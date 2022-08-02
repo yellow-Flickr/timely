@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timely/Stopwatch.dart';
 import 'package:timely/Timer.dart';
 
 void main() {
@@ -59,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController.dispose();
     super.dispose();
   }
-
+int _currentIndex =0;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -78,12 +80,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Align(alignment: Alignment.centerLeft, child: Text("Timely", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),)),
+          title: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Timely",
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+              )),
           automaticallyImplyLeading: false,
           elevation: 0,
           actions: [
-            Icon(Icons.add,size: 35,),
-            Icon(Icons.more_vert,size: 35,),
+            Icon(
+              Icons.add,
+              size: 35,
+            ),
+            Icon(
+              Icons.more_vert,
+              size: 35,
+            ),
           ],
 
           // title: Text(widget.title),
@@ -94,25 +107,31 @@ class _MyHomePageState extends State<MyHomePage> {
           // iconSize: 16,
           // selectedFontSize: 10,
           // unselectedFontSize: 8,
+          currentIndex: _currentIndex,
+          onTap: (index)
+          {
+            setState(() {
+               _currentIndex = index;
+            });
+          },
           showSelectedLabels: true,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(label: "Timer", icon: Icon(Icons.timer)),
             BottomNavigationBarItem(
-                label: "Scheduler", icon: Icon(Icons.event_note)),
-            BottomNavigationBarItem(
                 label: "Stopwatch", icon: Icon(Icons.timer_10_select_sharp)),
             BottomNavigationBarItem(
                 label: "World Clock", icon: Icon(Icons.public)),
+            BottomNavigationBarItem(
+                label: "Scheduler", icon: Icon(Icons.event_note)),
           ],
           elevation: 0,
         ),
         body:
-            // PageView(
-            //   controller: _pageController,
-            //   children: [
-            Timer());
+           (_currentIndex == 0)? Timer() : StopWatch()
+           
+           );
     //   ],
     // ));
   }

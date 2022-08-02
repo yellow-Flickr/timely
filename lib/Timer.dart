@@ -15,52 +15,7 @@ class _TimerState extends State<Timer> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return 
-    Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Hours(),
-              ColonSeperator(),
-              Minutes(),
-              ColonSeperator(),
-              Seconds(),
-              CircularProgressIndicator()
-            ],
-          ),
-        ),
-        // Expanded(child: SizedBox(width: width * 0.05,)),
-       
-        Expanded(
-          child: Center(
-            child: Container(
-              width: width * 0.3,
-              height: height * 0.08,
-              decoration: ShapeDecoration(
-                  color: ThemeData.light().primaryColor,
-                  shape: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(100),
-                      gapPadding: 0)),
-              child: TextButton(
-                  onPressed: () {},
-                  child: Center(
-                    child: Text(
-                      "Start",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
-                    ),
-                  )),
-            ),
-          ),
-        ),
-      ],
-    );
+    Setup_Screen();
   }
 }
 
