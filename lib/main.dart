@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -77,12 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          leading: Center(child: Text("Timely")),
+          title: Align(alignment: Alignment.centerLeft, child: Text("Timely", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),)),
           automaticallyImplyLeading: false,
           elevation: 0,
           actions: [
-            Icon(Icons.add),
-            Icon(Icons.more_vert),
+            Icon(Icons.add,size: 35,),
+            Icon(Icons.more_vert,size: 35,),
           ],
 
           // title: Text(widget.title),

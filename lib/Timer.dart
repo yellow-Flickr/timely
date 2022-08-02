@@ -14,47 +14,91 @@ class _TimerState extends State<Timer> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return 
+    Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Hours(),
-            Container(
-              height: height * 0.25,
-              // width: width * 0.25,
-              child: Center(
-                  child: Text(
-                ":",
-                style: TextStyle(fontSize: 80, color: Colors.white),
-              )),
-            ),
-            Minutes(),
-            Container(
-              height: height * 0.25,
-              // width: width * 0.25,
-              child: Center(
-                  child: Text(
-                ":",
-                style: TextStyle(fontSize: 80, color: Colors.white),
-              )),
-            ),
-            Seconds(),
-          ],
+        Container(
+           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Hours(),
+              ColonSeperator(),
+              Minutes(),
+              ColonSeperator(),
+              Seconds(),
+              CircularProgressIndicator()
+            ],
+          ),
         ),
+        // Expanded(child: SizedBox(width: width * 0.05,)),
+       
         Expanded(
           child: Center(
-            child: ListView(
+            child: Container(
+              width: width * 0.3,
+              height: height * 0.08,
+              decoration: ShapeDecoration(
+                  color: ThemeData.light().primaryColor,
+                  shape: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(100),
+                      gapPadding: 0)),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      "Start",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                  )),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Setup_Screen extends StatelessWidget {
+  const Setup_Screen({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Hours(),
+              ColonSeperator(),
+              Minutes(),
+              ColonSeperator(),
+              Seconds(),
+            ],
+          ),
+        ),
+        // Expanded(child: SizedBox(width: width * 0.05,)),
+        Expanded(
+          child: Center(
+            child: ListView.separated(
+              itemCount: 7,
+              itemBuilder: ((context, index) => Presets()),
+              separatorBuilder: ((context, index) => SizedBox(
+                    width: width * 0.05,
+                  )),
               shrinkWrap: true,
-              itemExtent: width * 0.25,
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsetsDirectional.all(8),
-              children: [
-                Presets(),
-                Presets(),
-              ],
+              padding: EdgeInsetsDirectional.all(10),
             ),
           ),
         ),
@@ -62,13 +106,51 @@ class _TimerState extends State<Timer> {
           child: Center(
             child: Container(
               width: width * 0.3,
-              height: height * 0.1,
-               child: ElevatedButton(
-                  onPressed: () {}, child: Center(child: Text("Start"))),
+              height: height * 0.08,
+              decoration: ShapeDecoration(
+                  color: ThemeData.light().primaryColor,
+                  shape: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(100),
+                      gapPadding: 0)),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      "Start",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                  )),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Colon seperating time digits
+class ColonSeperator extends StatelessWidget {
+  const ColonSeperator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      padding: EdgeInsets.only(top: height * 0.12),
+      margin: EdgeInsets.only(top: 10),
+      height: height * 0.4,
+      // width: width * 0.25,
+      child: Center(
+          child: Text(
+        ":",
+        style: TextStyle(
+            fontSize: 50, fontWeight: FontWeight.w400, color: Colors.white),
+      )),
     );
   }
 }
@@ -93,24 +175,26 @@ class Seconds extends StatelessWidget {
           )),
         ),
         Container(
+          margin: EdgeInsets.only(bottom: 15),
           height: height * 0.3,
           width: width * 0.25,
-          child: ListWheelScrollView.useDelegate(clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: ListWheelScrollView.useDelegate(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
               physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
               diameterRatio: 4,
               itemExtent: 85,
-              overAndUnderCenterOpacity: 0.5,
+              overAndUnderCenterOpacity: 0.3,
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
                   children: List.generate(
                       60,
                       (index) => Container(
-                              child: Center(
-                                  child: Text(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
                             doubleDigits(index),
-                            style: TextStyle(color: Colors.white, fontSize: 80),
-                          )))))),
+                            style: TextStyle(color: Colors.white, fontSize: 50),
+                          ))))),
         ),
       ],
     );
@@ -119,7 +203,7 @@ class Seconds extends StatelessWidget {
 
 class Hours extends StatelessWidget {
   Hours({Key? key}) : super(key: key);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -138,24 +222,28 @@ class Hours extends StatelessWidget {
           )),
         ),
         Container(
+          margin: EdgeInsets.only(bottom: 15),
           height: height * 0.3,
           width: width * 0.25,
           child: ListWheelScrollView.useDelegate(
               physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
               diameterRatio: 4,
               itemExtent: 85,
-              overAndUnderCenterOpacity: 0.5,
+              overAndUnderCenterOpacity: 0.3,
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
                   children: List.generate(
                       100,
                       (index) => Container(
-                              child: Center(
-                                  child: Text(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
                             doubleDigits(index),
-                            style: TextStyle(color: Colors.white, fontSize: 80),
-                          )))))),
+                            style: TextStyle(
+                                color: Colors.white,
+                               /*  fontWeight: FontWeight.w500, */
+                                fontSize: 50),
+                          ))))),
         ),
       ],
     );
@@ -182,30 +270,32 @@ class Minutes extends StatelessWidget {
           )),
         ),
         Container(
+          margin: EdgeInsets.only(bottom: 15),
           height: height * 0.3,
           width: width * 0.25,
           child: ListWheelScrollView.useDelegate(
               physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
               diameterRatio: 4,
               itemExtent: 85,
-              overAndUnderCenterOpacity: 0.5,
+              overAndUnderCenterOpacity: 0.3,
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
                   children: List.generate(
                       60,
                       (index) => Container(
-                              child: Center(
-                                  child: Text(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
                             doubleDigits(index),
-                            style: TextStyle(color: Colors.white, fontSize: 80),
-                          )))))),
+                            style: TextStyle(color: Colors.white, fontSize: 50),
+                          ))))),
         ),
       ],
     );
   }
 }
 
+/// Widget for saved and named time presets  on Timer screen.
 class Presets extends StatelessWidget {
   const Presets({Key? key}) : super(key: key);
 
@@ -214,11 +304,13 @@ class Presets extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      width: width * 0.25,
-      height: height * 0.15,
+      width: width * 0.26,
+      height: height * 0.20,
       padding: EdgeInsets.all(10),
-      decoration:
-          BoxDecoration(color: Colors.grey.shade500, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          shape: BoxShape.circle,
+          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -226,15 +318,17 @@ class Presets extends StatelessWidget {
           children: [
             Container(
               child: Text(
-                "Secondsfdgfrdgrg",
+                "Workout Rest",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white, fontSize: 10),
               ),
             ),
             Container(
               child: Text(
                 "00:00:00",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             )
           ],
@@ -244,6 +338,7 @@ class Presets extends StatelessWidget {
   }
 }
 
+/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
 String doubleDigits(int number) {
   return number.toString().length == 1 ? "0$number" : number.toString();
 }
