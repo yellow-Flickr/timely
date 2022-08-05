@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timely/Stopwatch.dart';
 import 'package:timely/Timer.dart';
+import 'package:timely/Worldclock.dart';
 
 void main() {
   runApp(const MyApp());
@@ -75,32 +76,32 @@ int _currentIndex =0;
     // than having to individually change instances of widgets.
     return Scaffold(
         backgroundColor: Colors.grey.shade900,
-        appBar: AppBar(
-          backgroundColor: Colors.grey.shade900,
+        // appBar: AppBar(
+        //   backgroundColor: Colors.grey.shade900,
 
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Timely",
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-              )),
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          actions: [
-            Icon(
-              Icons.add,
-              size: 35,
-            ),
-            Icon(
-              Icons.more_vert,
-              size: 35,
-            ),
-          ],
+        //   // Here we take the value from the MyHomePage object that was created by
+        //   // the App.build method, and use it to set our appbar title.
+        //   title: Align(
+        //       alignment: Alignment.centerLeft,
+        //       child: Text(
+        //         "Timely",
+        //         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+        //       )),
+        //   automaticallyImplyLeading: false,
+        //   elevation: 0,
+        //   actions: [
+        //     Icon(
+        //       Icons.add,
+        //       size: 35,
+        //     ),
+        //     Icon(
+        //       Icons.more_vert,
+        //       size: 35,
+        //     ),
+        //   ],
 
-          // title: Text(widget.title),
-        ),
+        //   // title: Text(widget.title),
+        // ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey.shade900,
 
@@ -129,7 +130,7 @@ int _currentIndex =0;
           elevation: 0,
         ),
         body:
-           (_currentIndex == 0)? Timer() : StopWatch()
+           (_currentIndex == 0)? Timer() :(_currentIndex == 1)? StopWatch(): Worldclock()
            
            );
     //   ],

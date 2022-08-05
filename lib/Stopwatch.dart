@@ -23,11 +23,17 @@ class _StopwatchState extends State<StopWatch> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Minutes(),
+              Minutes(
+                digits: "00",
+              ),
               DigitSeperator(seperator: ":"),
-              Seconds(),
+              Seconds(
+                digits: "00",
+              ),
               DigitSeperator(seperator: "."),
-              Seconds(),
+              Seconds(
+                digits: "00",
+              ),
             ],
           ),
         ),
@@ -43,11 +49,17 @@ class _StopwatchState extends State<StopWatch> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Minutes(),
+                Minutes(
+                  digits: "00",
+                ),
                 DigitSeperator(seperator: ":"),
-                Seconds(),
+                Seconds(
+                  digits: "00",
+                ),
                 DigitSeperator(seperator: "."),
-                Seconds(),
+                Seconds(
+                  digits: "00",
+                ),
               ],
             ),
           ),
@@ -71,18 +83,21 @@ class _StopwatchState extends State<StopWatch> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Lap", style: TextStyle(
-                                        color: Colors.white.withOpacity(.7),
-                                         fontWeight: FontWeight.w500,
-                                        fontSize: 14)),
-                          Text("Lap Times", style: TextStyle(
-                                        color: Colors.white.withOpacity(.7),
-                                         fontWeight: FontWeight.w500,
-                                        fontSize: 14)),
-                          Text("Overall time", style: TextStyle(
-                                        color: Colors.white.withOpacity(.7),
-                                         fontWeight: FontWeight.w500,
-                                        fontSize: 14)),
+                          Text("Lap",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(.7),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14)),
+                          Text("Lap Times",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(.7),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14)),
+                          Text("Overall time",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(.7),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14)),
                         ],
                       ),
                     ),
@@ -103,7 +118,7 @@ class _StopwatchState extends State<StopWatch> {
                       13,
                       (index) => Container(
                             padding: EdgeInsets.symmetric(
-                                 horizontal: width * 0.1, 
+                                horizontal: width * 0.1,
                                 vertical: height * 0.023),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,17 +127,17 @@ class _StopwatchState extends State<StopWatch> {
                                 Text(doubleDigits(index + 1),
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(.5),
-                                         fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14)),
                                 Text("00:00.00",
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(.6),
-                                         fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14)),
                                 Text("00:00.00",
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(.8),
-                                         fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14)),
                               ],
                             ),
@@ -224,7 +239,9 @@ class DigitSeperator extends StatelessWidget {
 }
 
 class Seconds extends StatelessWidget {
-  const Seconds({Key? key}) : super(key: key);
+  final String digits;
+
+  const Seconds({Key? key, required this.digits}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -239,7 +256,7 @@ class Seconds extends StatelessWidget {
           child: Center(
               // alignment: Alignment.bottomCenter,
               child: Text(
-            "00",
+            digits,
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
           )),
@@ -250,7 +267,8 @@ class Seconds extends StatelessWidget {
 }
 
 class Minutes extends StatelessWidget {
-  const Minutes({Key? key}) : super(key: key);
+  final String digits;
+  const Minutes({Key? key, required this.digits}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -265,7 +283,7 @@ class Minutes extends StatelessWidget {
           // padding: EdgeInsets.symmetric(horizontal: width * 0.05),
           child: Center(
               child: Text(
-            "00",
+            digits,
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
           )),
