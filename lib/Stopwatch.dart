@@ -247,21 +247,17 @@ class Seconds extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Column(
-      children: [
-        Container(
-          // margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.1,
-          width: width * 0.22,
-          child: Center(
-              // alignment: Alignment.bottomCenter,
-              child: Text(
-            digits,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
-          )),
-        ),
-      ],
+    return Container(
+      // margin: EdgeInsets.only(bottom: 15),
+      height: height * 0.1,
+      width: width * 0.22,
+      child: Center(
+          // alignment: Alignment.bottomCenter,
+          child: Text(
+        digits,
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
+      )),
     );
   }
 }
@@ -274,21 +270,17 @@ class Minutes extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Column(
-      children: [
-        Container(
-          // margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.1,
-          width: width * 0.22,
-          // padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-          child: Center(
-              child: Text(
-            digits,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
-          )),
-        ),
-      ],
+    return Container(
+      // margin: EdgeInsets.only(bottom: 15),
+      height: height * 0.1,
+      width: width * 0.22,
+      // padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+      child: Center(
+          child: Text(
+        digits,
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
+      )),
     );
   }
 }
