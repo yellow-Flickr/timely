@@ -13,7 +13,7 @@ class TimerTicker extends StatefulWidget {
 }
 
 class _TimerTickerState extends State<TimerTicker>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   int _count = 50;
 
@@ -28,7 +28,7 @@ class _TimerTickerState extends State<TimerTicker>
   void initState() {
      super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
+        AnimationController(vsync: this, duration: Duration(seconds: 30) )..forward();
   }
   
 
