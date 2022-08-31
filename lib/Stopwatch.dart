@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-class StopWatch extends StatefulWidget {
-  const StopWatch({Key? key}) : super(key: key);
+class Stop_Watch extends StatefulWidget {
+  const Stop_Watch({Key? key}) : super(key: key);
 
   @override
-  State<StopWatch> createState() => _StopwatchState();
+  State<Stop_Watch> createState() => _StopwatchState();
 }
 
-class _StopwatchState extends State<StopWatch> {
+class _StopwatchState extends State<Stop_Watch> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -285,7 +285,7 @@ class Minutes extends StatelessWidget {
   }
 }
 
-/// Widget for saved and named time presets  on StopWatch screen.
+/// Widget for saved and named time presets  on Stop_Watch screen.
 class Presets extends StatelessWidget {
   const Presets({Key? key}) : super(key: key);
 

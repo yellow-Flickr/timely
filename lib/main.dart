@@ -131,7 +131,7 @@ int _currentIndex =0;
             elevation: 0,
           ),
           body:
-             (_currentIndex == 0)? Timer() :(_currentIndex == 1)? StopWatch(): Worldclock()
+             (_currentIndex == 0)? Timer() :(_currentIndex == 1)? Stop_Watch(): Worldclock()
              
              ),
     );

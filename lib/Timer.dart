@@ -72,7 +72,7 @@ class Setup_Screen extends StatelessWidget {
               child: TextButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TimerTicker()));
+                        MaterialPageRoute(builder: (context) => TimerTicker(time: 15,)));
                   },
                   child: Center(
                     child: Text(

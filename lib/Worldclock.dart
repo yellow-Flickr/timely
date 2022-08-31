@@ -85,24 +85,7 @@ class _WorldclockState extends State<Worldclock> {
               ),
             ),
           ),
-          // title: Container(
-          //   child: Center(
-          //       child: Column(
-          //     children: [
-          //       Row(
-          //         children: [
-          //           Minutes(digits: "00"),
-          //           Minutes(digits: "00"),
-          //           Minutes(digits: "00"),
-          //         ],
-          //       ),
-          //       Text(
-          //         "Greenwich Mean Time",
-          //         style: TextStyle(color: Colors.white,fontSize: 20),
-          //       )
-          //     ],
-          //   )),
-          // ),
+     
         ),
         SliverList(
             delegate: SliverChildBuilderDelegate(((context, index) {
