@@ -207,8 +207,8 @@ class _TimerTickerState extends State<TimerTicker>
   late AnimationController _animationController;
   late Animation<int> animation;
   double _count = 100;
-      Stopwatch timelapsed = Stopwatch(); 
- 
+  Stopwatch timelapsed = Stopwatch();
+
   // @override
   // void dispose() {
   //   _animationController.dispose();
@@ -229,15 +229,15 @@ class _TimerTickerState extends State<TimerTicker>
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         tick;
         timelapsed.start();
-       });
+      });
     }
   }
 
-  late Timer tick = Timer.periodic(Duration(milliseconds: 1), (timer) {
+  late Timer tick = Timer.periodic(Duration(milliseconds: 10), (timer) {
     if (mounted) {
       if (_count > 0.1) {
         setState(() {
-          _count -= ((100 / widget.time * 0.001) * 1);
+          _count -= ((100 / widget.time * 0.001) * 10);
           // timelapsed -= (timelapsed - 0.001).toInt();
         });
       } else {
@@ -338,8 +338,10 @@ class _TimerTickerState extends State<TimerTicker>
                 foregroundPainter: DrawTicker(
                     stroke: width * 0.035,
                     percent: _count,
-                    tickerPaint: ((widget.time - (timelapsed.elapsedMicroseconds * 1000)) <= 5)
-                        ? Colors.red.shade900.withOpacity(0.7)
+                    tickerPaint: ((widget.time -
+                                (timelapsed.elapsedMicroseconds / 1000000)) <=
+                            5)
+                        ? Colors.red.shade700 
                         : null),
               )
                   //       ),
@@ -366,7 +368,11 @@ class _TimerTickerState extends State<TimerTicker>
                             borderRadius: BorderRadius.circular(100),
                             gapPadding: 0)),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          tick;
+                          debugPrint(( 
+                                (timelapsed.elapsedMicroseconds / 1000000)).toString());
+                        },
                         child: Center(
                           child: Text(
                             "Lap",
@@ -387,7 +393,7 @@ class _TimerTickerState extends State<TimerTicker>
                     height: height * 0.065,
                     decoration: ShapeDecoration(
                         color: (tick.isActive)
-                            ? Colors.red.shade900.withOpacity(0.8)
+                            ? Colors.red.shade700
                             : Colors.deepPurple,
                         shape: OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -398,11 +404,10 @@ class _TimerTickerState extends State<TimerTicker>
                           if (tick.isActive) {
                             tick.cancel();
                           } else {
-                           setState(() {
-                             tick;
-                           }); 
+                            setState(() {
+                              tick;
+                            });
                           }
-                         
                         },
                         child: Center(
                           child: Text(
