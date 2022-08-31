@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
@@ -32,16 +33,16 @@ class _WorldclockState extends State<Worldclock> {
           elevation: 0,
           expandedHeight: height * 0.3,
           bottom: AppBar(
+            primary: false,
             backgroundColor: Colors.grey.shade900,
 
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            title: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Timely",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-                )),
+              
+            // title: Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Text(
+            //       "Timely",
+            //       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+            //     )),
             automaticallyImplyLeading: false,
             elevation: 0,
             actions: [
@@ -59,7 +60,7 @@ class _WorldclockState extends State<Worldclock> {
           ),
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: EdgeInsets.only(top: height * 0.1),
-            centerTitle: true,
+            centerTitle: true, 
             title: Center(
               child: Container(
                 width: width * 0.3,

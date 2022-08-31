@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:timely/TimerTicker.dart';
 
 class Timer extends StatefulWidget {
   const Timer({Key? key}) : super(key: key);
@@ -14,16 +15,16 @@ class _TimerState extends State<Timer> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return 
-    Setup_Screen();
+    return Setup_Screen();
   }
 }
 
 class Setup_Screen extends StatelessWidget {
-  const Setup_Screen({ Key? key }) : super(key: key);
+  const Setup_Screen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {    double height = MediaQuery.of(context).size.height;
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -69,7 +70,10 @@ class Setup_Screen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100),
                       gapPadding: 0)),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => TimerTicker()));
+                  },
                   child: Center(
                     child: Text(
                       "Start",
@@ -196,7 +200,7 @@ class Hours extends StatelessWidget {
                             doubleDigits(index),
                             style: TextStyle(
                                 color: Colors.white,
-                               /*  fontWeight: FontWeight.w500, */
+                                /*  fontWeight: FontWeight.w500, */
                                 fontSize: 50),
                           ))))),
         ),
