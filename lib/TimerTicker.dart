@@ -49,186 +49,177 @@ class _TimerTickerState extends State<TimerTicker>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Center(
-          child: Container(
-              margin: EdgeInsets.symmetric(vertical: height * 0.05),
-              height: height * 0.45,
-              width: width,
-              // color: Colors.amber,
-              child: FittedBox(
-                child: AnimatedBuilder(
-                  // duration: Duration(seconds: widget.time),
-                  // tween: percent,
-                  // curve: Curves.linear,
-                  // onEnd: (() {
-                  //   Navigator.pop(context);
-                  // }),
-
-                  animation: ticking,
-                  builder: ((context, child) => CustomPaint(
-                        size: Size.fromRadius(width / 2),
-                        child: Container(
-                          height: width,
-                          width: width,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: width * 0.01,
-                              vertical: height * 0.005),
-                          child: LayoutBuilder(builder: (context, constraints) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    "data",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 30),
-                                  ),
-                                ),
-                                Container(
-                                  // width: width * 0.5,
-                                  // height: height * 0.05,
-                                  // padding: EdgeInsets.only(bottom: height * 0.1),
-                                  // foregroundDecoration: BoxDecoration(
-                                  //     color: Colors.grey.shade900.withOpacity(0.5)),
-                                  child: FittedBox(
-                                    fit: BoxFit.contain,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Minutes(
-                                          digits: "00",
-                                        ),
-                                        DigitSeperator(seperator: ":"),
-                                        Seconds(
-                                          digits: "00",
-                                        ),
-                                        DigitSeperator(seperator: "."),
-                                        Seconds(
-                                          digits: "00",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.notifications,
-                                        size: 20,
-                                        color: Colors.grey.shade400
-                                            .withOpacity(0.5),
-                                      ),
-                                      Text(
-                                        "00:00",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.grey.shade400
-                                                .withOpacity(0.5)),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            );
-                          }),
-                        ),
-                        foregroundPainter: DrawTicker(
-                            stroke: width * 0.035,
-                            percent: ticking.value,
-                            tickerPaint: (ticking.value <= (500 / widget.time))
-                                ? Colors.red.shade700
-                                : null),
-                      )),
-                ),
-              )),
-        ),
-        Flexible(
-          fit: FlexFit.loose,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  alignment: Alignment.bottomLeft,
-                  padding: EdgeInsets.only(
-                      left: width * 0.05, bottom: height * 0.05),
-                  child: Container(
-                    width: width * 0.3,
-                    height: height * 0.065,
-                    decoration: ShapeDecoration(
-                        color: ThemeData.light().disabledColor,
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(100),
-                            gapPadding: 0)),
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Center(
-                          child: Text(
-                            "Lap",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white),
-                          ),
-                        )),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          Center(
+            child: Container(
+                margin: EdgeInsets.symmetric(vertical: height * 0.05),
+                height: height * 0.45,
+                width: width,
+                 child: AnimatedBuilder(
+                
+                   child: LayoutBuilder(builder: (context, constraints) {
+                     return Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children: [
+                         Container(
+                           child: Text(
+                             "data",
+                             style: TextStyle(color: Colors.white, fontSize: 30),
+                           ),
+                         ),
+                         Container(
+                           // width: width * 0.5,
+                           // height: height * 0.05,
+                           // padding: EdgeInsets.only(bottom: height * 0.1),
+                           // foregroundDecoration: BoxDecoration(
+                           //     color: Colors.grey.shade900.withOpacity(0.5)),
+                           child: FittedBox(
+                             fit: BoxFit.contain,
+                             child: Row(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               crossAxisAlignment: CrossAxisAlignment.center,
+                               children: [
+                                 Minutes(
+                                   digits: "00",
+                                 ),
+                                 DigitSeperator(seperator: ":"),
+                                 Seconds(
+                                   digits: "00",
+                                 ),
+                                 DigitSeperator(seperator: "."),
+                                 Seconds(
+                                   digits: "00",
+                                 ),
+                               ],
+                             ),
+                           ),
+                         ),
+                         Container(
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               Icon(
+                                 Icons.notifications,
+                                 size: 20,
+                                 color: Colors.grey.shade400.withOpacity(0.5),
+                               ),
+                               Text(
+                                 "00:00",
+                                 style: TextStyle(
+                                     fontSize: 20,
+                                     color:
+                                         Colors.grey.shade400.withOpacity(0.5)),
+                               )
+                             ],
+                           ),
+                         )
+                       ],
+                     );
+                   }),
+                   animation: ticking,
+                   builder: ((context, child) => CustomPaint(
+                         size: Size.fromRadius(width / 2),
+                         child: Container(
+                           height: width,
+                           width: width,
+                           alignment: Alignment.center,
+                           padding: EdgeInsets.symmetric(
+                               horizontal: width * 0.01,
+                               vertical: height * 0.005),
+                           child: child,
+                         ),
+                         foregroundPainter: DrawTicker(
+                             stroke: width * 0.035,
+                             percent: ticking.value,
+                             tickerPaint: (ticking.value <= (500 / widget.time))
+                                 ? Colors.red.shade700
+                                 : null),
+                       )),
+                 )),
+          ),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.only(
+                        left: width * 0.05, bottom: height * 0.05),
+                    child: Container(
+                      width: width * 0.3,
+                      height: height * 0.065,
+                      decoration: ShapeDecoration(
+                          color: ThemeData.light().disabledColor,
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(100),
+                              gapPadding: 0)),
+                      child: TextButton(
+                          onPressed: () {},
+                          child: Center(
+                            child: Text(
+                              "Lap",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
+                          )),
+                    ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  padding: EdgeInsets.only(
-                      right: width * 0.05, bottom: height * 0.05),
-                  child: Container(
-                    width: width * 0.3,
-                    height: height * 0.065,
-                    decoration: ShapeDecoration(
-                        color: (_animationController.isAnimating)
-                            ? Colors.red.shade700
-                            : Colors.deepPurple,
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(100),
-                            gapPadding: 0)),
-                    child: TextButton(
-                        onPressed: () {
-                          if (_animationController.isAnimating) {
-                            _animationController.stop(canceled: true);
-                          } else {
-                            _animationController.forward();
-                          }
-                          setState(() {});
-                        },
-                        child: Center(
-                          child: Text(
-                            (_animationController.isAnimating)
-                                ? "Pause"
-                                : "Resume",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white),
-                          ),
-                        )),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    padding: EdgeInsets.only(
+                        right: width * 0.05, bottom: height * 0.05),
+                    child: Container(
+                      width: width * 0.3,
+                      height: height * 0.065,
+                      decoration: ShapeDecoration(
+                          color: (_animationController.isAnimating)
+                              ? Colors.red.shade700
+                              : Colors.deepPurple,
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(100),
+                              gapPadding: 0)),
+                      child: TextButton(
+                          onPressed: () {
+                            if (_animationController.isAnimating) {
+                              _animationController.stop(canceled: true);
+                            } else {
+                              _animationController.forward();
+                            }
+                            setState(() {});
+                          },
+                          child: Center(
+                            child: Text(
+                              (_animationController.isAnimating)
+                                  ? "Pause"
+                                  : "Resume",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
     ;
   }
 }
- 
+
 class DrawTicker extends CustomPainter {
   double stroke;
   double percent;
