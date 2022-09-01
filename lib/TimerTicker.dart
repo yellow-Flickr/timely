@@ -14,245 +14,37 @@ class TimerTicker extends StatefulWidget {
   State<TimerTicker> createState() => _TimerTickerState();
 }
 
-// class _TimerTickerState extends State<TimerTicker>
-//     with SingleTickerProviderStateMixin {
-//   late AnimationController _animationController;
-//   int _count = 50;
-
-//   @override
-//   void dispose() {
-//     _animationController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _animationController =
-//         AnimationController(vsync: this, duration: Duration(seconds: 30))
-//           ..forward();
-//   }
-
-//   Future<void> animate() async {
-//     try {
-//       await _animationController.forward().orCancel;
-//     } on TickerCanceled {
-//       debugPrint(" C A N C E L L E D");
-//     }
-//   }
-
-//   IntTween percent = IntTween(begin: 50, end: 0);
-//   @override
-//   Widget build(BuildContext context) {
-//     double height = MediaQuery.of(context).size.height;
-//     double width = MediaQuery.of(context).size.width;
-//     return Column(
-//       children: [
-//         Center(
-//           child: Container(
-//               margin: EdgeInsets.symmetric(vertical: height * 0.05),
-//               height: height * 0.45,
-//               width: width,
-//               // color: Colors.amber,
-//               child: FittedBox(
-//                 child: TweenAnimationBuilder(
-//                   duration: Duration(seconds: 30),
-//                   tween: percent,
-//                   builder: ((context, int count, child) => CustomPaint(
-//                         size: Size.fromRadius(width / 2),
-//                         child: Container(
-//                           height: width,
-//                           width: width,
-//                           alignment: Alignment.center,
-//                           padding: EdgeInsets.symmetric(
-//                               horizontal: width * 0.01,
-//                               vertical: height * 0.005),
-//                           child: Column(
-//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                             children: [
-//                               Container(
-//                                 child: Text(
-//                                   "data",
-//                                   style: TextStyle(
-//                                       color: Colors.white, fontSize: 30),
-//                                 ),
-//                               ),
-//                               Container(
-//                                 // width: width * 0.5,
-//                                 // height: height * 0.05,
-//                                 // padding: EdgeInsets.only(bottom: height * 0.1),
-//                                 // foregroundDecoration: BoxDecoration(
-//                                 //     color: Colors.grey.shade900.withOpacity(0.5)),
-//                                 child: FittedBox(
-//                                   fit: BoxFit.scaleDown,
-//                                   child: Row(
-//                                     mainAxisAlignment: MainAxisAlignment.center,
-//                                     crossAxisAlignment:
-//                                         CrossAxisAlignment.center,
-//                                     children: [
-//                                       Minutes(
-//                                         digits: "00",
-//                                       ),
-//                                       DigitSeperator(seperator: ":"),
-//                                       Seconds(
-//                                         digits: "00",
-//                                       ),
-//                                       DigitSeperator(seperator: "."),
-//                                       Seconds(
-//                                         digits: "00",
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ),
-//                               Container(
-//                                 child: Row(
-//                                   mainAxisAlignment: MainAxisAlignment.center,
-//                                   children: [
-//                                     Icon(
-//                                       Icons.notifications,
-//                                       size: 20,
-//                                       color:
-//                                           Colors.grey.shade400.withOpacity(0.5),
-//                                     ),
-//                                     Text(
-//                                       "00:00",
-//                                       style: TextStyle(
-//                                           fontSize: 20,
-//                                           color: Colors.grey.shade400
-//                                               .withOpacity(0.5)),
-//                                     )
-//                                   ],
-//                                 ),
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                         foregroundPainter:
-//                             DrawTicker(stroke: width * 0.035, percent: count),
-//                       )),
-//                 ),
-//               )),
-//         ),
-//         Flexible(
-//           fit: FlexFit.loose,
-//           child: Center(
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Container(
-//                   alignment: Alignment.bottomLeft,
-//                   padding: EdgeInsets.only(
-//                       left: width * 0.05, bottom: height * 0.05),
-//                   child: Container(
-//                     width: width * 0.3,
-//                     height: height * 0.065,
-//                     decoration: ShapeDecoration(
-//                         color: ThemeData.light().disabledColor,
-//                         shape: OutlineInputBorder(
-//                             borderSide: BorderSide.none,
-//                             borderRadius: BorderRadius.circular(100),
-//                             gapPadding: 0)),
-//                     child: TextButton(
-//                         onPressed: () {},
-//                         child: Center(
-//                           child: Text(
-//                             "Lap",
-//                             style: TextStyle(
-//                                 fontWeight: FontWeight.bold,
-//                                 fontSize: 20,
-//                                 color: Colors.white),
-//                           ),
-//                         )),
-//                   ),
-//                 ),
-//                 Container(
-//                   alignment: Alignment.bottomRight,
-//                   padding: EdgeInsets.only(
-//                       right: width * 0.05, bottom: height * 0.05),
-//                   child: Container(
-//                     width: width * 0.3,
-//                     height: height * 0.065,
-//                     decoration: ShapeDecoration(
-//                         color: ThemeData.light().primaryColor,
-//                         shape: OutlineInputBorder(
-//                             borderSide: BorderSide.none,
-//                             borderRadius: BorderRadius.circular(100),
-//                             gapPadding: 0)),
-//                     child: TextButton(
-//                         onPressed: () {},
-//                         child: Center(
-//                           child: Text(
-//                             "Start",
-//                             style: TextStyle(
-//                                 fontWeight: FontWeight.bold,
-//                                 fontSize: 20,
-//                                 color: Colors.white),
-//                           ),
-//                         )),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//     ;
-//   }
-// }
-
 class _TimerTickerState extends State<TimerTicker>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<int> animation;
+  late Animation<double> ticking;
   double _count = 100;
-  Stopwatch timelapsed = Stopwatch();
 
-  // @override
-  // void dispose() {
-  //   _animationController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    // _animationController =
-    //     AnimationController(vsync: this, duration: Duration(seconds: 30));
-    // animation = IntTween(begin: _count, end: 0).animate(_animationController);
-    // ..addListener(() {
-    //   setState(() {});
-    // });
-    // _animationController.forward();
-    if (mounted) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        tick;
-        timelapsed.start();
-      });
+    _animationController = AnimationController(
+        vsync: this, duration: Duration(seconds: widget.time));
+    ticking = Tween<double>(begin: _count, end: 0).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.linear));
+    _animationController.forward();
+  }
+
+  Future<void> animate() async {
+    try {
+      // await _animationController.forward().orCancel;
+    } on TickerCanceled {
+      debugPrint(" C A N C E L L E D");
     }
   }
 
-  late Timer tick = Timer.periodic(Duration(milliseconds: 10), (timer) {
-    if (mounted) {
-      if (_count > 0.1) {
-        setState(() {
-          _count -= ((100 / widget.time * 0.001) * 10);
-          // timelapsed -= (timelapsed - 0.001).toInt();
-        });
-      } else {
-        timer.cancel();
-        Navigator.pop(context);
-      }
-    }
-  });
-
-  @override
-  void dispose() {
-    tick.cancel();
-    super.dispose();
-  }
-
+  Tween<double> percent = Tween<double>(begin: 100, end: 0);
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -266,87 +58,97 @@ class _TimerTickerState extends State<TimerTicker>
               width: width,
               // color: Colors.amber,
               child: FittedBox(
-                  child:
-                      // AnimatedBuilder(
-                      //   animation: _animationController,
-                      //   builder: ((context, child) =>
-                      CustomPaint(
-                size: Size.fromRadius(width / 2),
-                child: Container(
-                  height: width,
-                  width: width,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.01, vertical: height * 0.005),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        child: Text(
-                          "data",
-                          style: TextStyle(color: Colors.white, fontSize: 30),
+                child: AnimatedBuilder(
+                  // duration: Duration(seconds: widget.time),
+                  // tween: percent,
+                  // curve: Curves.linear,
+                  // onEnd: (() {
+                  //   Navigator.pop(context);
+                  // }),
+
+                  animation: ticking,
+                  builder: ((context, child) => CustomPaint(
+                        size: Size.fromRadius(width / 2),
+                        child: Container(
+                          height: width,
+                          width: width,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.01,
+                              vertical: height * 0.005),
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    "data",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 30),
+                                  ),
+                                ),
+                                Container(
+                                  // width: width * 0.5,
+                                  // height: height * 0.05,
+                                  // padding: EdgeInsets.only(bottom: height * 0.1),
+                                  // foregroundDecoration: BoxDecoration(
+                                  //     color: Colors.grey.shade900.withOpacity(0.5)),
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Minutes(
+                                          digits: "00",
+                                        ),
+                                        DigitSeperator(seperator: ":"),
+                                        Seconds(
+                                          digits: "00",
+                                        ),
+                                        DigitSeperator(seperator: "."),
+                                        Seconds(
+                                          digits: "00",
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.notifications,
+                                        size: 20,
+                                        color: Colors.grey.shade400
+                                            .withOpacity(0.5),
+                                      ),
+                                      Text(
+                                        "00:00",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.grey.shade400
+                                                .withOpacity(0.5)),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
                         ),
-                      ),
-                      Container(
-                        // width: width * 0.5,
-                        // height: height * 0.05,
-                        // padding: EdgeInsets.only(bottom: height * 0.1),
-                        // foregroundDecoration: BoxDecoration(
-                        //     color: Colors.grey.shade900.withOpacity(0.5)),
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Minutes(
-                                digits: "00",
-                              ),
-                              DigitSeperator(seperator: ":"),
-                              Seconds(
-                                digits: "00",
-                              ),
-                              DigitSeperator(seperator: "."),
-                              Seconds(
-                                digits: "00",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.notifications,
-                              size: 20,
-                              color: Colors.grey.shade400.withOpacity(0.5),
-                            ),
-                            Text(
-                              "00:00",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.grey.shade400.withOpacity(0.5)),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                        foregroundPainter: DrawTicker(
+                            stroke: width * 0.035,
+                            percent: ticking.value,
+                            tickerPaint: (ticking.value <= (500 / widget.time))
+                                ? Colors.red.shade700
+                                : null),
+                      )),
                 ),
-                foregroundPainter: DrawTicker(
-                    stroke: width * 0.035,
-                    percent: _count,
-                    tickerPaint: ((widget.time -
-                                (timelapsed.elapsedMicroseconds / 1000000)) <=
-                            5)
-                        ? Colors.red.shade700 
-                        : null),
-              )
-                  //       ),
-                  // ),
-                  )),
+              )),
         ),
         Flexible(
           fit: FlexFit.loose,
@@ -368,11 +170,7 @@ class _TimerTickerState extends State<TimerTicker>
                             borderRadius: BorderRadius.circular(100),
                             gapPadding: 0)),
                     child: TextButton(
-                        onPressed: () {
-                          tick;
-                          debugPrint(( 
-                                (timelapsed.elapsedMicroseconds / 1000000)).toString());
-                        },
+                        onPressed: () {},
                         child: Center(
                           child: Text(
                             "Lap",
@@ -392,7 +190,7 @@ class _TimerTickerState extends State<TimerTicker>
                     width: width * 0.3,
                     height: height * 0.065,
                     decoration: ShapeDecoration(
-                        color: (tick.isActive)
+                        color: (_animationController.isAnimating)
                             ? Colors.red.shade700
                             : Colors.deepPurple,
                         shape: OutlineInputBorder(
@@ -401,17 +199,18 @@ class _TimerTickerState extends State<TimerTicker>
                             gapPadding: 0)),
                     child: TextButton(
                         onPressed: () {
-                          if (tick.isActive) {
-                            tick.cancel();
+                          if (_animationController.isAnimating) {
+                            _animationController.stop(canceled: true);
                           } else {
-                            setState(() {
-                              tick;
-                            });
+                            _animationController.forward();
                           }
+                          setState(() {});
                         },
                         child: Center(
                           child: Text(
-                            (tick.isActive) ? "Pause" : "Resume",
+                            (_animationController.isAnimating)
+                                ? "Pause"
+                                : "Resume",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -429,7 +228,7 @@ class _TimerTickerState extends State<TimerTicker>
     ;
   }
 }
-
+ 
 class DrawTicker extends CustomPainter {
   double stroke;
   double percent;
