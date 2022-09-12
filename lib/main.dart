@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_themes/stacked_themes.dart';
 import 'package:timely/Stopwatch.dart';
 import 'package:timely/Timer.dart';
 import 'package:timely/Worldclock.dart';
@@ -16,23 +17,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return ThemeBuilder(
+        defaultThemeMode: ThemeMode.system,
+        builder: (context, regularTheme, darkTheme, themeMode) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(),
+              darkTheme: ThemeData(brightness: Brightness.dark),
+              home: const MyHomePage(title: 'Flutter Demo Home Page'),
+            ));
   }
 }
 
@@ -62,11 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController.dispose();
     super.dispose();
   }
-int _currentIndex =0;
+
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
 
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -76,10 +71,10 @@ int _currentIndex =0;
     // than having to individually change instances of widgets.
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Colors.grey.shade900,
+          backgroundColor: theme.backgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.grey.shade900,
-    
+            backgroundColor: theme.backgroundColor,
+
             // Here we take the value from the MyHomePage object that was created by
             // the App.build method, and use it to set our appbar title.
             title: Align(
@@ -100,20 +95,19 @@ int _currentIndex =0;
                 size: 35,
               ),
             ],
-    
+
             // title: Text(widget.title),
           ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.grey.shade900,
-    
+
             // iconSize: 16,
             // selectedFontSize: 10,
             // unselectedFontSize: 8,
             currentIndex: _currentIndex,
-            onTap: (index)
-            {
+            onTap: (index) {
               setState(() {
-                 _currentIndex = index;
+                _currentIndex = index;
               });
             },
             showSelectedLabels: true,
@@ -130,10 +124,11 @@ int _currentIndex =0;
             ],
             elevation: 0,
           ),
-          body:
-             (_currentIndex == 0)? Timer() :(_currentIndex == 1)? Stop_Watch(): Worldclock()
-             
-             ),
+          body: (_currentIndex == 0)
+              ? Timer()
+              : (_currentIndex == 1)
+                  ? Stop_Watch()
+                  : Worldclock()),
     );
     //   ],
     // ));

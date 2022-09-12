@@ -1,7 +1,9 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:timely/Components.dart';
 import 'package:timely/TimerTicker.dart';
+import 'package:timely/ViewModel.dart';
 
 class Timer extends StatefulWidget {
   const Timer({Key? key}) : super(key: key);
@@ -11,16 +13,35 @@ class Timer extends StatefulWidget {
 }
 
 class _TimerState extends State<Timer> {
+  ViewModel app = ViewModel();
+  @override
+  void dispose() {
+    app.starter.dispose();
+    app.timing.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Setup_Screen();
+    var theme = Theme.of(context);
+    return ValueListenableBuilder(
+      valueListenable: app.starter,
+      builder: (context, value, child) {
+        return AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: app.starter.value
+                ? TimerTicker(time: app.timing.value)
+                :SetupScreen() );
+      },
+    );
   }
 }
 
-class Setup_Screen extends StatelessWidget {
-  const Setup_Screen({Key? key}) : super(key: key);
+class SetupScreen extends StatelessWidget {
+  SetupScreen({Key? key}) : super(key: key);
+  final ViewModel app = ViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -60,29 +81,13 @@ class Setup_Screen extends StatelessWidget {
         ),
         Expanded(
           child: Center(
-            child: Container(
-              width: width * 0.3,
-              height: height * 0.08,
-              decoration: ShapeDecoration(
-                  color: ThemeData.light().primaryColor,
-                  shape: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(100),
-                      gapPadding: 0)),
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TimerTicker(time: 15,)));
-                  },
-                  child: Center(
-                    child: Text(
-                      "Start",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
-                    ),
-                  )),
+            child: Button(
+              onPressed: () {
+                app.time(15);
+                app.status(true);
+              },
+              label: 'Start',
+              color: Colors.deepPurple,
             ),
           ),
         ),
@@ -116,7 +121,7 @@ class ColonSeperator extends StatelessWidget {
 
 class Seconds extends StatelessWidget {
   Seconds({Key? key}) : super(key: key);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -146,14 +151,14 @@ class Seconds extends StatelessWidget {
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
-                  children: List.generate(
-                      60,
-                      (index) => Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            doubleDigits(index),
-                            style: TextStyle(color: Colors.white, fontSize: 50),
-                          ))))),
+                  children: List.generate(60, (index) {
+                return Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      doubleDigits(index),
+                      style: TextStyle(color: Colors.white, fontSize: 50),
+                    ));
+              }))),
         ),
       ],
     );
@@ -262,6 +267,8 @@ class Presets extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
+
     return Container(
       width: width * 0.26,
       height: height * 0.20,
@@ -269,7 +276,7 @@ class Presets extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
+          border: Border.all(width: 3, color: theme.primaryColor)),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

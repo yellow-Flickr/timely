@@ -96,29 +96,7 @@ class _WorldclockState extends State<Worldclock> {
   }
 }
 
-/// Punctuation seperating time digits
-class DigitSeperator extends StatelessWidget {
-  final String seperator;
-  const DigitSeperator({Key? key, required this.seperator}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return Container(
-      // padding: EdgeInsets.only(top: height * 0.12),
-      // margin: EdgeInsets.only(top: 10),
-      // height: height * 0.4,
-      // width: width * 0.25,
-      child: Center(
-          child: Text(
-        seperator,
-        style: TextStyle(
-            fontSize: 50, fontWeight: FontWeight.w400, color: Colors.white),
-      )),
-    );
-  }
-}
+ 
 
 class Seconds extends StatelessWidget {
   final String digits;
