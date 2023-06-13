@@ -1,114 +1,131 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_themes/stacked_themes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:timely/Scheduler.dart';
 import 'package:timely/Stopwatch.dart';
 import 'package:timely/Timer.dart';
+import 'package:timely/TimerTicker.dart';
 import 'package:timely/Worldclock.dart';
+import 'package:timely/addSchedule.dart';
+import 'package:timely/constant.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => TimelyStates(),
+    )
+  ], child: const Timely()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final schedulerNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigatorKey = GlobalKey<NavigatorState>();
+final GoRouter _router = GoRouter(
+  navigatorKey: _rootNavigatorKey,
+  initialLocation: '/',
+  routes: <RouteBase>[
+    ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) => UIShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/',
+            name: "timer",
+            builder: (BuildContext context, GoRouterState state) {
+              return Timer();
+            },
+          ),
+          GoRoute(
+            path: '/stopwatch',
+            name: 'stopwatch',
+            builder: (BuildContext context, GoRouterState state) {
+              return StopWatch();
+            },
+          ),
+          GoRoute(
+            path: '/worldclock',
+            name: 'worldclock',
+            builder: (BuildContext context, GoRouterState state) {
+              return Worldclock();
+            },
+          ),
+          GoRoute(
+              path: '/scheduler',
+              name: 'scheduler',
+              builder: (BuildContext context, GoRouterState state) {
+                return Scheduler();
+              },
+              routes: [
+                GoRoute(
+                  path: 'add-schedule',
+                  name: 'add-schedule',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return AddSchedule();
+                  },
+                ),
+              ]),
+        ]),
+    // GoRoute(
+    //   path: '/add-schedule',
+    //   name: 'add-schedule',
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return AddSchedule();
+    //   },
+    // ),
+    GoRoute(
+      path: '/ticker',
+      name: 'ticker',
+      builder: (BuildContext context, GoRouterState state) {
+        return TimerTicker(
+          time: state.extra as int,
+        );
+      },
+    ),
+  ],
+);
+
+class Timely extends StatelessWidget {
+  const Timely({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ThemeBuilder(
-        defaultThemeMode: ThemeMode.system,
-        builder: (context, regularTheme, darkTheme, themeMode) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
-              theme: ThemeData(),
-              darkTheme: ThemeData(brightness: Brightness.dark),
-              home: const MyHomePage(title: 'Flutter Demo Home Page'),
-            ));
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      darkTheme: Themes.darkTheme, // standard dark theme
+      routerConfig: _router,
+      theme: Themes.lightTheme,
+      themeMode: ThemeMode.system,
+    );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class UIShell extends StatelessWidget {
+  const UIShell({Key? key, required this.child}) : super(key: key);
+  final Widget child;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final PageController _pageController = PageController();
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var theme = Theme.of(context);
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return SafeArea(
       child: Scaffold(
-          backgroundColor: theme.backgroundColor,
-          appBar: AppBar(
-            backgroundColor: theme.backgroundColor,
-
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            title: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Timely",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-                )),
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            actions: [
-              Icon(
-                Icons.add,
-                size: 35,
-              ),
-              Icon(
-                Icons.more_vert,
-                size: 35,
-              ),
-            ],
-
-            // title: Text(widget.title),
-          ),
+          backgroundColor: theme.primaryColor,
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.grey.shade900,
-
-            // iconSize: 16,
-            // selectedFontSize: 10,
-            // unselectedFontSize: 8,
-            currentIndex: _currentIndex,
+            backgroundColor: theme.primaryColor,
+            currentIndex: calculateSelectedIndex(context),
             onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
+              switch (index) {
+                case 1:
+                  return context.goNamed('stopwatch');
+                case 2:
+                  return context.goNamed('worldclock');
+                case 3:
+                  return context.goNamed('scheduler');
+                default:
+                  return context.go('/');
+              }
             },
             showSelectedLabels: true,
             showUnselectedLabels: false,
@@ -124,13 +141,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
             elevation: 0,
           ),
-          body: (_currentIndex == 0)
-              ? Timer()
-              : (_currentIndex == 1)
-                  ? Stop_Watch()
-                  : Worldclock()),
+          body: child),
     );
-    //   ],
-    // ));
+  }
+
+  int calculateSelectedIndex(BuildContext context) {
+    final GoRouter route = GoRouter.of(context);
+    final String location = route.location;
+    if (location.startsWith('/stopwatch')) {
+      return 1;
+    }
+    if (location.startsWith('/worldclock')) {
+      return 2;
+    }
+    if (location.startsWith('/scheduler')) {
+      return 3;
+    }
+
+    return 0;
   }
 }

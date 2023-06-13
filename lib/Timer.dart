@@ -1,6 +1,9 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timely/Components.dart';
 import 'package:timely/TimerTicker.dart';
 import 'package:timely/ViewModel.dart';
@@ -13,85 +16,112 @@ class Timer extends StatefulWidget {
 }
 
 class _TimerState extends State<Timer> {
-  ViewModel app = ViewModel();
-  @override
-  void dispose() {
-    app.starter.dispose();
-    app.timing.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    var theme = Theme.of(context);
-    return ValueListenableBuilder(
-      valueListenable: app.starter,
-      builder: (context, value, child) {
-        return AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: app.starter.value
-                ? TimerTicker(time: app.timing.value)
-                :SetupScreen() );
-      },
-    );
-  }
-}
-
-class SetupScreen extends StatelessWidget {
-  SetupScreen({Key? key}) : super(key: key);
+  int hour = 0, minutes = 0, sec = 0;
   final ViewModel app = ViewModel();
 
   @override
+  @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(bottom: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Hours(),
-              ColonSeperator(),
-              Minutes(),
-              ColonSeperator(),
-              Seconds(),
-            ],
+    var theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: theme.primaryColor,
+
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Timely",
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+            )),
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        actions: [
+          Icon(
+            Icons.add,
+            size: 25,
           ),
-        ),
-        // Expanded(child: SizedBox(width: width * 0.05,)),
-        Expanded(
-          child: Center(
-            child: ListView.separated(
-              itemCount: 7,
-              itemBuilder: ((context, index) => Presets()),
-              separatorBuilder: ((context, index) => SizedBox(
-                    width: width * 0.05,
-                  )),
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsetsDirectional.all(10),
+          Icon(
+            Icons.more_vert,
+            size: 25,
+          ),
+        ],
+
+        // title: Text(widget.title),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Hours(
+                  selectedHour: (p0) {
+                    setState(() {
+                      hour = p0;
+                    });
+                  },
+                ),
+                ColonSeperator(),
+                Minutes(
+                  selectedMinutes: (p0) {
+                    setState(() {
+                      minutes = p0;
+                    });
+                  },
+                ),
+                ColonSeperator(),
+                Seconds(
+                  selectedSeconds: (p0) {
+                    setState(() {
+                      sec = p0;
+                    });
+                  },
+                ),
+              ],
             ),
           ),
-        ),
-        Expanded(
-          child: Center(
-            child: Button(
-              onPressed: () {
-                app.time(15);
-                app.status(true);
-              },
-              label: 'Start',
-              color: Colors.deepPurple,
+          // Expanded(child: SizedBox(width: width * 0.05,)),
+          Expanded(
+            child: Center(
+              child: ListView.separated(
+                itemCount: 7,
+                itemBuilder: ((context, index) => Presets()),
+                separatorBuilder: ((context, index) => SizedBox(
+                      width: width * 0.05,
+                    )),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsetsDirectional.all(10),
+              ),
             ),
           ),
-        ),
-      ],
+          Expanded(
+            child: Center(
+              child: Button(
+                onPressed: () {
+                  if (Duration(hours: hour, minutes: minutes, seconds: sec)
+                          .inSeconds ==
+                      0) {
+                    return;
+                  }
+                  context.goNamed('ticker',
+                      extra:
+                          Duration(hours: hour, minutes: minutes, seconds: sec)
+                              .inSeconds);
+                },
+                label: 'Start',
+                color: theme.primaryColorDark,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -113,14 +143,18 @@ class ColonSeperator extends StatelessWidget {
           child: Text(
         ":",
         style: TextStyle(
-            fontSize: 50, fontWeight: FontWeight.w400, color: Colors.white),
+          fontSize: 50,
+          fontWeight: FontWeight.w400,
+        ),
       )),
     );
   }
 }
 
 class Seconds extends StatelessWidget {
-  Seconds({Key? key}) : super(key: key);
+  final void Function(int) selectedSeconds;
+
+  Seconds({Key? key, required this.selectedSeconds}) : super(key: key);
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -135,7 +169,7 @@ class Seconds extends StatelessWidget {
           child: Center(
               child: Text(
             "Seconds",
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: TextStyle(fontSize: 15),
           )),
         ),
         Container(
@@ -148,6 +182,9 @@ class Seconds extends StatelessWidget {
               diameterRatio: 4,
               itemExtent: 85,
               overAndUnderCenterOpacity: 0.3,
+              onSelectedItemChanged: (value) {
+                selectedSeconds(value);
+              },
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
@@ -156,7 +193,7 @@ class Seconds extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       doubleDigits(index),
-                      style: TextStyle(color: Colors.white, fontSize: 50),
+                      style: TextStyle(fontSize: 50),
                     ));
               }))),
         ),
@@ -166,7 +203,8 @@ class Seconds extends StatelessWidget {
 }
 
 class Hours extends StatelessWidget {
-  Hours({Key? key}) : super(key: key);
+  final void Function(int) selectedHour;
+  Hours({Key? key, required this.selectedHour}) : super(key: key);
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -182,7 +220,7 @@ class Hours extends StatelessWidget {
           child: Center(
               child: Text(
             "Hours",
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: TextStyle(fontSize: 15),
           )),
         ),
         Container(
@@ -196,6 +234,9 @@ class Hours extends StatelessWidget {
               overAndUnderCenterOpacity: 0.3,
               // useMagnifier: true,
               // magnification: 1.2,
+              onSelectedItemChanged: (value) {
+                selectedHour(value);
+              },
               childDelegate: ListWheelChildLoopingListDelegate(
                   children: List.generate(
                       100,
@@ -204,7 +245,7 @@ class Hours extends StatelessWidget {
                           child: Text(
                             doubleDigits(index),
                             style: TextStyle(
-                                color: Colors.white,
+
                                 /*  fontWeight: FontWeight.w500, */
                                 fontSize: 50),
                           ))))),
@@ -215,7 +256,9 @@ class Hours extends StatelessWidget {
 }
 
 class Minutes extends StatelessWidget {
-  Minutes({Key? key}) : super(key: key);
+  final void Function(int) selectedMinutes;
+
+  Minutes({Key? key, required this.selectedMinutes}) : super(key: key);
   ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -230,7 +273,7 @@ class Minutes extends StatelessWidget {
           child: Center(
               child: Text(
             "Minutes",
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: TextStyle(fontSize: 15),
           )),
         ),
         Container(
@@ -242,6 +285,9 @@ class Minutes extends StatelessWidget {
               diameterRatio: 4,
               itemExtent: 85,
               overAndUnderCenterOpacity: 0.3,
+              onSelectedItemChanged: (value) {
+                selectedMinutes(value);
+              },
               // useMagnifier: true,
               // magnification: 1.2,
               childDelegate: ListWheelChildLoopingListDelegate(
@@ -251,7 +297,7 @@ class Minutes extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             doubleDigits(index),
-                            style: TextStyle(color: Colors.white, fontSize: 50),
+                            style: TextStyle(fontSize: 50),
                           ))))),
         ),
       ],
@@ -276,7 +322,7 @@ class Presets extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(width: 3, color: theme.primaryColor)),
+          border: Border.all(width: 3, color: theme.primaryColorDark)),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -287,14 +333,14 @@ class Presets extends StatelessWidget {
                 "Workout Rest",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 10),
+                style: TextStyle(fontSize: 10),
               ),
             ),
             Container(
               child: Text(
                 "00:00:00",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(fontSize: 12),
               ),
             )
           ],

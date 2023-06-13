@@ -1,7 +1,10 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timely/Components.dart';
 
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
@@ -11,73 +14,67 @@ class Worldclock extends StatefulWidget {
 }
 
 class _WorldclockState extends State<Worldclock> {
-  bool expanded = true;
+  // bool expanded = false;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          centerTitle: true,
-          backgroundColor: Colors.grey.shade900,
-          automaticallyImplyLeading: false,
-          floating: true,
-          pinned: true,
-          // onStretchTrigger: () async {
-          //   setState(() {
-          //     expanded = !expanded;
-          //   });
-          // },
-          // snap: true,
-          elevation: 0,
-          expandedHeight: height * 0.3,
-          bottom: AppBar(
-            primary: false,
-            backgroundColor: Colors.grey.shade900,
+    var theme = Theme.of(context);
 
-              
-            // title: Align(
-            //     alignment: Alignment.centerLeft,
-            //     child: Text(
-            //       "Timely",
-            //       style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-            //     )),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            centerTitle: true,
+            backgroundColor: theme.primaryColor,
             automaticallyImplyLeading: false,
+            floating: false,
+            // title: Text("Coporate News"),
+            pinned: false,
+            snap: false,
             elevation: 0,
+            scrolledUnderElevation: 0,
+            expandedHeight: height * 0.3,
+            // stretch: true,
             actions: [
               Icon(
                 Icons.add,
-                size: 35,
+                size: 25,
               ),
               Icon(
                 Icons.more_vert,
-                size: 35,
+                size: 25,
               ),
             ],
-
-            // title: Text(widget.title),
-          ),
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.only(top: height * 0.1),
-            centerTitle: true, 
-            title: Center(
-              child: Container(
-                width: width * 0.3,
-                height: height * 0.05,
+            // onStretchTrigger: () async {
+            //   setState(() {
+            //     expanded = !expanded;
+            //   });
+            //   log('message');
+            // },
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(""),
+              expandedTitleScale: 2,
+              titlePadding: EdgeInsets.only(top: height * 0.15),
+              centerTitle: true,
+              background: Center(
                 child: FittedBox(
                   child: Column(
                     children: [
                       Row(
                         children: [
                           Minutes(digits: "00"),
+                          DigitSeperator(seperator: ':'),
                           Minutes(digits: "00"),
+                          DigitSeperator(seperator: ':'),
                           Minutes(digits: "00"),
                         ],
                       ),
                       Text(
                         "Greenwich Mean Time",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: theme.primaryColorLight.withOpacity(0.6)),
                       )
                     ],
                   ),
@@ -85,18 +82,18 @@ class _WorldclockState extends State<Worldclock> {
               ),
             ),
           ),
-     
-        ),
-        SliverList(
-            delegate: SliverChildBuilderDelegate(((context, index) {
-          return ClockItem();
-        }), childCount: 15))
-      ],
+          SliverList(
+              delegate: SliverChildBuilderDelegate(((context, index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+              child: ClockItem(),
+            );
+          }), childCount: 15))
+        ],
+      ),
     );
   }
 }
-
- 
 
 class Seconds extends StatelessWidget {
   final String digits;
@@ -117,8 +114,7 @@ class Seconds extends StatelessWidget {
               // alignment: Alignment.bottomCenter,
               child: Text(
             digits,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 60),
           )),
         ),
       ],
@@ -131,23 +127,18 @@ class Minutes extends StatelessWidget {
   const Minutes({Key? key, required this.digits}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
 
     return Column(
       children: [
-        Container(
-          // margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.1,
-          width: width * 0.22,
-          // padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-          child: Center(
-              child: Text(
-            digits,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 60),
-          )),
-        ),
+        Center(
+            child: Text(
+          digits,
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 50,
+              color: theme.primaryColorLight.withOpacity(.9)),
+        )),
       ],
     );
   }
@@ -161,13 +152,15 @@ class ClockItem extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
+
     return Container(
       // width: width * 0.26,
       margin: EdgeInsets.symmetric(vertical: height * 0.015),
       height: height * 0.12,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: ShapeDecoration(
-        color: Colors.grey.shade800.withOpacity(0.4),
+        color: theme.primaryColor.withOpacity(0.4),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), side: BorderSide.none),
       ),
@@ -185,17 +178,14 @@ class ClockItem extends StatelessWidget {
                     "Accra",
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
                 Container(
                   child: Text(
                     "Local time zone",
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(fontSize: 10),
                   ),
                 )
               ],
@@ -204,9 +194,9 @@ class ClockItem extends StatelessWidget {
               child: Text(
                 "00:00",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35,
-                    color: Colors.white),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 35,
+                ),
               ),
             )
           ],

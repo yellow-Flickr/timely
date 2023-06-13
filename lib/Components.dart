@@ -56,7 +56,7 @@ class DigitSeperator extends StatelessWidget {
           child: Text(
         seperator,
         style: TextStyle(
-            fontSize: 50, fontWeight: FontWeight.w400, color: Colors.white),
+            fontSize: 50, fontWeight: FontWeight.w400,),
       )),
     );
   }
