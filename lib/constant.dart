@@ -16,10 +16,11 @@ class Themes {
           titleTextStyle: TextStyle(color: Colors.black54),
           toolbarTextStyle: TextStyle(color: Colors.black54),
           iconTheme: IconThemeData(color: Colors.black54),
-          textTheme: TextTheme(
-              bodyMedium: TextStyle(color: Colors.black54),
-              bodySmall: TextStyle(color: Colors.black54),
-              bodyLarge: TextStyle(color: Colors.black54))),
+          // textTheme: TextTheme(
+          //     bodyMedium: TextStyle(color: Colors.black54),
+          //     bodySmall: TextStyle(color: Colors.black54),
+          //     bodyLarge: TextStyle(color: Colors.black54))
+              ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           showUnselectedLabels: true,
           elevation: 0,
@@ -53,10 +54,10 @@ class Themes {
   static ThemeData darkTheme = ThemeData(
       primarySwatch: Colors.blueGrey,
       appBarTheme: const AppBarTheme(
-        textTheme: TextTheme(
-            bodyMedium: TextStyle(color: Colors.white),
-            bodySmall: TextStyle(color: Colors.white),
-            bodyLarge: TextStyle(color: Colors.white)),
+        // textTheme: TextTheme(
+        //     bodyMedium: TextStyle(color: Colors.white),
+        //     bodySmall: TextStyle(color: Colors.white),
+        //     bodyLarge: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         titleTextStyle: TextStyle(color: Colors.white),
