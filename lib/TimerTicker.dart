@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +53,8 @@ class _TimerTickerState extends State<TimerTicker>
           context.go("/");
           return;
         }
-        if (_animationController.isAnimating) {
+        if (_animationController  .isAnimating) {
+          // dev.log('tick');
           setState(() {
             hour = Duration(
                     milliseconds: Duration(seconds: widget.time)
@@ -93,10 +95,11 @@ class _TimerTickerState extends State<TimerTicker>
     double width = MediaQuery.of(context).size.width;
     var theme = Theme.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      // onPopInvoked: (_) async {
+      //   return  ;
+      // },
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.03),
@@ -109,6 +112,31 @@ class _TimerTickerState extends State<TimerTicker>
                     height: height * 0.45,
                     width: width,
                     child: AnimatedBuilder(
+                      animation: ticking,
+                      builder: ((context, child) => Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width * 0.05),
+                            child: CustomPaint(
+                              size: Size.fromRadius(width / 2),
+                              foregroundPainter: DrawTicker(
+                                  theme: theme,
+                                  stroke: width * 0.035,
+                                  percent: ticking.value,
+                                  tickerPaint:
+                                      (ticking.value <= (500 / widget.time))
+                                          ? Colors.red.shade700
+                                          : null),
+                              child: Container(
+                                height: width,
+                                width: width,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.01,
+                                    vertical: height * 0.005),
+                                child: child,
+                              ),
+                            ),
+                          )),
                       child: LayoutBuilder(builder: (context, constraints) {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,31 +218,6 @@ class _TimerTickerState extends State<TimerTicker>
                           ],
                         );
                       }),
-                      animation: ticking,
-                      builder: ((context, child) => Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: width * 0.05),
-                            child: CustomPaint(
-                              size: Size.fromRadius(width / 2),
-                              child: Container(
-                                height: width,
-                                width: width,
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width * 0.01,
-                                    vertical: height * 0.005),
-                                child: child,
-                              ),
-                              foregroundPainter: DrawTicker(
-                                  theme: theme,
-                                  stroke: width * 0.035,
-                                  percent: ticking.value,
-                                  tickerPaint:
-                                      (ticking.value <= (500 / widget.time))
-                                          ? Colors.red.shade700
-                                          : null),
-                            ),
-                          )),
                     )),
               ),
               Flexible(
@@ -288,7 +291,7 @@ class DrawTicker extends CustomPainter {
       ..color = theme.disabledColor.withOpacity(.8)
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = stroke / 15;
+      ..strokeWidth = stroke / 50;
 
     Paint ticker = Paint()
       ..color = tickerPaint ?? theme.primaryColorDark

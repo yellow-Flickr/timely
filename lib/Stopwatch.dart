@@ -7,7 +7,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:timely/Components.dart';
 import 'package:timely/constant.dart';
-import 'package:timely/main.dart';
 
 class StopWatch extends StatefulWidget {
   const StopWatch({Key? key}) : super(key: key);
@@ -18,10 +17,13 @@ class StopWatch extends StatefulWidget {
 
 class _StopwatchState extends State<StopWatch>
     with SingleTickerProviderStateMixin {
-  int millisec = 0, minutes = 0, sec = 0;
+  // int millisec = 0, minutes = 0, sec = 0;
+  Duration overall = Duration.zero;
+  Duration lap = Duration.zero;
   // Stopwatch tick = Stopwatch();
   // late AnimationController controller;
-  late Ticker ticker;
+  late Ticker overallTimer;
+  final Stopwatch lapTimer = Stopwatch();
   // late Animation<double> animating;
 
   @override
@@ -29,20 +31,33 @@ class _StopwatchState extends State<StopWatch>
     // TODO: implement initState
     super.initState();
 
-    ticker = createTicker((elapsed) {
+    overallTimer = createTicker((elapsed) {
       setState(() {
-        minutes = elapsed.inMinutes.ceil();
-        sec = elapsed.inSeconds.ceil() % Duration.secondsPerMinute;
-        millisec =
-            elapsed.inMilliseconds.ceil() % Duration.millisecondsPerSecond;
+        overall = elapsed;
+        // lap = elapsed;
+        // minutes = elapsed.inMinutes.ceil();
+        // sec = elapsed.inSeconds.ceil() % Duration.secondsPerMinute;
+        // millisec =
+        //     elapsed.inMilliseconds.ceil() % Duration.millisecondsPerSecond;
       });
     });
+
+    // lapTimer = createTicker((elapsed) {
+    //   setState(() {
+    //     // overall = elapsed;
+    //     lap = elapsed;
+    //     // minutes = elapsed.inMinutes.ceil();
+    //     // sec = elapsed.inSeconds.ceil() % Duration.secondsPerMinute;
+    //     // millisec =
+    //     //     elapsed.inMilliseconds.ceil() % Duration.millisecondsPerSecond;
+    //   });
+    // });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    ticker.dispose();
+    overallTimer.dispose();
     super.dispose();
   }
 
@@ -67,41 +82,45 @@ class _StopwatchState extends State<StopWatch>
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 5),
                     child: Minutes(
-                      digits: minutes,
+                      digits: overall.inMinutes.ceil(),
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
                       //         milliseconds:
                       //             context.watch<TimelyStates>().stopWatch)
                       //     .inMinutes),
-                      key: ValueKey<int>(minutes),
+                      key: ValueKey<int>(overall.inMinutes.ceil()),
                     ),
                   ),
                   DigitSeperator(seperator: ":"),
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 2),
                     child: Seconds(
-                      digits: sec,
+                      digits:
+                          overall.inSeconds.ceil() % Duration.secondsPerMinute,
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
                       //             milliseconds:
                       //                 context.watch<TimelyStates>().stopWatch)
                       //         .inSeconds %
                       //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(sec),
+                      key: ValueKey<int>(
+                          overall.inSeconds.ceil() % Duration.secondsPerMinute),
                     ),
                   ),
                   DigitSeperator(seperator: "."),
                   AnimatedSwitcher(
                     duration: Duration(microseconds: 1),
                     child: Milliseconds(
-                      digits: millisec,
+                      digits: overall.inMilliseconds.ceil() %
+                          Duration.millisecondsPerSecond,
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
                       //             milliseconds:
                       //                 context.watch<TimelyStates>().stopWatch)
                       //         .inMilliseconds %
                       //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(millisec),
+                      key: ValueKey<int>(overall.inMilliseconds.ceil() %
+                          Duration.millisecondsPerSecond),
                     ),
                   ),
                 ],
@@ -120,17 +139,19 @@ class _StopwatchState extends State<StopWatch>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Minutes(
-                      digits: 0,
+                      digits: lapTimer.elapsed.inMinutes.ceil(),
                       textOpacity: 0.7,
                     ),
                     DigitSeperator(seperator: ":"),
                     Seconds(
-                      digits: 0,
+                      digits: lapTimer.elapsed.inSeconds.ceil() %
+                          Duration.secondsPerMinute,
                       textOpacity: 0.7,
                     ),
                     DigitSeperator(seperator: "."),
                     Milliseconds(
-                      digits: 0,
+                      digits: lapTimer.elapsed.inMilliseconds.ceil() %
+                          Duration.millisecondsPerSecond,
                       textOpacity: 0.7,
                     ),
                   ],
@@ -208,13 +229,14 @@ class _StopwatchState extends State<StopWatch>
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14)),
                                     Text(
-                                        "${context.watch<TimelyStates>().laps[index].inMinutes.ceil().toString().padLeft(2, '0')}:${(context.watch<TimelyStates>().laps[index].inSeconds.ceil() % Duration.secondsPerMinute).toString().padLeft(2, '0')}.${(context.watch<TimelyStates>().laps[index].inMilliseconds.ceil() % Duration.millisecondsPerSecond).toString().padLeft(3, '0')}",
+                                        "${context.watch<TimelyStates>().laps[index].$1.inMinutes.ceil().toString().padLeft(2, '0')}:${(context.watch<TimelyStates>().laps[index].$1.inSeconds.ceil() % Duration.secondsPerMinute).toString().padLeft(2, '0')}.${(context.watch<TimelyStates>().laps[index].$1.inMilliseconds.ceil() % Duration.millisecondsPerSecond).toString().padLeft(3, '0')}",
                                         style: TextStyle(
                                             color: theme.primaryColorLight
                                                 .withOpacity(.6),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14)),
-                                    Text("00:00.00",
+                                    Text(
+                                        "${context.watch<TimelyStates>().laps[index].$2.inMinutes.ceil().toString().padLeft(2, '0')}:${(context.watch<TimelyStates>().laps[index].$2.inSeconds.ceil() % Duration.secondsPerMinute).toString().padLeft(2, '0')}.${(context.watch<TimelyStates>().laps[index].$2.inMilliseconds.ceil() % Duration.millisecondsPerSecond).toString().padLeft(3, '0')}",
                                         style: TextStyle(
                                             color: theme.primaryColorLight
                                                 .withOpacity(.8),
@@ -222,7 +244,7 @@ class _StopwatchState extends State<StopWatch>
                                             fontSize: 14)),
                                   ],
                                 ),
-                              )),
+                              )).reversed.toList(),
                     ),
                   ),
                 ],
@@ -236,28 +258,35 @@ class _StopwatchState extends State<StopWatch>
                   children: [
                     Button(
                       onPressed: () {
-                        context.read<TimelyStates>().addLap(Duration(
-                            minutes: minutes,
-                            seconds: sec,
-                            milliseconds: millisec));
+                        context
+                            .read<TimelyStates>()
+                            .addLap((lapTimer.elapsed, overall));
+                        lapTimer.reset();
+                        // ..start();
                       },
                       label: "Lap",
                       color: Theme.of(context).disabledColor,
                     ),
                     Button(
                       onPressed: () {
-                        if (ticker.isTicking) {
-                          // tick.stop();
-                          ticker.stop(canceled: true);
-                        } else {
-                          ticker.start();
-                          // tick.start();
-                        }
+                        setState(() {
+                          if (overallTimer.isTicking) {
+                            // tick.stop();
+                            overallTimer.stop(canceled: true);
+                            lapTimer.stop();
+                          } else {
+                            overallTimer.start();
+                            lapTimer
+                              ..reset()
+                              ..start();
+                            // tick.start();
+                          }
+                        });
                       },
-                      color: !ticker.muted
+                      color: !overallTimer.isActive
                           ? Theme.of(context).primaryColorDark
                           : Colors.red.shade700,
-                      label: !ticker.isTicking ? "Start" : 'Reset',
+                      label: overallTimer.isActive ?  "Stop" :/*  (overallTimer.)? '': */'Stop',
                     ),
                   ],
                 ),

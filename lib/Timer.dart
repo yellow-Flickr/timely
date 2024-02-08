@@ -110,7 +110,7 @@ class _TimerState extends State<Timer> {
                       0) {
                     return;
                   }
-                  context.goNamed('ticker',
+                  context.goNamed('ticker', 
                       extra:
                           Duration(hours: hour, minutes: minutes, seconds: sec)
                               .inSeconds);
