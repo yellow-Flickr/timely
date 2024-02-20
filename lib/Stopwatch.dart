@@ -22,25 +22,30 @@ class _StopwatchState extends State<StopWatch>
   Duration lap = Duration.zero;
   // Stopwatch tick = Stopwatch();
   // late AnimationController controller;
-  late Ticker overallTimer;
+  late Ticker animationTicker;
   final Stopwatch lapTimer = Stopwatch();
+  final Stopwatch overallTimer = Stopwatch();
   // late Animation<double> animating;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    context.read<TimelyStates>().laps = [];
 
-    overallTimer = createTicker((elapsed) {
-      setState(() {
-        overall = elapsed;
-        // lap = elapsed;
-        // minutes = elapsed.inMinutes.ceil();
-        // sec = elapsed.inSeconds.ceil() % Duration.secondsPerMinute;
-        // millisec =
-        //     elapsed.inMilliseconds.ceil() % Duration.millisecondsPerSecond;
-      });
+    animationTicker = createTicker((elapsed) {
+      setState(() {});
     });
+    // overallTimer = createTicker((elapsed) {
+    //   setState(() {
+    //     overall = elapsed;
+    //     // lap = elapsed;
+    //     // minutes = elapsed.inMinutes.ceil();
+    //     // sec = elapsed.inSeconds.ceil() % Duration.secondsPerMinute;
+    //     // millisec =
+    //     //     elapsed.inMilliseconds.ceil() % Duration.millisecondsPerSecond;
+    //   });
+    // });
 
     // lapTimer = createTicker((elapsed) {
     //   setState(() {
@@ -57,7 +62,9 @@ class _StopwatchState extends State<StopWatch>
   @override
   void dispose() {
     // TODO: implement dispose
-    overallTimer.dispose();
+
+    animationTicker.dispose();
+
     super.dispose();
   }
 
@@ -73,6 +80,7 @@ class _StopwatchState extends State<StopWatch>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ///Over-all timer
             Container(
               padding: EdgeInsets.only(top: height * 0.06),
               child: Row(
@@ -82,36 +90,36 @@ class _StopwatchState extends State<StopWatch>
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 5),
                     child: Minutes(
-                      digits: overall.inMinutes.ceil(),
+                      digits: overallTimer.elapsed.inMinutes.ceil(),
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
                       //         milliseconds:
                       //             context.watch<TimelyStates>().stopWatch)
                       //     .inMinutes),
-                      key: ValueKey<int>(overall.inMinutes.ceil()),
+                      key: ValueKey<int>(overallTimer.elapsed.inMinutes.ceil()),
                     ),
                   ),
                   DigitSeperator(seperator: ":"),
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 2),
                     child: Seconds(
-                      digits:
-                          overall.inSeconds.ceil() % Duration.secondsPerMinute,
+                      digits: overallTimer.elapsed.inSeconds.ceil() %
+                          Duration.secondsPerMinute,
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
                       //             milliseconds:
                       //                 context.watch<TimelyStates>().stopWatch)
                       //         .inSeconds %
                       //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(
-                          overall.inSeconds.ceil() % Duration.secondsPerMinute),
+                      key: ValueKey<int>(overallTimer.elapsed.inSeconds.ceil() %
+                          Duration.secondsPerMinute),
                     ),
                   ),
                   DigitSeperator(seperator: "."),
                   AnimatedSwitcher(
                     duration: Duration(microseconds: 1),
                     child: Milliseconds(
-                      digits: overall.inMilliseconds.ceil() %
+                      digits: overallTimer.elapsed.inMilliseconds.ceil() %
                           Duration.millisecondsPerSecond,
                       textOpacity: 1,
                       // key: ValueKey<int>(Duration(
@@ -119,13 +127,16 @@ class _StopwatchState extends State<StopWatch>
                       //                 context.watch<TimelyStates>().stopWatch)
                       //         .inMilliseconds %
                       //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(overall.inMilliseconds.ceil() %
-                          Duration.millisecondsPerSecond),
+                      key: ValueKey<int>(
+                          overallTimer.elapsed.inMilliseconds.ceil() %
+                              Duration.millisecondsPerSecond),
                     ),
                   ),
                 ],
               ),
             ),
+
+            ///Lap timer
             SizedBox(
               width: width * 0.5,
               height: height * 0.05,
@@ -258,35 +269,51 @@ class _StopwatchState extends State<StopWatch>
                   children: [
                     Button(
                       onPressed: () {
-                        context
-                            .read<TimelyStates>()
-                            .addLap((lapTimer.elapsed, overall));
-                        lapTimer.reset();
+                        if (overallTimer.isRunning) {
+                          context
+                              .read<TimelyStates>()
+                              .addLap((lapTimer.elapsed, overallTimer.elapsed));
+                          lapTimer.reset();
+                        } else {
+                          setState(() {
+                            overallTimer.reset();
+                            lapTimer.reset();
+                          });
+                        }
                         // ..start();
                       },
-                      label: "Lap",
-                      color: Theme.of(context).disabledColor,
+                      label: (overallTimer.isRunning ||
+                              (overallTimer.elapsed == Duration.zero))
+                          ? "Lap"
+                          : "Reset",
+                      color: (overallTimer.isRunning ||
+                              (overallTimer.elapsed == Duration.zero))
+                          ? Theme.of(context).disabledColor
+                          : Colors.red.shade700,
                     ),
                     Button(
                       onPressed: () {
                         setState(() {
-                          if (overallTimer.isTicking) {
+                          if (overallTimer.isRunning) {
                             // tick.stop();
-                            overallTimer.stop(canceled: true);
+                            overallTimer.stop(/* canceled: true */);
                             lapTimer.stop();
+                            animationTicker.stop();
                           } else {
+                            animationTicker.start();
                             overallTimer.start();
                             lapTimer
-                              ..reset()
-                              ..start();
+                                // ..reset()
+                                .start();
                             // tick.start();
                           }
                         });
                       },
-                      color: !overallTimer.isActive
+                      color: !overallTimer.isRunning
                           ? Theme.of(context).primaryColorDark
                           : Colors.red.shade700,
-                      label: overallTimer.isActive ?  "Stop" :/*  (overallTimer.)? '': */'Stop',
+                      label: /* overall==Duration.zero ?  "Start" : */
+                          (overallTimer.isRunning) ? 'Pause' : 'Start',
                     ),
                   ],
                 ),

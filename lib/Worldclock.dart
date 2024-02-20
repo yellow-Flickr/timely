@@ -25,16 +25,18 @@ class _WorldclockState extends State<Worldclock> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            centerTitle: true,
+            centerTitle: false,
             backgroundColor: theme.primaryColor,
             automaticallyImplyLeading: false,
-            floating: false,
-            // title: Text("Coporate News"),
-            pinned: false,
+            floating: true,
+             pinned: true,
             snap: false,
+            // stretch: false,
             elevation: 0,
             scrolledUnderElevation: 0,
-            expandedHeight: height * 0.3,
+            title: Text('WorldClock'),
+            
+            expandedHeight: height * 0.25,
             // stretch: true,
             actions: [
               Icon(

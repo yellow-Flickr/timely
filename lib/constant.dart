@@ -11,16 +11,16 @@ class Themes {
   static ThemeData lightTheme = ThemeData(
       primarySwatch: Colors.blueGrey,
       appBarTheme: const AppBarTheme(
-          elevation: 0,
-          backgroundColor: Color.fromARGB(255, 237, 218, 255),
-          titleTextStyle: TextStyle(color: Colors.black54),
-          toolbarTextStyle: TextStyle(color: Colors.black54),
-          iconTheme: IconThemeData(color: Colors.black54),
-          // textTheme: TextTheme(
-          //     bodyMedium: TextStyle(color: Colors.black54),
-          //     bodySmall: TextStyle(color: Colors.black54),
-          //     bodyLarge: TextStyle(color: Colors.black54))
-              ),
+        elevation: 0,
+        backgroundColor: Color.fromARGB(255, 237, 218, 255),
+        titleTextStyle: TextStyle(color: Colors.black54),
+        toolbarTextStyle: TextStyle(color: Colors.black54),
+        iconTheme: IconThemeData(color: Colors.black54),
+        // textTheme: TextTheme(
+        //     bodyMedium: TextStyle(color: Colors.black54),
+        //     bodySmall: TextStyle(color: Colors.black54),
+        //     bodyLarge: TextStyle(color: Colors.black54))
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           showUnselectedLabels: true,
           elevation: 0,
@@ -115,11 +115,15 @@ final double height =
 // }
 
 class TimelyStates with ChangeNotifier {
-  final List<(Duration,Duration)> _laps = [];
+    List<(Duration, Duration)> _laps = [];
 
-  List<(Duration,Duration)> get laps => _laps;
+  List<(Duration, Duration)> get laps => _laps;
 
-  void addLap((Duration,Duration) lap) {
+  set laps(List<(Duration, Duration)> laps) {
+    _laps = laps;
+  }
+
+  void addLap((Duration, Duration) lap) {
     _laps.add(lap);
     notifyListeners();
   }
