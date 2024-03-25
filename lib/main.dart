@@ -10,6 +10,8 @@ import 'package:timely/TimerTicker.dart';
 import 'package:timely/Worldclock.dart';
 import 'package:timely/addSchedule.dart';
 import 'package:timely/constant.dart';
+import 'package:timely/models/scheduleModel.dart';
+import 'package:timely/scheduleDetail.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -65,6 +67,15 @@ final GoRouter _router = GoRouter(
                     return AddSchedule();
                   },
                 ),
+                GoRoute(
+                  path: 'schedule-detail',
+                  name: 'schedule-detail',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return ScheduleDetail(
+                      schedule: state.extra as ScheduleModel,
+                    );
+                  },
+                ),
               ]),
         ]),
     // GoRoute(
@@ -72,6 +83,15 @@ final GoRouter _router = GoRouter(
     //   name: 'add-schedule',
     //   builder: (BuildContext context, GoRouterState state) {
     //     return AddSchedule();
+    //   },
+    // ),
+    // GoRoute(
+    //   path: '/schedule-detail',
+    //   name: 'schedule-detail',
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return ScheduleDetail(
+    //       schedule: state.extra as ScheduleModel,
+    //     );
     //   },
     // ),
     GoRoute(
@@ -109,40 +129,38 @@ class UIShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
+        backgroundColor: theme.primaryColor,
+        bottomNavigationBar: BottomNavigationBar(
           backgroundColor: theme.primaryColor,
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: theme.primaryColor,
-            currentIndex: calculateSelectedIndex(context),
-            onTap: (index) {
-              switch (index) {
-                case 1:
-                  return context.goNamed('stopwatch');
-                case 2:
-                  return context.goNamed('worldclock');
-                case 3:
-                  return context.goNamed('scheduler');
-                default:
-                  return context.go('/');
-              }
-            },
-            showSelectedLabels: true,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(label: "Timer", icon: Icon(Icons.timer)),
-              BottomNavigationBarItem(
-                  label: "Stopwatch", icon: Icon(Icons.timer_10_select_sharp)),
-              BottomNavigationBarItem(
-                  label: "World Clock", icon: Icon(Icons.public)),
-              BottomNavigationBarItem(
-                  label: "Scheduler", icon: Icon(Icons.event_note)),
-            ],
-            elevation: 0,
-          ),
-          body: child),
-    );
+          currentIndex: calculateSelectedIndex(context),
+          onTap: (index) {
+            switch (index) {
+              case 1:
+                return context.goNamed('stopwatch');
+              case 2:
+                return context.goNamed('worldclock');
+              case 3:
+                return context.goNamed('scheduler');
+              default:
+                return context.go('/');
+            }
+          },
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(label: "Timer", icon: Icon(Icons.timer)),
+            BottomNavigationBarItem(
+                label: "Stopwatch", icon: Icon(Icons.timer_10_select_sharp)),
+            BottomNavigationBarItem(
+                label: "World Clock", icon: Icon(Icons.public)),
+            BottomNavigationBarItem(
+                label: "Scheduler", icon: Icon(Icons.event_note)),
+          ],
+          elevation: 0,
+        ),
+        body: child);
   }
 
   int calculateSelectedIndex(BuildContext context) {

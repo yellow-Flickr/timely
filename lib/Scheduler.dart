@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/ViewModel.dart';
+import 'package:timely/models/scheduleModel.dart';
 
 class Scheduler extends StatefulWidget {
   const Scheduler({Key? key}) : super(key: key);
@@ -29,32 +30,42 @@ class _SchedulerState extends State<Scheduler> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.pushNamed('add-schedule');
-          },
-          child: Icon(
-            Icons.add_alert_outlined,
-            color: theme.primaryColorDark,
-          ),
-        ),
-        appBar: AppBar(
-          backgroundColor: theme.primaryColor,
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
-          title: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Scheduler",
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-              )),
+    return Scaffold(
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     context.pushNamed('add-schedule');
+        //   },
+        //   child: Icon(
+        //     Icons.add_alert_outlined,
+        //     color: theme.primaryColorDark,
+        //   ),
+        // ),
+        appBar: AppBar(
+          title: Text(
+            "Scheduler",
+          ),
           automaticallyImplyLeading: false,
           elevation: 0,
+actions: [
+  IconButton(onPressed:() =>             context.pushNamed('add-schedule')
+, icon: Icon(
+            Icons.add_alert_outlined,
+            // color: theme.primaryColorDark,
+          ))
+],
 
-          // title: Text(widget.title),
         ),
-        body: ListView(
-          children: List.generate(20, (index) => ScheduleItem()),
+        body: ListView.separated(
+          itemCount: 20,
+          padding: EdgeInsets.symmetric(
+              horizontal: width * .03, vertical: height * .01),
+          itemBuilder: (context, index) => ScheduleItem(),
+          separatorBuilder: (BuildContext context, int index) => SizedBox(
+            height: height * .01,
+          ),
         ));
   }
 }
@@ -69,17 +80,21 @@ class ScheduleItem extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     var theme = Theme.of(context);
 
-    return Container(
-      // width: width * 0.26,
-      margin: EdgeInsets.symmetric(vertical: height * 0.015),
-      height: height * 0.12,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: ShapeDecoration(
-        color: theme.primaryColor.withOpacity(0.4),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), side: BorderSide.none),
-      ),
-      child: Center(
+    return GestureDetector(
+      onTap: () =>     context.goNamed('schedule-detail', 
+                      extra:
+                          testSchedule),
+      child: Container(
+        // width: width * 0.26,
+        // height: height * 0.1,
+        padding:
+            EdgeInsets.symmetric(vertical: height * .01, horizontal: width * .02),
+        decoration: ShapeDecoration(
+          color: theme.primaryColor.withOpacity(0.4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,46 +105,46 @@ class ScheduleItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Text(
-                      "Pomodoro Workout",
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
+                  Text(
+                    "Pomodoro Workout",
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w600),
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.circle_notifications_outlined,
-                          color: Colors.redAccent,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "High Priority",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.circle_notifications_outlined,
+                        color: Colors.redAccent,
+                        size: 14,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "High Priority",
+                        textAlign: TextAlign.left,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
                   )
                 ],
               ),
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                child: Text(
-                  "Hourly",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+              child: Column(
+                children: [
+                  Text(
+                    "Hourly",
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
+                  ), Text(
+                    "Repeat",
+                    style: theme.textTheme.bodySmall?.copyWith(fontSize: 8),
                   ),
-                ),
+                ],
               ),
             )
           ],

@@ -1,29 +1,37 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:timely/constant.dart';
+import 'package:timely/models/scheduleModel.dart';
 
-class AddSchedule extends StatefulWidget {
-  const AddSchedule({Key? key}) : super(key: key);
+class ScheduleDetail extends StatefulWidget {
+  final ScheduleModel schedule;
+  const ScheduleDetail({Key? key, required this.schedule}) : super(key: key);
 
   @override
-  State<AddSchedule> createState() => _AddScheduleState();
+  State<ScheduleDetail> createState() => _ScheduleDetailState();
 }
 
-class _AddScheduleState extends State<AddSchedule> {
+class _ScheduleDetailState extends State<ScheduleDetail> {
   DateTime day = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
+  TextEditingController title = TextEditingController();
+  TextEditingController notes = TextEditingController();
+
+  @override
+  void initState() {
+    title.text = widget.schedule.title;
+    notes.text = widget.schedule.notes;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "New Scheduler",
+            "Schedule Detail",
           ),
           automaticallyImplyLeading: false,
           elevation: 0,
@@ -118,9 +126,7 @@ class _AddScheduleState extends State<AddSchedule> {
                       // side: BorderSide(color: theme.primaryColor, width: 1.5),
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                SizedBox(
-                  height: height * .01,
-                ),
+
                 Divider(),
                 SizedBox(
                   height: height * .01,
@@ -128,6 +134,7 @@ class _AddScheduleState extends State<AddSchedule> {
                 TextField(
                   maxLines: 1,
                   style: theme.textTheme.bodySmall,
+                  controller: title,
                   decoration: InputDecoration(
                       fillColor: theme.highlightColor,
                       isDense: true,
@@ -150,6 +157,7 @@ class _AddScheduleState extends State<AddSchedule> {
                   // maxLength: 30,
                   // style: TextStyle(),
                   maxLines: 8, maxLength: 500,
+                  controller: notes,
                   style: theme.textTheme.bodySmall,
                   decoration: InputDecoration(
                     isCollapsed: true,
@@ -167,6 +175,9 @@ class _AddScheduleState extends State<AddSchedule> {
                   ),
                 ),
 
+                // SizedBox(
+                //   height: height * .01,
+                // ),
                 // ListTile(
                 //   onTap: () async {
                 //     day = await showDatePicker(
@@ -186,7 +197,8 @@ class _AddScheduleState extends State<AddSchedule> {
                 //   dense: true,
                 //   title: Text(
                 //     'Date',
-                //     style: theme.textTheme.labelSmall?.copyWith (fontWeight: FontWeight.bold),
+                //     style: theme.textTheme.labelSmall
+                //         ?.copyWith(fontWeight: FontWeight.bold),
                 //   ),
                 //   trailing: Container(
                 //     padding: EdgeInsets.symmetric(
@@ -232,7 +244,8 @@ class _AddScheduleState extends State<AddSchedule> {
                 //   dense: true,
                 //   title: Text(
                 //     'Time',
-                //     style: theme.textTheme.labelSmall?.copyWith (fontWeight: FontWeight.bold),
+                //     style: theme.textTheme.labelSmall
+                //         ?.copyWith(fontWeight: FontWeight.bold),
                 //   ),
                 //   trailing: Container(
                 //     padding: EdgeInsets.symmetric(
