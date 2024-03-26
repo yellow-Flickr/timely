@@ -3,9 +3,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:timely/Components.dart';
-
+import 'package:timely/components.dart';
+ 
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
 
@@ -89,115 +88,3 @@ class _WorldclockState extends State<Worldclock> {
   }
 }
 
-class Seconds extends StatelessWidget {
-  final String digits;
-
-  const Seconds({Key? key, required this.digits}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    return Column(
-      children: [
-        Container(
-          // margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.1,
-          width: width * 0.22,
-          child: Center(
-              // alignment: Alignment.bottomCenter,
-              child: Text(
-            digits,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 60),
-          )),
-        ),
-      ],
-    );
-  }
-}
-
-class Minutes extends StatelessWidget {
-  final String digits;
-  const Minutes({Key? key, required this.digits}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return Column(
-      children: [
-        Center(
-            child: Text(
-          digits,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 50,
-              color: theme.primaryColorLight.withOpacity(.9)),
-        )),
-      ],
-    );
-  }
-}
-
-/// Widget for saved and named time presets  on Worldclock screen.
-class ClockItem extends StatelessWidget {
-  const ClockItem({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    var theme = Theme.of(context);
-
-    return Container(
-      // width: width * 0.26,
-       height: height * 0.10,
-      padding: EdgeInsets.symmetric(  horizontal: 15),
-      decoration: ShapeDecoration(
-        color: theme.primaryColor.withOpacity(0.4),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),  ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: Text(
-                  "Accra",
-                  textAlign: TextAlign.left,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "Local time zone",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 10),
-                ),
-              )
-            ],
-          ),
-          Container(
-            child: Text(
-              "00:00",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 35,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
-String doubleDigits(int number) {
-  return number.toString().length == 1 ? "0$number" : number.toString();
-}

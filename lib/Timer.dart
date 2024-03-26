@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:timely/Components.dart';
+import 'package:timely/components.dart';
 import 'package:timely/TimerTicker.dart';
 import 'package:timely/ViewModel.dart';
 
@@ -60,28 +60,34 @@ class _TimerState extends State<Timer> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Hours(
-                  selectedHour: (p0) {
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
                     setState(() {
                       hour = p0;
                     });
                   },
+                  label: 'Hours',
+                  timeFigures: 100,
                 ),
-                ColonSeperator(),
-                Minutes(
-                  selectedMinutes: (p0) {
+                DigitSeperator(seperator: ':',wheelSelector: true,),
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
                     setState(() {
                       minutes = p0;
                     });
                   },
+                  label: 'Minutes',
+                  timeFigures: 60,
                 ),
-                ColonSeperator(),
-                Seconds(
-                  selectedSeconds: (p0) {
+                DigitSeperator(seperator: ':',wheelSelector: true,),
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
                     setState(() {
                       sec = p0;
                     });
                   },
+                  label: 'Seconds',
+                  timeFigures: 60,
                 ),
               ],
             ),
@@ -110,7 +116,7 @@ class _TimerState extends State<Timer> {
                       0) {
                     return;
                   }
-                  context.goNamed('ticker', 
+                  context.goNamed('ticker',
                       extra:
                           Duration(hours: hour, minutes: minutes, seconds: sec)
                               .inSeconds);
@@ -126,185 +132,7 @@ class _TimerState extends State<Timer> {
   }
 }
 
-/// Colon seperating time digits
-class ColonSeperator extends StatelessWidget {
-  const ColonSeperator({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.only(top: height * 0.12),
-      margin: EdgeInsets.only(top: 10),
-      height: height * 0.4,
-      // width: width * 0.25,
-      child: Center(
-          child: Text(
-        ":",
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.w400,
-        ),
-      )),
-    );
-  }
-}
-
-class Seconds extends StatelessWidget {
-  final void Function(int) selectedSeconds;
-
-  Seconds({Key? key, required this.selectedSeconds}) : super(key: key);
-  final ScrollController _scrollController = ScrollController();
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: height * 0.05),
-          width: width * 0.25,
-          child: Center(
-              child: Text(
-            "Seconds",
-            style: TextStyle(fontSize: 15),
-          )),
-        ),
-        Container(
-          margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.3,
-          width: width * 0.25,
-          child: ListWheelScrollView.useDelegate(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
-              diameterRatio: 4,
-              itemExtent: 85,
-              overAndUnderCenterOpacity: 0.3,
-              onSelectedItemChanged: (value) {
-                selectedSeconds(value);
-              },
-              // useMagnifier: true,
-              // magnification: 1.2,
-              childDelegate: ListWheelChildLoopingListDelegate(
-                  children: List.generate(60, (index) {
-                return Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      doubleDigits(index),
-                      style: TextStyle(fontSize: 50),
-                    ));
-              }))),
-        ),
-      ],
-    );
-  }
-}
-
-class Hours extends StatelessWidget {
-  final void Function(int) selectedHour;
-  Hours({Key? key, required this.selectedHour}) : super(key: key);
-  final ScrollController _scrollController = ScrollController();
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: height * 0.05),
-          width: width * 0.25,
-          child: Center(
-              child: Text(
-            "Hours",
-            style: TextStyle(fontSize: 15),
-          )),
-        ),
-        Container(
-          margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.3,
-          width: width * 0.25,
-          child: ListWheelScrollView.useDelegate(
-              physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
-              diameterRatio: 4,
-              itemExtent: 85,
-              overAndUnderCenterOpacity: 0.3,
-              // useMagnifier: true,
-              // magnification: 1.2,
-              onSelectedItemChanged: (value) {
-                selectedHour(value);
-              },
-              childDelegate: ListWheelChildLoopingListDelegate(
-                  children: List.generate(
-                      100,
-                      (index) => Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            doubleDigits(index),
-                            style: TextStyle(
-
-                                /*  fontWeight: FontWeight.w500, */
-                                fontSize: 50),
-                          ))))),
-        ),
-      ],
-    );
-  }
-}
-
-class Minutes extends StatelessWidget {
-  final void Function(int) selectedMinutes;
-
-  Minutes({Key? key, required this.selectedMinutes}) : super(key: key);
-  ScrollController _scrollController = ScrollController();
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: height * 0.05),
-          width: width * 0.25,
-          child: Center(
-              child: Text(
-            "Minutes",
-            style: TextStyle(fontSize: 15),
-          )),
-        ),
-        Container(
-          margin: EdgeInsets.only(bottom: 15),
-          height: height * 0.3,
-          width: width * 0.25,
-          child: ListWheelScrollView.useDelegate(
-              physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
-              diameterRatio: 4,
-              itemExtent: 85,
-              overAndUnderCenterOpacity: 0.3,
-              onSelectedItemChanged: (value) {
-                selectedMinutes(value);
-              },
-              // useMagnifier: true,
-              // magnification: 1.2,
-              childDelegate: ListWheelChildLoopingListDelegate(
-                  children: List.generate(
-                      60,
-                      (index) => Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            doubleDigits(index),
-                            style: TextStyle(fontSize: 50),
-                          ))))),
-        ),
-      ],
-    );
-  }
-}
-
+ 
 /// Widget for saved and named time presets  on Timer screen.
 class Presets extends StatelessWidget {
   const Presets({Key? key}) : super(key: key);

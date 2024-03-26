@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:timely/Scheduler.dart';
-import 'package:timely/Stopwatch.dart';
-import 'package:timely/Timer.dart';
+import 'package:timely/scheduler.dart';
+import 'package:timely/stopwatch.dart';
+import 'package:timely/timer.dart';
 import 'package:timely/TimerTicker.dart';
-import 'package:timely/Worldclock.dart';
+import 'package:timely/worldclock.dart';
 import 'package:timely/addSchedule.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/models/scheduleModel.dart';

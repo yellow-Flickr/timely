@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'package:timely/Components.dart';
+import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
 
 class StopWatch extends StatefulWidget {
@@ -74,6 +74,106 @@ class _StopwatchState extends State<StopWatch>
     double width = MediaQuery.of(context).size.width;
     var theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Stopwatch'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(height * .15),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: height * 0.06),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 5),
+                      child: Minutes(
+                        digits: overallTimer.elapsed.inMinutes.ceil(),
+                        textOpacity: 1,
+                        // key: ValueKey<int>(Duration(
+                        //         milliseconds:
+                        //             context.watch<TimelyStates>().stopWatch)
+                        //     .inMinutes),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inMinutes.ceil()),
+                      ),
+                    ),
+                    DigitSeperator(seperator: ":"),
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 2),
+                      child: Seconds(
+                        digits: overallTimer.elapsed.inSeconds.ceil() %
+                            Duration.secondsPerMinute,
+                        textOpacity: 1,
+                        // key: ValueKey<int>(Duration(
+                        //             milliseconds:
+                        //                 context.watch<TimelyStates>().stopWatch)
+                        //         .inSeconds %
+                        //     Duration.millisecondsPerMinute),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inSeconds.ceil() %
+                                Duration.secondsPerMinute),
+                      ),
+                    ),
+                    DigitSeperator(seperator: "."),
+                    AnimatedSwitcher(
+                      duration: Duration(microseconds: 1),
+                      child: Milliseconds(
+                        digits: overallTimer.elapsed.inMilliseconds.ceil() %
+                            Duration.millisecondsPerSecond,
+                        textOpacity: 1,
+                        // key: ValueKey<int>(Duration(
+                        //             milliseconds:
+                        //                 context.watch<TimelyStates>().stopWatch)
+                        //         .inMilliseconds %
+                        //     Duration.millisecondsPerMinute),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inMilliseconds.ceil() %
+                                Duration.millisecondsPerSecond),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              ///Lap timer
+              SizedBox(
+                width: width * 0.5,
+                height: height * 0.05,
+                // padding: EdgeInsets.only(bottom: height * 0.1),
+                // foregroundDecoration:
+                //     BoxDecoration(color: theme.primaryColor.withOpacity(0.5)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Minutes(
+                        digits: lapTimer.elapsed.inMinutes.ceil(),
+                        textOpacity: 0.7,
+                      ),
+                      DigitSeperator(seperator: ":"),
+                      Seconds(
+                        digits: lapTimer.elapsed.inSeconds.ceil() %
+                            Duration.secondsPerMinute,
+                        textOpacity: 0.7,
+                      ),
+                      DigitSeperator(seperator: "."),
+                      Milliseconds(
+                        digits: lapTimer.elapsed.inMilliseconds.ceil() %
+                            Duration.millisecondsPerSecond,
+                        textOpacity: 0.7,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.06, vertical: height * 0.01),
@@ -81,94 +181,7 @@ class _StopwatchState extends State<StopWatch>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ///Over-all timer
-            Container(
-              padding: EdgeInsets.only(top: height * 0.06),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 5),
-                    child: Minutes(
-                      digits: overallTimer.elapsed.inMinutes.ceil(),
-                      textOpacity: 1,
-                      // key: ValueKey<int>(Duration(
-                      //         milliseconds:
-                      //             context.watch<TimelyStates>().stopWatch)
-                      //     .inMinutes),
-                      key: ValueKey<int>(overallTimer.elapsed.inMinutes.ceil()),
-                    ),
-                  ),
-                  DigitSeperator(seperator: ":"),
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 2),
-                    child: Seconds(
-                      digits: overallTimer.elapsed.inSeconds.ceil() %
-                          Duration.secondsPerMinute,
-                      textOpacity: 1,
-                      // key: ValueKey<int>(Duration(
-                      //             milliseconds:
-                      //                 context.watch<TimelyStates>().stopWatch)
-                      //         .inSeconds %
-                      //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(overallTimer.elapsed.inSeconds.ceil() %
-                          Duration.secondsPerMinute),
-                    ),
-                  ),
-                  DigitSeperator(seperator: "."),
-                  AnimatedSwitcher(
-                    duration: Duration(microseconds: 1),
-                    child: Milliseconds(
-                      digits: overallTimer.elapsed.inMilliseconds.ceil() %
-                          Duration.millisecondsPerSecond,
-                      textOpacity: 1,
-                      // key: ValueKey<int>(Duration(
-                      //             milliseconds:
-                      //                 context.watch<TimelyStates>().stopWatch)
-                      //         .inMilliseconds %
-                      //     Duration.millisecondsPerMinute),
-                      key: ValueKey<int>(
-                          overallTimer.elapsed.inMilliseconds.ceil() %
-                              Duration.millisecondsPerSecond),
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            ///Lap timer
-            SizedBox(
-              width: width * 0.5,
-              height: height * 0.05,
-              // padding: EdgeInsets.only(bottom: height * 0.1),
-              // foregroundDecoration:
-              //     BoxDecoration(color: theme.primaryColor.withOpacity(0.5)),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Minutes(
-                      digits: lapTimer.elapsed.inMinutes.ceil(),
-                      textOpacity: 0.7,
-                    ),
-                    DigitSeperator(seperator: ":"),
-                    Seconds(
-                      digits: lapTimer.elapsed.inSeconds.ceil() %
-                          Duration.secondsPerMinute,
-                      textOpacity: 0.7,
-                    ),
-                    DigitSeperator(seperator: "."),
-                    Milliseconds(
-                      digits: lapTimer.elapsed.inMilliseconds.ceil() %
-                          Duration.millisecondsPerSecond,
-                      textOpacity: 0.7,
-                    ),
-                  ],
-                ),
-              ),
-            ),
             // Expanded(child: SizedBox(width: width * 0.05,)),
             Container(
               height: height * 0.45,
@@ -414,50 +427,5 @@ class Minutes extends StatelessWidget {
   }
 }
 
-/// Widget for saved and named time presets  on Stop_Watch screen.
-class Presets extends StatelessWidget {
-  const Presets({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      width: width * 0.26,
-      height: height * 0.20,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Text(
-                "Workout Rest",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ),
-            Container(
-              child: Text(
-                "00:00:00",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
-String doubleDigits(int number) {
-  return number.toString().length == 1 ? "0$number" : number.toString();
-}
+ 

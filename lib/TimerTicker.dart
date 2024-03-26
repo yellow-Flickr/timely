@@ -6,8 +6,8 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:timely/Components.dart';
-import 'package:timely/Stopwatch.dart';
+import 'package:timely/components.dart';
+// import 'package:timely/stopwatch.dart';
 
 class TimerTicker extends StatefulWidget {
   final int time;
@@ -164,10 +164,9 @@ class _TimerTickerState extends State<TimerTicker>
                                       child: Row(
                                         children: [
                                           Seconds(
-                                            digits: hour,
+                                            digits: hour.toString(),
                                             // key: ValueKey<int>(hour),
-                                            textOpacity: 1,
-                                          ),
+                                           ),
                                           DigitSeperator(seperator: ":"),
                                         ],
                                       ),
@@ -177,19 +176,17 @@ class _TimerTickerState extends State<TimerTicker>
                                       child: Row(
                                         children: [
                                           Seconds(
-                                            digits: minutes,
+                                            digits: minutes.toString(),
                                             // key: ValueKey<int>(minutes),
-                                            textOpacity: 1,
-                                          ),
+                                           ),
                                           DigitSeperator(seperator: ":"),
                                         ],
                                       ),
                                     ),
                                     Seconds(
-                                      digits: sec,
+                                      digits: sec.toString(),
                                       // key: ValueKey<int>(sec),
-                                      textOpacity: 1,
-                                    ),
+                                     ),
                                   ],
                                 ),
                               ),
@@ -317,50 +314,5 @@ class DrawTicker extends CustomPainter {
   }
 }
 
-/// Widget for saved and named time presets  on TimerTicker screen.
-class Presets extends StatelessWidget {
-  const Presets({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      width: width * 0.26,
-      height: height * 0.20,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Text(
-                "Workout Rest",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ),
-            Container(
-              child: Text(
-                "00:00:00",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
-String doubleDigits(int number) {
-  return number.toString().length == 1 ? "0$number" : number.toString();
-}
