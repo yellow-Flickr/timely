@@ -1,11 +1,8 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
-import 'package:timely/TimerTicker.dart';
 import 'package:timely/ViewModel.dart';
 
 class Timer extends StatefulWidget {

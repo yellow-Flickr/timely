@@ -1,8 +1,6 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable, prefer_final_fields
 
-import 'dart:async';
 import 'dart:math';
-import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -163,7 +161,7 @@ class _TimerTickerState extends State<TimerTicker>
                                       visible: hour > 0,
                                       child: Row(
                                         children: [
-                                          Seconds(
+                                          TimeDigits(
                                             digits: hour.toString(),
                                             // key: ValueKey<int>(hour),
                                            ),
@@ -175,7 +173,7 @@ class _TimerTickerState extends State<TimerTicker>
                                       visible: minutes > 0,
                                       child: Row(
                                         children: [
-                                          Seconds(
+                                          TimeDigits(
                                             digits: minutes.toString(),
                                             // key: ValueKey<int>(minutes),
                                            ),
@@ -183,7 +181,7 @@ class _TimerTickerState extends State<TimerTicker>
                                         ],
                                       ),
                                     ),
-                                    Seconds(
+                                    TimeDigits(
                                       digits: sec.toString(),
                                       // key: ValueKey<int>(sec),
                                      ),
@@ -267,7 +265,7 @@ class _TimerTickerState extends State<TimerTicker>
         ),
       ),
     );
-    ;
+    
   }
 }
 

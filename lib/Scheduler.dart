@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/ViewModel.dart';
 import 'package:timely/components.dart';
-import 'package:timely/models/scheduleModel.dart';
 
 class Scheduler extends StatefulWidget {
   const Scheduler({Key? key}) : super(key: key);
@@ -30,7 +29,6 @@ class _SchedulerState extends State<Scheduler> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 

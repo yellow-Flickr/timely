@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/models/scheduleModel.dart';
 
@@ -6,25 +7,29 @@ class Button extends StatelessWidget {
   Color? color = ThemeData.dark().disabledColor;
   final void Function()? onPressed;
   final String label;
+  final double borderRadius;
+  final double width;
+  final double height;
   Button({
     Key? key,
     this.color,
     required this.onPressed,
     required this.label,
+    this.borderRadius = 5,
+    this.width = 0.3,
+    this.height = 0.065,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * 0.3,
-      height: height * 0.065,
+      width: MediaQuery.of(context).size.width * width,
+      height: MediaQuery.of(context).size.height * height,
       decoration: ShapeDecoration(
           color: color,
           shape: OutlineInputBorder(
               borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(5),
               gapPadding: 0)),
       child: TextButton(
           onPressed: onPressed,
@@ -52,16 +57,16 @@ class DigitSeperator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     return Container(
       padding: wheelSelector ? EdgeInsets.only(top: height * 0.1) : null,
-      margin: wheelSelector ? EdgeInsets.only(top: 10) : null,
+      margin: wheelSelector ? const EdgeInsets.only(top: 10) : null,
       height: wheelSelector ? height * 0.4 : null,
       // width: wheelSelector ? width * 0.25 : null,
       child: Center(
           child: Text(
         seperator,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 50,
           fontWeight: FontWeight.w400,
         ),
@@ -70,52 +75,36 @@ class DigitSeperator extends StatelessWidget {
   }
 }
 
-class Seconds extends StatelessWidget {
+class TimeDigits extends StatelessWidget {
   final String digits;
   final TextStyle? style;
-
+  final EdgeInsetsGeometry? padding;
   final double? width;
   final double? height;
-  const Seconds(
-      {Key? key, required this.digits, this.style, this.width, this.height})
-      : super(key: key);
+  const TimeDigits({
+    Key? key,
+    required this.digits,
+    this.style,
+    this.width,
+    this.height,
+    this.padding,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          // margin: EdgeInsets.only(bottom: 15),
+        Container(
+          padding: padding ??
+              EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * .01),
           height: height ?? (MediaQuery.of(context).size.width * .12),
           width: width ?? (MediaQuery.of(context).size.height * .23),
-          child: Center(
-              // alignment: Alignment.bottomCenter,
-              child: Text(
+          child: Text(
             digits,
             style: style,
-          )),
+          ),
         ),
-      ],
-    );
-  }
-}
-
-class Minutes extends StatelessWidget {
-  final String digits;
-  const Minutes({Key? key, required this.digits}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return Column(
-      children: [
-        Center(
-            child: Text(
-          digits,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 50,
-              color: theme.primaryColorLight.withOpacity(.9)),
-        )),
       ],
     );
   }
@@ -134,7 +123,7 @@ class ClockItem extends StatelessWidget {
     return Container(
       // width: width * 0.26,
       height: height * 0.10,
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: ShapeDecoration(
         color: theme.primaryColor.withOpacity(0.4),
         shape: RoundedRectangleBorder(
@@ -150,7 +139,7 @@ class ClockItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: Text(
+                child: const Text(
                   "Accra",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
@@ -158,7 +147,7 @@ class ClockItem extends StatelessWidget {
                 ),
               ),
               Container(
-                child: Text(
+                child: const Text(
                   "Local time zone",
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 10),
@@ -167,7 +156,7 @@ class ClockItem extends StatelessWidget {
             ],
           ),
           Container(
-            child: Text(
+            child: const Text(
               "00:00",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -197,7 +186,7 @@ class TimerTickerPresets extends StatelessWidget {
     return Container(
       width: width * 0.26,
       height: height * 0.20,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
@@ -208,7 +197,7 @@ class TimerTickerPresets extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              child: Text(
+              child: const Text(
                 "Workout Rest",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
@@ -216,7 +205,7 @@ class TimerTickerPresets extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text(
+              child: const Text(
                 "00:00:00",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 12),
@@ -240,7 +229,7 @@ class StopWatchPresets extends StatelessWidget {
     return Container(
       width: width * 0.26,
       height: height * 0.20,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
@@ -251,7 +240,7 @@ class StopWatchPresets extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              child: Text(
+              child: const Text(
                 "Workout Rest",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
@@ -259,7 +248,7 @@ class StopWatchPresets extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text(
+              child: const Text(
                 "00:00:00",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 12),
@@ -314,12 +303,12 @@ class ScheduleItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.circle_notifications_outlined,
                         color: Colors.redAccent,
                         size: 14,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
@@ -362,7 +351,7 @@ class ScrollableTimeSelector extends StatelessWidget {
   final String label;
   final TextStyle? style;
   final TextStyle? labelStyle;
-  ScrollableTimeSelector(
+  const ScrollableTimeSelector(
       {Key? key,
       required this.selectedTime,
       required this.timeFigures,
@@ -370,7 +359,6 @@ class ScrollableTimeSelector extends StatelessWidget {
       required this.label,
       this.labelStyle})
       : super(key: key);
-  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -385,15 +373,15 @@ class ScrollableTimeSelector extends StatelessWidget {
           child: Center(
               child: Text(
             label,
-            style: labelStyle ?? TextStyle(fontSize: 15),
+            style: labelStyle ?? const TextStyle(fontSize: 15),
           )),
         ),
         Container(
-          margin: EdgeInsets.only(bottom: 15),
+          margin: const EdgeInsets.only(bottom: 15),
           height: height * 0.3,
           width: width * 0.25,
           child: ListWheelScrollView.useDelegate(
-              physics: ScrollPhysics(parent: FixedExtentScrollPhysics()),
+              physics: const ScrollPhysics(parent: FixedExtentScrollPhysics()),
               diameterRatio: 4,
               itemExtent: 85,
               overAndUnderCenterOpacity: 0.3,
@@ -409,7 +397,7 @@ class ScrollableTimeSelector extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             doubleDigits(index),
-                            style: style ?? TextStyle(fontSize: 50),
+                            style: style ?? const TextStyle(fontSize: 50),
                           ))))),
         ),
       ],

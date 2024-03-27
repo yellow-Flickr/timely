@@ -1,10 +1,8 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:timely/components.dart';
- 
+
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
 
@@ -57,11 +55,11 @@ class _WorldclockState extends State<Worldclock> {
                       children: [
                         Row(
                           children: [
-                            Minutes(digits: "00"),
+                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
                             DigitSeperator(seperator: ':'),
-                            Minutes(digits: "00"),
+                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
                             DigitSeperator(seperator: ':'),
-                            Minutes(digits: "00"),
+                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
                           ],
                         ),
                         Text(
@@ -80,11 +78,15 @@ class _WorldclockState extends State<Worldclock> {
               ),
             )),
         body: ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: width *.03, vertical: height * .01),
-            itemBuilder: ((context, index) {
-              return ClockItem();
-            }),
-            itemCount: 15, separatorBuilder: (BuildContext context, int index)=>SizedBox(height: height *.01,),));
+          padding: EdgeInsets.symmetric(
+              horizontal: width * .03, vertical: height * .01),
+          itemBuilder: ((context, index) {
+            return ClockItem();
+          }),
+          itemCount: 15,
+          separatorBuilder: (BuildContext context, int index) => SizedBox(
+            height: height * .01,
+          ),
+        ));
   }
 }
-
