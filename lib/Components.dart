@@ -10,21 +10,23 @@ class Button extends StatelessWidget {
   final double borderRadius;
   final double width;
   final double height;
+  final TextStyle? style;
   Button({
     Key? key,
     this.color,
     required this.onPressed,
     required this.label,
     this.borderRadius = 5,
-    this.width = 0.3,
-    this.height = 0.065,
+    this.width = 0.2,
+    this.height = 0.065, this.style,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { final theme = Theme.of(context);
     return Container(
       width: MediaQuery.of(context).size.width * width,
-      height: MediaQuery.of(context).size.height * height,
+      height: MediaQuery.of(context).size.height * height,   
+
       decoration: ShapeDecoration(
           color: color,
           shape: OutlineInputBorder(
@@ -36,9 +38,9 @@ class Button extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: const TextStyle(
+              style: style ?? theme.textTheme.bodySmall?.copyWith (
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 14,
                   color: Colors.white),
             ),
           )),
@@ -184,35 +186,28 @@ class TimerTickerPresets extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      width: width * 0.26,
-      height: height * 0.20,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
+      width: width * 0.22,
+      // height: height * 0.1,
+       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
           border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: const Text(
-                "Workout Rest",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ),
-            Container(
-              child: const Text(
-                "00:00:00",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            )
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "00:00:00",
+            textAlign: TextAlign.center,
+            style: TextStyle(  fontSize: 12),
+          ),
+          Text(
+            "Workout Rest",
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(  fontSize: 10),
+          )
+        ],
       ),
     );
   }
@@ -368,7 +363,7 @@ class ScrollableTimeSelector extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: height * 0.05),
+          padding: EdgeInsets.symmetric(vertical: height * 0.02),
           width: width * 0.25,
           child: Center(
               child: Text(

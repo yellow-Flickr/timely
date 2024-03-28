@@ -51,7 +51,7 @@ class _TimerTickerState extends State<TimerTicker>
           context.go("/");
           return;
         }
-        if (_animationController  .isAnimating) {
+        if (_animationController.isAnimating) {
           // dev.log('tick');
           setState(() {
             hour = Duration(
@@ -151,42 +151,66 @@ class _TimerTickerState extends State<TimerTicker>
                               // padding: EdgeInsets.only(bottom: height * 0.1),
                               // foregroundDecoration: BoxDecoration(
                               //     color: Colors.grey.shade900.withOpacity(0.5)),
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Visibility(
-                                      visible: hour > 0,
-                                      child: Row(
-                                        children: [
-                                          TimeDigits(
-                                            digits: hour.toString(),
-                                            // key: ValueKey<int>(hour),
-                                           ),
-                                          DigitSeperator(seperator: ":"),
-                                        ],
-                                      ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.ideographic,
+                                children: [
+                                  Visibility(
+                                    visible: hour > 0,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.ideographic,
+                                      children: [
+                                        TimeDigits(
+                                          width: width * .14,
+                                          height: height * .10,
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 40,
+                                          ),
+                                          digits: hour.toString(),
+                                          // key: ValueKey<int>(hour),
+                                        ),
+                                        DigitSeperator(seperator: ":"),
+                                      ],
                                     ),
-                                    Visibility(
-                                      visible: minutes > 0,
-                                      child: Row(
-                                        children: [
-                                          TimeDigits(
-                                            digits: minutes.toString(),
-                                            // key: ValueKey<int>(minutes),
-                                           ),
-                                          DigitSeperator(seperator: ":"),
-                                        ],
-                                      ),
+                                  ),
+                                  Visibility(
+                                    visible: minutes > 0,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.ideographic,
+                                      children: [
+                                        TimeDigits(
+                                          width: width * .14,
+                                          height: height * .10,
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 40,
+                                          ),
+                                          digits: minutes.toString(),
+                                          // key: ValueKey<int>(minutes),
+                                        ),
+                                        DigitSeperator(seperator: ":"),
+                                      ],
                                     ),
-                                    TimeDigits(
-                                      digits: sec.toString(),
-                                      // key: ValueKey<int>(sec),
-                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  TimeDigits(
+                                    width: width * .14,
+                                    height: height * .10,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 40,
+                                    ),
+                                    digits: sec.toString(),
+                                    // key: ValueKey<int>(sec),
+                                  ),
+                                ],
                               ),
                             ),
                             Container(
@@ -265,7 +289,6 @@ class _TimerTickerState extends State<TimerTicker>
         ),
       ),
     );
-    
   }
 }
 
@@ -311,6 +334,3 @@ class DrawTicker extends CustomPainter {
     return true;
   }
 }
-
-
-

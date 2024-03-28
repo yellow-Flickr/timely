@@ -29,11 +29,13 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+      
         appBar: AppBar(
+      
           title: Text(
             "Schedule Detail",
           ),
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
           elevation: 0,
 
           // title: Text(widget.title),

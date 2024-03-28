@@ -23,7 +23,7 @@ class _AddScheduleState extends State<AddSchedule> {
           title: Text(
             "New Scheduler",
           ),
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
           elevation: 0,
 
           // title: Text(widget.title),

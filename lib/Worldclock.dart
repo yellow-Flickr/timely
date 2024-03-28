@@ -47,33 +47,54 @@ class _WorldclockState extends State<Worldclock> {
             //   log('message');
             // },
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(height * .12),
+              preferredSize: Size.fromHeight(height * .10),
               child: Container(
-                child: Center(
-                  child: FittedBox(
-                    child: Column(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.ideographic,
                       children: [
-                        Row(
-                          children: [
-                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
-                            DigitSeperator(seperator: ':'),
-                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
-                            DigitSeperator(seperator: ':'),
-                            TimeDigits(digits: 0.toString().padLeft(2, '0')),
-                          ],
+                        TimeDigits(
+                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 42,
+                      ),
+                          width: width * .15,
+                          height: height * .06,
                         ),
-                        Text(
-                          "Greenwich Mean Time",
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: theme.primaryColorLight.withOpacity(0.6)),
+                        DigitSeperator(seperator: ':'),
+                        TimeDigits(
+                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 42,
+                      ),
+                          width: width * .15,
+                          height: height * .06,
                         ),
-                        SizedBox(
-                          height: height * .015,
-                        )
+                        DigitSeperator(seperator: ':'),
+                        TimeDigits(
+                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 42,
+                      ),
+                          width: width * .15,
+                          height: height * .06,
+                        ),
                       ],
                     ),
-                  ),
+                    Text(
+                      "Greenwich Mean Time",
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: theme.primaryColorLight.withOpacity(0.6)),
+                    ),
+                    SizedBox(
+                      height: height * .01,
+                    )
+                  ],
                 ),
               ),
             )),
