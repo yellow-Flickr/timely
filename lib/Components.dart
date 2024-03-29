@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/models/scheduleModel.dart';
 
 class Button extends StatelessWidget {
-  Color? color = ThemeData.dark().disabledColor;
+  final Color? color;
   final void Function()? onPressed;
   final String label;
   final double borderRadius;
   final double width;
   final double height;
   final TextStyle? style;
-  Button({
+  const Button({
     Key? key,
     this.color,
     required this.onPressed,
     required this.label,
     this.borderRadius = 5,
     this.width = 0.2,
-    this.height = 0.065, this.style,
+    this.height = 0.065,
+    this.style,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) { final theme = Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: MediaQuery.of(context).size.width * width,
-      height: MediaQuery.of(context).size.height * height,   
-
+      height: MediaQuery.of(context).size.height * height,
       decoration: ShapeDecoration(
-          color: color,
+          color: color ?? ThemeData.dark().disabledColor,
           shape: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(5),
@@ -38,10 +38,11 @@ class Button extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: style ?? theme.textTheme.bodySmall?.copyWith (
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Colors.white),
+              style: style ??
+                  theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.white),
             ),
           )),
     );
@@ -184,11 +185,11 @@ class TimerTickerPresets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    // double height = MediaQuery.of(context).size.height;
     return Container(
       width: width * 0.22,
       // height: height * 0.1,
-       decoration: BoxDecoration(
+      decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
           border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
@@ -199,13 +200,13 @@ class TimerTickerPresets extends StatelessWidget {
           Text(
             "00:00:00",
             textAlign: TextAlign.center,
-            style: TextStyle(  fontSize: 12),
+            style: TextStyle(fontSize: 12),
           ),
           Text(
             "Workout Rest",
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(  fontSize: 10),
+            style: TextStyle(fontSize: 10),
           )
         ],
       ),
