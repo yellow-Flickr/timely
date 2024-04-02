@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class Themes {
 /* light theme settings */
   static ThemeData lightTheme = ThemeData(
-      primarySwatch: Colors.blueGrey,
+      primarySwatch: Colors.purple,
       appBarTheme: const AppBarTheme(
         elevation: 0,
         backgroundColor: Color.fromARGB(255, 237, 218, 255),

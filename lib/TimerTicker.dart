@@ -253,9 +253,14 @@ class _TimerTickerState extends State<TimerTicker>
               Center(
                 child: CircularPercentIndicator(
                     radius: height * .20,
-                    percent: .30,
+                    percent: ticking.value/100,
                     lineWidth: 10,
-                    reverse: true,
+                    // reverse: true,
+                    progressColor: 
+                                                 (ticking.value <= (500 / widget.time))
+                                          ? Colors.red.shade700
+                                          : Colors.purple
+                    ,
                     backgroundWidth: .1,
                     circularStrokeCap: CircularStrokeCap.round,
                     center: Column(
