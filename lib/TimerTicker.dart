@@ -2,6 +2,8 @@
 
 import 'dart:math';
 
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
@@ -22,6 +24,7 @@ class _TimerTickerState extends State<TimerTicker>
   double _count = 100;
   int hour = 0, minutes = 0, sec = 0;
   TimeOfDay time = TimeOfDay.now();
+  Stopwatch _reverseTimer = Stopwatch();
 
   @override
   void dispose() {
@@ -52,23 +55,27 @@ class _TimerTickerState extends State<TimerTicker>
           return;
         }
         if (_animationController.isAnimating) {
-          // dev.log('tick');
+          _reverseTimer.start();
+       
           setState(() {
             hour = Duration(
                     milliseconds: Duration(seconds: widget.time)
                             .inMilliseconds
                             .ceil() -
-                        (_animationController.lastElapsedDuration ?? Duration())
-                            .inMilliseconds)
+                        // (_animationController.lastElapsedDuration ?? Duration())
+                        // .inMilliseconds
+                        _reverseTimer.elapsedMilliseconds)
                 .inHours
                 .ceil();
             minutes = Duration(
                         milliseconds: Duration(seconds: widget.time)
                                 .inMilliseconds
                                 .ceil() -
-                            (_animationController.lastElapsedDuration ??
-                                    Duration())
-                                .inMilliseconds)
+                            // (_animationController.lastElapsedDuration ??
+                            //         Duration()
+                            //         )
+                            //     .inMilliseconds
+                            _reverseTimer.elapsedMilliseconds)
                     .inMinutes
                     .ceil() %
                 Duration.minutesPerHour;
@@ -76,9 +83,10 @@ class _TimerTickerState extends State<TimerTicker>
                         milliseconds: Duration(seconds: widget.time)
                                 .inMilliseconds
                                 .ceil() -
-                            (_animationController.lastElapsedDuration ??
-                                    Duration())
-                                .inMilliseconds)
+                            // (_animationController.lastElapsedDuration ??
+                            //         Duration())
+                            //     .inMilliseconds
+                            _reverseTimer.elapsedMilliseconds)
                     .inSeconds
                     .ceil() %
                 Duration.secondsPerMinute;
@@ -171,7 +179,8 @@ class _TimerTickerState extends State<TimerTicker>
                                             fontWeight: FontWeight.w600,
                                             fontSize: 40,
                                           ),
-                                          digits: hour.toString().padLeft(2,'0'),
+                                          digits:
+                                              hour.toString().padLeft(2, '0'),
                                           // key: ValueKey<int>(hour),
                                         ),
                                         DigitSeperator(seperator: ":"),
@@ -193,7 +202,9 @@ class _TimerTickerState extends State<TimerTicker>
                                             fontWeight: FontWeight.w600,
                                             fontSize: 40,
                                           ),
-                                          digits: minutes.toString().padLeft(2,'0'),
+                                          digits: minutes
+                                              .toString()
+                                              .padLeft(2, '0'),
                                           // key: ValueKey<int>(minutes),
                                         ),
                                         DigitSeperator(seperator: ":"),
@@ -267,8 +278,10 @@ class _TimerTickerState extends State<TimerTicker>
                           onPressed: () {
                             if (_animationController.isAnimating) {
                               _animationController.stop(canceled: false);
+                              _reverseTimer.stop();
                             } else {
                               _animationController.forward();
+                              _reverseTimer.start();
                             }
                             setState(() {});
                           },
