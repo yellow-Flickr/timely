@@ -7,6 +7,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
+import 'package:timely/timeTickerArc.dart';
 // import 'package:timely/stopwatch.dart';
 
 class TimerTicker extends StatefulWidget {
@@ -110,144 +111,253 @@ class _TimerTickerState extends State<TimerTicker>
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.03),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Center(
+              //   heightFactor: 1.5,
+              //   child: Container(
+              //       margin: EdgeInsets.symmetric(vertical: height * 0.05),
+              //       height: height * 0.45,
+              //       width: width,
+              //       child: AnimatedBuilder(
+              //         animation: ticking,
+              //         builder: ((context, child) => Padding(
+              //               padding:
+              //                   EdgeInsets.symmetric(horizontal: width * 0.05),
+              //               child: CustomPaint(
+              //                 size: Size.fromRadius(width / 2),
+              //                 foregroundPainter: DrawTicker(
+              //                     theme: theme,
+              //                     stroke: width * 0.035,
+              //                     percent: ticking.value,
+              //                     tickerPaint:
+              //                         (ticking.value <= (500 / widget.time))
+              //                             ? Colors.red.shade700
+              //                             : null),
+              //                 child: Container(
+              //                   height: width,
+              //                   width: width,
+              //                   alignment: Alignment.center,
+              //                   // padding: EdgeInsets.symmetric(
+              //                   //     horizontal: width * 0.01,
+              //                   //     vertical: height * 0.005),
+              //                   child: child,
+              //                 ),
+              //               ),
+              //             )),
+              //         child: LayoutBuilder(builder: (context, constraints) {
+              //           return Column(
+              //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //             children: [
+              //               Container(
+              //                 child: Text(
+              //                   "data",
+              //                   style: TextStyle(fontSize: 30),
+              //                 ),
+              //               ),
+              //               Container(
+              //                 // width: width * 0.5,
+              //                 // height: height * 0.05,
+              //                 // padding: EdgeInsets.only(bottom: height * 0.1),
+              //                 // foregroundDecoration: BoxDecoration(
+              //                 //     color: Colors.grey.shade900.withOpacity(0.5)),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   crossAxisAlignment: CrossAxisAlignment.baseline,
+              //                   textBaseline: TextBaseline.ideographic,
+              //                   children: [
+              //                     Visibility(
+              //                       visible: hour > 0,
+              //                       child: Row(
+              //                         crossAxisAlignment:
+              //                             CrossAxisAlignment.baseline,
+              //                         textBaseline: TextBaseline.ideographic,
+              //                         children: [
+              //                           TimeDigits(
+              //                             width: width * .14,
+              //                             height: height * .10,
+              //                             style: theme.textTheme.bodyMedium
+              //                                 ?.copyWith(
+              //                               fontWeight: FontWeight.w600,
+              //                               fontSize: 40,
+              //                             ),
+              //                             digits: hour.toString().padLeft(2,'0'),
+              //                             // key: ValueKey<int>(hour),
+              //                           ),
+              //                           DigitSeperator(seperator: ":"),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                     Visibility(
+              //                       visible: minutes > 0,
+              //                       child: Row(
+              //                         crossAxisAlignment:
+              //                             CrossAxisAlignment.baseline,
+              //                         textBaseline: TextBaseline.ideographic,
+              //                         children: [
+              //                           TimeDigits(
+              //                             width: width * .14,
+              //                             height: height * .10,
+              //                             style: theme.textTheme.bodyMedium
+              //                                 ?.copyWith(
+              //                               fontWeight: FontWeight.w600,
+              //                               fontSize: 40,
+              //                             ),
+              //                             digits: minutes.toString().padLeft(2,'0'),
+              //                             // key: ValueKey<int>(minutes),
+              //                           ),
+              //                           DigitSeperator(seperator: ":"),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                     TimeDigits(
+              //                       width: width * .14,
+              //                       height: height * .10,
+              //                       style: theme.textTheme.bodyMedium?.copyWith(
+              //                         fontWeight: FontWeight.w600,
+              //                         fontSize: 40,
+              //                       ),
+              //                       digits: sec.toString(),
+              //                       // key: ValueKey<int>(sec),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //               Container(
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: [
+              //                     Icon(
+              //                       Icons.notifications,
+              //                       size: 20,
+              //                       // color: theme.disabledColor,
+              //                     ),
+              //                     SizedBox(
+              //                       width: width * 0.01,
+              //                     ),
+              //                     Text(
+              //                       time.format(context),
+              //                       style: TextStyle(
+              //                         fontSize: 20,
+              //                       ),
+              //                     )
+              //                   ],
+              //                 ),
+              //               )
+              //             ],
+              //           );
+              //         }),
+              //       )),
+              // ),
+
               Center(
-                heightFactor: 1.5,
-                child: Container(
-                    margin: EdgeInsets.symmetric(vertical: height * 0.05),
-                    height: height * 0.45,
-                    width: width,
-                    child: AnimatedBuilder(
-                      animation: ticking,
-                      builder: ((context, child) => Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: width * 0.05),
-                            child: CustomPaint(
-                              size: Size.fromRadius(width / 2),
-                              foregroundPainter: DrawTicker(
-                                  theme: theme,
-                                  stroke: width * 0.035,
-                                  percent: ticking.value,
-                                  tickerPaint:
-                                      (ticking.value <= (500 / widget.time))
-                                          ? Colors.red.shade700
-                                          : null),
-                              child: Container(
-                                height: width,
-                                width: width,
-                                alignment: Alignment.center,
-                                // padding: EdgeInsets.symmetric(
-                                //     horizontal: width * 0.01,
-                                //     vertical: height * 0.005),
-                                child: child,
-                              ),
-                            ),
-                          )),
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              child: Text(
-                                "data",
-                                style: TextStyle(fontSize: 30),
-                              ),
-                            ),
-                            Container(
-                              // width: width * 0.5,
-                              // height: height * 0.05,
-                              // padding: EdgeInsets.only(bottom: height * 0.1),
-                              // foregroundDecoration: BoxDecoration(
-                              //     color: Colors.grey.shade900.withOpacity(0.5)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.ideographic,
-                                children: [
-                                  Visibility(
-                                    visible: hour > 0,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.baseline,
-                                      textBaseline: TextBaseline.ideographic,
-                                      children: [
-                                        TimeDigits(
-                                          width: width * .14,
-                                          height: height * .10,
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 40,
-                                          ),
-                                          digits:
-                                              hour.toString().padLeft(2, '0'),
-                                          // key: ValueKey<int>(hour),
-                                        ),
-                                        DigitSeperator(seperator: ":"),
-                                      ],
+                child: CircularPercentIndicator(
+                    radius: height * .20,
+                    percent: .30,
+                    lineWidth: 10,
+                    reverse: true,
+                    backgroundWidth: .1,
+                    circularStrokeCap: CircularStrokeCap.round,
+                    center: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          child: Text(
+                            "data",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                        Container(
+                          // width: width * 0.5,
+                          // height: height * 0.05,
+                          // padding: EdgeInsets.only(bottom: height * 0.1),
+                          // foregroundDecoration: BoxDecoration(
+                          //     color: Colors.grey.shade900.withOpacity(0.5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.ideographic,
+                            children: [
+                              Visibility(
+                                visible: hour > 0,
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.ideographic,
+                                  children: [
+                                    TimeDigits(
+                                      width: width * .14,
+                                      height: height * .10,
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 40,
+                                      ),
+                                      digits: hour.toString().padLeft(2, '0'),
+                                      // key: ValueKey<int>(hour),
                                     ),
-                                  ),
-                                  Visibility(
-                                    visible: minutes > 0,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.baseline,
-                                      textBaseline: TextBaseline.ideographic,
-                                      children: [
-                                        TimeDigits(
-                                          width: width * .14,
-                                          height: height * .10,
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 40,
-                                          ),
-                                          digits: minutes
-                                              .toString()
-                                              .padLeft(2, '0'),
-                                          // key: ValueKey<int>(minutes),
-                                        ),
-                                        DigitSeperator(seperator: ":"),
-                                      ],
-                                    ),
-                                  ),
-                                  TimeDigits(
-                                    width: width * .14,
-                                    height: height * .10,
-                                    style: theme.textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 40,
-                                    ),
-                                    digits: sec.toString(),
-                                    // key: ValueKey<int>(sec),
-                                  ),
-                                ],
+                                    DigitSeperator(seperator: ":"),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.notifications,
-                                    size: 20,
-                                    // color: theme.disabledColor,
-                                  ),
-                                  SizedBox(
-                                    width: width * 0.01,
-                                  ),
-                                  Text(
-                                    time.format(context),
-                                    style: TextStyle(
-                                      fontSize: 20,
+                              Visibility(
+                                visible: minutes > 0,
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.ideographic,
+                                  children: [
+                                    TimeDigits(
+                                      width: width * .14,
+                                      height: height * .10,
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 40,
+                                      ),
+                                      digits:
+                                          minutes.toString().padLeft(2, '0'),
+                                      // key: ValueKey<int>(minutes),
                                     ),
-                                  )
-                                ],
+                                    DigitSeperator(seperator: ":"),
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
-                        );
-                      }),
+                              TimeDigits(
+                                width: width * .14,
+                                height: height * .10,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 40,
+                                ),
+                                digits: sec.toString(),
+                                // key: ValueKey<int>(sec),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.notifications,
+                                size: 20,
+                                // color: theme.disabledColor,
+                              ),
+                              SizedBox(
+                                width: width * 0.01,
+                              ),
+                              Text(
+                                time.format(context),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     )),
               ),
               Flexible(
