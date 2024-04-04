@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/models/scheduleModel.dart';
 
@@ -18,6 +19,8 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
 
+  bool edit = false;
+
   @override
   void initState() {
     title.text = widget.schedule.title;
@@ -29,16 +32,40 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      
         appBar: AppBar(
-      
           title: Text(
             "Schedule Detail",
           ),
           automaticallyImplyLeading: true,
           elevation: 0,
-
-          // title: Text(widget.title),
+          actions: [
+            Visibility(
+              visible: !edit,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    edit = !edit;
+                  });
+                },
+                child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: width * .05),
+                    child: Text(
+                      'Edit',
+                      style: theme.textTheme.labelLarge
+                          ?.copyWith(color: Colors.amber.shade700),
+                    )
+                    // Visibility(
+                    //   child: Button(
+                    //       width:   .15,
+                    //       color: widget.schedule.active ? Colors.amber.shade700:null  ,
+                    //       height: .038,
+                    //       onPressed: () {},
+                    //       label: widget.schedule.active ? 'Edit' : ''),
+                    // ),
+                    ),
+              ),
+            )
+          ],
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -50,7 +77,28 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                   height: height * .01,
                 ),
                 ListTile(
-                  onTap: () async {},
+                  onTap: () async {
+                    time = await showTimePicker(
+                          context: context,
+                          initialEntryMode: TimePickerEntryMode.input,
+                          initialTime: TimeOfDay.fromDateTime(
+                              DateTime.now().add(Duration(hours: 1))),
+                          builder: (context, child) => MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(alwaysUse24HourFormat: true),
+                              child: child!),
+                        ) ??
+                        TimeOfDay.fromDateTime(
+                            DateTime.now().add(Duration(hours: 1)));
+                    // TimeOfDay(
+                    //     hour: TimeOfDay.now().hour + 1,
+                    //     minute: TimeOfDay.now().minute);
+                    // log((DateTime.now().add(Duration(days: 1)).day == day.day)
+                    //     .toString());
+                    // log(DateTime.now().add(Duration(days: 1)).day.toString());
+                    // log(day.day.toString());
+                    // setState(() {});
+                  },
                   leading: Icon(Icons.event_repeat_outlined),
                   dense: true,
                   title: Text(
@@ -158,7 +206,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 TextField(
                   // maxLength: 30,
                   // style: TextStyle(),
-                  maxLines: 8, maxLength: 500,
+                  maxLines: 10, maxLength: 500,
                   controller: notes,
                   style: theme.textTheme.bodySmall,
                   decoration: InputDecoration(
@@ -267,7 +315,36 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 // ),
 
                 SizedBox(
-                  height: height * .01,
+                  height: height * .2,
+                ),
+
+                Column(
+                  children: [
+                    Button(
+                        width: .9,
+                        color: widget.schedule.active
+                            ? theme.primaryColorLight
+                            : theme.primaryColorDark,
+                        height: .05,
+                        onPressed: () {},
+                        label:
+                            widget.schedule.active ? 'Deactivate' : 'Activate'),
+                    SizedBox(
+                      height: height * .02,
+                    ),
+                    Button(
+                        width: .9,
+                        color: !edit ? theme.colorScheme.error : Colors.amber,
+                        height: .05,
+                        onPressed: () {
+                          if (edit) {
+                            setState(() {
+                              edit = false;
+                            });
+                          }
+                        },
+                        label: !edit ? 'Delete' : 'Update'),
+                  ],
                 ),
               ],
             ),

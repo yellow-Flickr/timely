@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/ViewModel.dart';
 import 'package:timely/components.dart';
+import 'package:timely/models/scheduleModel.dart';
 
 class Scheduler extends StatefulWidget {
   const Scheduler({Key? key}) : super(key: key);
@@ -58,10 +59,10 @@ class _SchedulerState extends State<Scheduler> {
           ],
         ),
         body: ListView.separated(
-          itemCount: 20,
+          itemCount: testSchedule.length,
           padding: EdgeInsets.symmetric(
               horizontal: width * .03, vertical: height * .01),
-          itemBuilder: (context, index) => ScheduleItem(),
+          itemBuilder: (context, index) => ScheduleItem(schedule: testSchedule[index],),
           separatorBuilder: (BuildContext context, int index) => SizedBox(
             height: height * .01,
           ),

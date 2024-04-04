@@ -9,6 +9,14 @@ import 'package:flutter/material.dart';
 class Themes {
 /* light theme settings */
   static ThemeData lightTheme = ThemeData(
+     brightness: Brightness.light,
+    colorScheme: ColorScheme.light(
+        background: Colors.white,
+        primaryContainer: Colors.grey.shade200,
+        primary: const Color.fromARGB(255, 237, 218, 255),
+        secondary: Colors.grey, // icons
+        inversePrimary:   Colors.purple // buttons and actions keys
+        ),
       primarySwatch: Colors.purple,
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -38,10 +46,9 @@ class Themes {
         ),
         backgroundColor: Color.fromARGB(255, 237, 218, 255),
       ),
-      primaryColorDark: Colors.purple,
+      primaryColorDark: const Color.fromRGBO(156, 39, 176, 1),
       primaryColorLight: Color.fromARGB(255, 25, 24, 26),
-      brightness: Brightness.light,
-      cardColor: const Color.fromARGB(255, 237, 218, 255),
+       cardColor: const Color.fromARGB(255, 237, 218, 255),
       textTheme: const TextTheme(
           bodyMedium:
               TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),

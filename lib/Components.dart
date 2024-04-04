@@ -259,7 +259,8 @@ class StopWatchPresets extends StatelessWidget {
 
 /// Widget for saved Schedules.
 class ScheduleItem extends StatelessWidget {
-  const ScheduleItem({Key? key}) : super(key: key);
+  final ScheduleModel schedule;
+  const ScheduleItem({Key? key, required this.schedule}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +269,12 @@ class ScheduleItem extends StatelessWidget {
     var theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => context.goNamed('schedule-detail', extra: testSchedule),
+      onTap: () => context.goNamed('schedule-detail', extra: schedule),
       child: Container(
         // width: width * 0.26,
         // height: height * 0.1,
         padding: EdgeInsets.symmetric(
-            vertical: height * .01, horizontal: width * .02),
+            vertical: height * .005, horizontal: width * .02),
         decoration: ShapeDecoration(
           color: theme.primaryColor.withOpacity(0.4),
           shape: RoundedRectangleBorder(
@@ -290,25 +291,40 @@ class ScheduleItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Pomodoro Workout",
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.circle,
+                        color: Colors.redAccent,
+                        size: 10,
+                      ),
+                      SizedBox(
+                        width: width * .01,
+                      ),
+                      Text(
+                        schedule.title,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * .005,
                   ),
                   Row(
                     children: [
                       const Icon(
-                        Icons.circle_notifications_outlined,
-                        color: Colors.redAccent,
-                        size: 14,
+                        Icons.replay_sharp,
+                        // color: Colors.redAccent,
+                        size: 10,
                       ),
                       const SizedBox(
                         width: 5,
                       ),
                       Text(
-                        "High Priority",
+                        "Hourly",
                         textAlign: TextAlign.left,
                         style: theme.textTheme.bodySmall,
                       ),
@@ -319,18 +335,12 @@ class ScheduleItem extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: Column(
-                children: [
-                  Text(
-                    "Hourly",
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    "Repeat",
-                    style: theme.textTheme.bodySmall?.copyWith(fontSize: 8),
-                  ),
-                ],
+              child: Transform.scale(
+                scale: .75,
+                child: Switch(
+                  value: schedule.active,
+                  onChanged: (value) {},
+                ),
               ),
             )
           ],
