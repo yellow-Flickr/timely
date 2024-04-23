@@ -55,7 +55,24 @@ class Themes {
           bodyLarge: TextStyle(color: Colors.black54, fontSize: 20),
           bodySmall: TextStyle(color: Colors.black54)),
       dividerColor: Colors.white12,
-      scaffoldBackgroundColor: Colors.white);
+      scaffoldBackgroundColor: Colors.white,
+    switchTheme: SwitchThemeData(
+      trackOutlineColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return const Color.fromARGB(255, 237, 218, 255);
+        }
+        return Colors.grey.shade300;
+      }),     thumbColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Color.fromARGB(255, 255, 255, 255);
+        }
+        return Colors.grey.shade500;
+      })),
+      dividerTheme: DividerThemeData(color:Colors.grey.shade400 )
+
+      );
 
   /* Dark theme settings */
   static ThemeData darkTheme = ThemeData(

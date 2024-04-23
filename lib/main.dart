@@ -72,7 +72,11 @@ final GoRouter _router = GoRouter(
                   name: 'schedule-detail',
                   builder: (BuildContext context, GoRouterState state) {
                     return ScheduleDetail(
-                      schedule: state.extra as ScheduleModel,
+                      schedule:
+                          ((state.extra as Map<String, dynamic>)['schedule'])
+                              as ScheduleModel,
+                      newschedule: ((state.extra
+                          as Map<String, dynamic>)['new-schedule']) as bool,
                     );
                   },
                 ),

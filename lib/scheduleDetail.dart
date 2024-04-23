@@ -7,7 +7,10 @@ import 'package:timely/models/scheduleModel.dart';
 
 class ScheduleDetail extends StatefulWidget {
   final ScheduleModel schedule;
-  const ScheduleDetail({Key? key, required this.schedule}) : super(key: key);
+  final bool newschedule;
+  const ScheduleDetail(
+      {Key? key, required this.schedule, this.newschedule = false})
+      : super(key: key);
 
   @override
   State<ScheduleDetail> createState() => _ScheduleDetailState();
@@ -18,11 +21,15 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   TimeOfDay time = TimeOfDay.now();
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
+  MaterialStatesController controller = MaterialStatesController();
 
   bool edit = false;
 
   @override
   void initState() {
+    // if (widget.newschedule) {
+    //   return;
+    // }
     title.text = widget.schedule.title;
     notes.text = widget.schedule.notes;
     super.initState();
@@ -32,15 +39,16 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
-            "Schedule Detail",
+            widget.newschedule ? "New Schedule" : "Schedule Detail",
           ),
           automaticallyImplyLeading: true,
           elevation: 0,
           actions: [
             Visibility(
-              visible: !edit,
+              visible: !edit && !widget.newschedule,
               child: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -67,288 +75,313 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
             )
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * .03, vertical: height * .02),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: height * .01,
-                ),
-                ListTile(
-                  onTap: () async {
-                    time = await showTimePicker(
-                          context: context,
-                          initialEntryMode: TimePickerEntryMode.input,
-                          initialTime: TimeOfDay.fromDateTime(
-                              DateTime.now().add(Duration(hours: 1))),
-                          builder: (context, child) => MediaQuery(
-                              data: MediaQuery.of(context)
-                                  .copyWith(alwaysUse24HourFormat: true),
-                              child: child!),
-                        ) ??
-                        TimeOfDay.fromDateTime(
-                            DateTime.now().add(Duration(hours: 1)));
-                    // TimeOfDay(
-                    //     hour: TimeOfDay.now().hour + 1,
-                    //     minute: TimeOfDay.now().minute);
-                    // log((DateTime.now().add(Duration(days: 1)).day == day.day)
-                    //     .toString());
-                    // log(DateTime.now().add(Duration(days: 1)).day.toString());
-                    // log(day.day.toString());
-                    // setState(() {});
+        body: ListView(
+          padding: EdgeInsets.symmetric(
+            horizontal: width * .03,
+          ),
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: height * .02,
+            ),
+            ListTile(
+              onTap: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    // Using Wrap makes the bottom sheet height the height of the content.
+                    // Otherwise, the height will be half the height of the screen.
+                    return Wrap(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.share),
+                          title: Text('Share'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.link),
+                          title: Text('Get link'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.edit),
+                          title: Text('Edit name'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.delete),
+                          title: Text('Delete collection'),
+                        ),
+                      ],
+                    );
                   },
-                  leading: Icon(Icons.event_repeat_outlined),
-                  dense: true,
-                  title: Text(
-                    'Repeat',
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: height * .015, horizontal: width * .04),
-                    decoration: ShapeDecoration(
-                        // color: theme.h.withOpacity(0.4),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('NONE'),
-                        SizedBox(
-                          width: width * .01,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          size: 13,
-                          weight: 100,
-                          grade: 100,
-                        )
-                      ],
-                    ),
-                  ),
-                  tileColor: theme.cardColor,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                SizedBox(
-                  height: height * .01,
-                ),
-                ListTile(
-                  onTap: () async {},
-                  leading: Icon(Icons.low_priority),
-                  dense: true,
-                  title: Text(
-                    'Priority',
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: height * .015, horizontal: width * .04),
-                    decoration: ShapeDecoration(
-                        // color: theme.primaryColor.withOpacity(0.4),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('NONE'),
-                        SizedBox(
-                          width: width * .01,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          size: 13,
-                          weight: 100,
-                          grade: 100,
-                        )
-                      ],
-                    ),
-                  ),
-                  tileColor: theme.cardColor,
-                  shape: RoundedRectangleBorder(
-                      // side: BorderSide(color: theme.primaryColor, width: 1.5),
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-
-                Divider(),
-                SizedBox(
-                  height: height * .01,
-                ),
-                TextField(
-                  maxLines: 1,
-                  style: theme.textTheme.bodySmall,
-                  controller: title,
-                  decoration: InputDecoration(
-                      fillColor: theme.highlightColor,
-                      isDense: true,
-                      filled: true,
-                      prefixIcon: Icon(
-                        Icons.title_rounded,
-                        color: Colors.grey,
-                      ),
-                      hintText: 'Schedule Title',
-                      counterText: '',
-                      border: OutlineInputBorder(
-                          gapPadding: 0,
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(5))),
-                ),
-                SizedBox(
-                  height: height * .01,
-                ),
-                TextField(
-                  // maxLength: 30,
-                  // style: TextStyle(),
-                  maxLines: 10, maxLength: 500,
-                  controller: notes,
-                  style: theme.textTheme.bodySmall,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    fillColor: theme.highlightColor,
-                    filled: true,
-                    prefixIcon: Icon(
-                      Icons.note_alt,
-                      color: Colors.grey,
-                    ),
-                    hintText: 'Schedule Notes',
-                    counterText: '',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(5)),
-                  ),
-                ),
-
-                // SizedBox(
-                //   height: height * .01,
-                // ),
-                // ListTile(
-                //   onTap: () async {
-                //     day = await showDatePicker(
-                //             context: context,
-                //             initialDate: DateTime.now(),
-                //             firstDate: DateTime.now(),
-                //             lastDate: DateTime(DateTime.now().year + 1,
-                //                 DateTime.now().month)) ??
-                //         DateTime.now();
-                //     // log((DateTime.now().add(Duration(days: 1)).day == day.day)
-                //     //     .toString());
-                //     // log(DateTime.now().add(Duration(days: 1)).day.toString());
-                //     // log(day.day.toString());
-                //     setState(() {});
-                //   },
-                //   leading: Icon(Icons.calendar_month),
-                //   dense: true,
-                //   title: Text(
-                //     'Date',
-                //     style: theme.textTheme.labelSmall
-                //         ?.copyWith(fontWeight: FontWeight.bold),
-                //   ),
-                //   trailing: Container(
-                //     padding: EdgeInsets.symmetric(
-                //         vertical: height * .015, horizontal: width * .06),
-                //     decoration: ShapeDecoration(
-                //         color: theme.primaryColor.withOpacity(0.4),
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(10))),
-                //     child: Text(
-                //         DateTime.now().add(Duration(days: 1)).day == day.day
-                //             ? 'TOMORROW'
-                //             : day.difference(DateTime.now()).inDays == 0
-                //                 ? 'TODAY'
-                //                 : DateFormat.yMMMMEEEEd().format(day)),
-                //   ),
-                //   tileColor: theme.cardColor,
-                //   shape: RoundedRectangleBorder(
-                //       // side: BorderSide(color: theme.primaryColor, width: 1.5),
-                //       borderRadius: BorderRadius.circular(10)),
-                // ),
-                // SizedBox(
-                //   height: height * .01,
-                // ),
-                // ListTile(
-                //   onTap: () async {
-                //     time = await showTimePicker(
-                //           context: context,
-                //           initialTime: TimeOfDay.fromDateTime(
-                //               DateTime.now().add(Duration(hours: 1))),
-                //         ) ??
-                //         TimeOfDay.fromDateTime(
-                //             DateTime.now().add(Duration(hours: 1)));
-                //     // TimeOfDay(
-                //     //     hour: TimeOfDay.now().hour + 1,
-                //     //     minute: TimeOfDay.now().minute);
-                //     // log((DateTime.now().add(Duration(days: 1)).day == day.day)
-                //     //     .toString());
-                //     // log(DateTime.now().add(Duration(days: 1)).day.toString());
-                //     // log(day.day.toString());
-                //     setState(() {});
-                //   },
-                //   leading: Icon(Icons.timer_sharp),
-                //   dense: true,
-                //   title: Text(
-                //     'Time',
-                //     style: theme.textTheme.labelSmall
-                //         ?.copyWith(fontWeight: FontWeight.bold),
-                //   ),
-                //   trailing: Container(
-                //     padding: EdgeInsets.symmetric(
-                //         vertical: height * .015, horizontal: width * .06),
-                //     decoration: ShapeDecoration(
-                //         color: theme.cardColor,
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(10))),
-                //     child: Text(time.hour.toString().padLeft(2, '0') +
-                //         ':' +
-                //         time.minute.toString().padLeft(2, '0')),
-                //   ),
-                //   tileColor: theme.cardColor,
-                //   shape: RoundedRectangleBorder(
-                //       // side: BorderSide(color: theme.primaryColor, width: 1.5),
-                //       borderRadius: BorderRadius.circular(5)),
-                // ),
-
-                SizedBox(
-                  height: height * .2,
-                ),
-
-                Column(
+                );
+                time = await showTimePicker(
+                      context: context,
+                      initialEntryMode: TimePickerEntryMode.input,
+                      initialTime: TimeOfDay.fromDateTime(
+                          DateTime.now().add(Duration(hours: 1))),
+                      builder: (context, child) => MediaQuery(
+                          data: MediaQuery.of(context)
+                              .copyWith(alwaysUse24HourFormat: true),
+                          child: child!),
+                    ) ??
+                    TimeOfDay.fromDateTime(
+                        DateTime.now().add(Duration(hours: 1)));
+                // TimeOfDay(
+                //     hour: TimeOfDay.now().hour + 1,
+                //     minute: TimeOfDay.now().minute);
+                // log((DateTime.now().add(Duration(days: 1)).day == day.day)
+                //     .toString());
+                // log(DateTime.now().add(Duration(days: 1)).day.toString());
+                // log(day.day.toString());
+                // setState(() {});
+              },
+              leading: Icon(Icons.event_repeat_outlined),
+              dense: true,
+              title: Text(
+                'Repeat',
+                style: theme.textTheme.labelSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              trailing: Container(
+                padding: EdgeInsets.symmetric(
+                    vertical: height * .015, horizontal: width * .04),
+                decoration: ShapeDecoration(
+                    // color: theme.h.withOpacity(0.4),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Button(
-                        width: .9,
-                        color: widget.schedule.active
-                            ? theme.primaryColorLight
-                            : theme.primaryColorDark,
-                        height: .05,
-                        onPressed: () {},
-                        label:
-                            widget.schedule.active ? 'Deactivate' : 'Activate'),
+                    Text('NONE'),
                     SizedBox(
-                      height: height * .02,
+                      width: width * .01,
                     ),
-                    Button(
-                        width: .9,
-                        color: !edit ? theme.colorScheme.error : Colors.amber,
-                        height: .05,
-                        onPressed: () {
-                          if (edit) {
-                            setState(() {
-                              edit = false;
-                            });
-                          }
-                        },
-                        label: !edit ? 'Delete' : 'Update'),
+                    Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 13,
+                      weight: 100,
+                      grade: 100,
+                    )
                   ],
                 ),
+              ),
+              tileColor: theme.cardColor,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            ListTile(
+              onTap: () async {},
+              leading: Icon(Icons.low_priority),
+              dense: true,
+              title: Text(
+                'Priority',
+                style: theme.textTheme.labelSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              trailing: Container(
+                padding: EdgeInsets.symmetric(
+                    vertical: height * .015, horizontal: width * .04),
+                decoration: ShapeDecoration(
+                    // color: theme.primaryColor.withOpacity(0.4),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('NONE'),
+                    SizedBox(
+                      width: width * .01,
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 13,
+                      weight: 100,
+                      grade: 100,
+                    )
+                  ],
+                ),
+              ),
+              tileColor: theme.cardColor,
+              shape: RoundedRectangleBorder(
+                  // side: BorderSide(color: theme.primaryColor, width: 1.5),
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+
+            Divider(),
+            SizedBox(
+              height: height * .01,
+            ),
+            TextField(
+              maxLines: 1,
+              style: theme.textTheme.bodySmall,
+              controller: title,
+              decoration: InputDecoration(
+                  fillColor: theme.highlightColor,
+                  isDense: true,
+                  filled: true,
+                  prefixIcon: Icon(
+                    Icons.title_rounded,
+                    color: Colors.grey,
+                  ),
+                  hintText: 'Schedule Title',
+                  counterText: '',
+                  border: OutlineInputBorder(
+                      gapPadding: 0,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(5))),
+            ),
+            SizedBox(
+              height: height * .025,
+            ),
+            TextField(
+              // maxLength: 30,
+              // style: TextStyle(),
+              maxLines: 12, maxLength: 500,
+              controller: notes,
+              style: theme.textTheme.bodySmall,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                fillColor: theme.highlightColor,
+                filled: true,
+                prefixIcon: Icon(
+                  Icons.note_alt,
+                  color: Colors.grey,
+                ),
+                hintText: 'Schedule Notes',
+                counterText: '',
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(5)),
+              ),
+            ),
+
+            // SizedBox(
+            //   height: height * .01,
+            // ),
+            // ListTile(
+            //   onTap: () async {
+            //     day = await showDatePicker(
+            //             context: context,
+            //             initialDate: DateTime.now(),
+            //             firstDate: DateTime.now(),
+            //             lastDate: DateTime(DateTime.now().year + 1,
+            //                 DateTime.now().month)) ??
+            //         DateTime.now();
+            //     // log((DateTime.now().add(Duration(days: 1)).day == day.day)
+            //     //     .toString());
+            //     // log(DateTime.now().add(Duration(days: 1)).day.toString());
+            //     // log(day.day.toString());
+            //     setState(() {});
+            //   },
+            //   leading: Icon(Icons.calendar_month),
+            //   dense: true,
+            //   title: Text(
+            //     'Date',
+            //     style: theme.textTheme.labelSmall
+            //         ?.copyWith(fontWeight: FontWeight.bold),
+            //   ),
+            //   trailing: Container(
+            //     padding: EdgeInsets.symmetric(
+            //         vertical: height * .015, horizontal: width * .06),
+            //     decoration: ShapeDecoration(
+            //         color: theme.primaryColor.withOpacity(0.4),
+            //         shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(10))),
+            //     child: Text(
+            //         DateTime.now().add(Duration(days: 1)).day == day.day
+            //             ? 'TOMORROW'
+            //             : day.difference(DateTime.now()).inDays == 0
+            //                 ? 'TODAY'
+            //                 : DateFormat.yMMMMEEEEd().format(day)),
+            //   ),
+            //   tileColor: theme.cardColor,
+            //   shape: RoundedRectangleBorder(
+            //       // side: BorderSide(color: theme.primaryColor, width: 1.5),
+            //       borderRadius: BorderRadius.circular(10)),
+            // ),
+            // SizedBox(
+            //   height: height * .01,
+            // ),
+            // ListTile(
+            //   onTap: () async {
+            //     time = await showTimePicker(
+            //           context: context,
+            //           initialTime: TimeOfDay.fromDateTime(
+            //               DateTime.now().add(Duration(hours: 1))),
+            //         ) ??
+            //         TimeOfDay.fromDateTime(
+            //             DateTime.now().add(Duration(hours: 1)));
+            //     // TimeOfDay(
+            //     //     hour: TimeOfDay.now().hour + 1,
+            //     //     minute: TimeOfDay.now().minute);
+            //     // log((DateTime.now().add(Duration(days: 1)).day == day.day)
+            //     //     .toString());
+            //     // log(DateTime.now().add(Duration(days: 1)).day.toString());
+            //     // log(day.day.toString());
+            //     setState(() {});
+            //   },
+            //   leading: Icon(Icons.timer_sharp),
+            //   dense: true,
+            //   title: Text(
+            //     'Time',
+            //     style: theme.textTheme.labelSmall
+            //         ?.copyWith(fontWeight: FontWeight.bold),
+            //   ),
+            //   trailing: Container(
+            //     padding: EdgeInsets.symmetric(
+            //         vertical: height * .015, horizontal: width * .06),
+            //     decoration: ShapeDecoration(
+            //         color: theme.cardColor,
+            //         shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(10))),
+            //     child: Text(time.hour.toString().padLeft(2, '0') +
+            //         ':' +
+            //         time.minute.toString().padLeft(2, '0')),
+            //   ),
+            //   tileColor: theme.cardColor,
+            //   shape: RoundedRectangleBorder(
+            //       // side: BorderSide(color: theme.primaryColor, width: 1.5),
+            //       borderRadius: BorderRadius.circular(5)),
+            // ),
+
+            SizedBox(
+              height: height * .1,
+            ),
+
+            Column(
+              children: [
+                Button(
+                    width: .9,
+                    color: widget.schedule.active
+                        ? theme.primaryColorLight
+                        : theme.primaryColorDark,
+                    height: .05,
+                    statesController: controller,
+                    onPressed: () {},
+                    label: widget.schedule.active ? 'Deactivate' : 'Activate'),
+                SizedBox(
+                  height: height * .02,
+                ),
+                Button(
+                    width: .9,
+                    color: !edit ? theme.colorScheme.error : Colors.amber,
+                    height: .05,
+                    onPressed: () {
+                      if (edit) {
+                        setState(() {
+                          edit = false;
+                        });
+                      }
+                    },
+                    label: !edit ? 'Delete' : 'Update'),
               ],
             ),
-          ),
+          ],
         ));
   }
 }

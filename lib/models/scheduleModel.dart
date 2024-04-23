@@ -9,22 +9,76 @@ class ScheduleModel {
   final bool active;
 
   ScheduleModel(
-      this.id, this.title, this.notes, this.repeat, this.priority, this.active);
+      {required this.id,
+      required this.title,
+      required this.notes,
+      this.repeat = const Duration(hours: 1),
+      this.priority = Priority.Low,
+      this.active = false});
 }
 
 List<ScheduleModel> testSchedule = [
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, false),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, false),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, true),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, false),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, true),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, false),
-  ScheduleModel(0, 'Pomodoro Workout', '10 Burpees, 30 Squats, 20 Lunges',
-      const Duration(hours: 1), Priority.High, true),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: false),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: true),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: false),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: true),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: false),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: true),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: false),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: true),
+  ScheduleModel(
+      id: 0,
+      title: 'Pomodoro Workout',
+      notes: '10 Burpees, 30 Squats, 20 Lunges',
+      repeat: const Duration(hours: 1),
+      priority: Priority.High,
+      active: false),
 ];

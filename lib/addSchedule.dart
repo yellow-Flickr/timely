@@ -147,7 +147,7 @@ class _AddScheduleState extends State<AddSchedule> {
                 TextField(
                   // maxLength: 30,
                   // style: TextStyle(),
-                  maxLines: 8, maxLength: 500,
+                  maxLines: 12, maxLength: 500,
                   style: theme.textTheme.bodySmall,
                   decoration: InputDecoration(
                     isCollapsed: true,

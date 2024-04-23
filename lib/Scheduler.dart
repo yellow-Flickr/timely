@@ -51,7 +51,10 @@ class _SchedulerState extends State<Scheduler> {
           elevation: 0,
           actions: [
             IconButton(
-                onPressed: () => context.pushNamed('add-schedule'),
+                onPressed: () => context.goNamed('schedule-detail', extra: {
+                      'schedule': ScheduleModel(id: 0, title: '', notes: ''),
+                      'new-schedule': true
+                    }),
                 icon: Icon(
                   Icons.add_alert_outlined,
                   // color: theme.primaryColorDark,
@@ -62,7 +65,9 @@ class _SchedulerState extends State<Scheduler> {
           itemCount: testSchedule.length,
           padding: EdgeInsets.symmetric(
               horizontal: width * .03, vertical: height * .01),
-          itemBuilder: (context, index) => ScheduleItem(schedule: testSchedule[index],),
+          itemBuilder: (context, index) => ScheduleItem(
+            schedule: testSchedule[index],
+          ),
           separatorBuilder: (BuildContext context, int index) => SizedBox(
             height: height * .01,
           ),

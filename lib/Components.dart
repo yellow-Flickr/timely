@@ -9,6 +9,7 @@ class Button extends StatelessWidget {
   final double borderRadius;
   final double width;
   final double height;
+  final MaterialStatesController? statesController;
   final TextStyle? style;
   const Button({
     Key? key,
@@ -19,21 +20,30 @@ class Button extends StatelessWidget {
     this.width = 0.2,
     this.height = 0.065,
     this.style,
+    this.statesController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * width,
       height: MediaQuery.of(context).size.height * height,
-      decoration: ShapeDecoration(
-          color: color ?? ThemeData.dark().disabledColor,
-          shape: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(5),
-              gapPadding: 0)),
       child: TextButton(
+          statesController: statesController,
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return (color ?? ThemeData.dark().disabledColor)
+                      .withOpacity(.6);
+                }
+                return color ?? ThemeData.dark().disabledColor;
+              }),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ))),
           onPressed: onPressed,
           child: Center(
             child: Text(
@@ -269,7 +279,8 @@ class ScheduleItem extends StatelessWidget {
     var theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => context.goNamed('schedule-detail', extra: schedule),
+      onTap: () => context.goNamed('schedule-detail',
+          extra: {'schedule': schedule, 'new-schedule': false}),
       child: Container(
         // width: width * 0.26,
         // height: height * 0.1,
