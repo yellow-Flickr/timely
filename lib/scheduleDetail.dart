@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/models/scheduleModel.dart';
@@ -27,12 +31,24 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
 
   @override
   void initState() {
-    // if (widget.newschedule) {
-    //   return;
-    // }
     title.text = widget.schedule.title;
     notes.text = widget.schedule.notes;
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
+      setState(() {
+        if (widget.newschedule) {
+          controller.update(MaterialState.disabled, true);
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    title.dispose();
+    notes.dispose();
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,6 +69,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 onTap: () {
                   setState(() {
                     edit = !edit;
+                    controller.update(MaterialState.disabled, true);
                   });
                 },
                 child: Container(
@@ -88,44 +105,68 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
               onTap: () async {
                 await showModalBottomSheet(
                   context: context,
+                  showDragHandle: true,
                   builder: (context) {
                     // Using Wrap makes the bottom sheet height the height of the content.
                     // Otherwise, the height will be half the height of the screen.
                     return Wrap(
                       children: [
                         ListTile(
-                          leading: Icon(Icons.share),
-                          title: Text('Share'),
+                          leading: Icon(Icons.forward_30),
+                          title: Text('30 minutes',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
-                          leading: Icon(Icons.link),
-                          title: Text('Get link'),
+                          leading: Icon(Icons.filter_1),
+                          title: Text('1 hour',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
-                          leading: Icon(Icons.edit),
-                          title: Text('Edit name'),
+                          leading: Icon(Icons.filter_2),
+                          title: Text('2 hours',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
-                          leading: Icon(Icons.delete),
-                          title: Text('Delete collection'),
+                          onTap: () async {
+                            time = await showTimePicker(
+                                  context: context,
+                                  initialEntryMode: TimePickerEntryMode.input,
+                                  initialTime: TimeOfDay.fromDateTime(
+                                      DateTime.now().add(Duration(hours: 1))),
+                                  builder: (context, child) => MediaQuery(
+                                      data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true),
+                                      child: child!),
+                                ) ??
+                                TimeOfDay.fromDateTime(
+                                    DateTime.now().add(Duration(hours: 1)));
+                          },
+                          leading: Icon(Icons.more_time_rounded),
+                          title: Text('Custom Duration',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
                         ),
                       ],
                     );
                   },
                 );
-                time = await showTimePicker(
-                      context: context,
-                      initialEntryMode: TimePickerEntryMode.input,
-                      initialTime: TimeOfDay.fromDateTime(
-                          DateTime.now().add(Duration(hours: 1))),
-                      builder: (context, child) => MediaQuery(
-                          data: MediaQuery.of(context)
-                              .copyWith(alwaysUse24HourFormat: true),
-                          child: child!),
-                    ) ??
-                    TimeOfDay.fromDateTime(
-                        DateTime.now().add(Duration(hours: 1)));
-                // TimeOfDay(
+                // {
+                //   time = await showTimePicker(
+                //         context: context,
+                //         initialEntryMode: TimePickerEntryMode.input,
+                //         initialTime: TimeOfDay.fromDateTime(
+                //             DateTime.now().add(Duration(hours: 1))),
+                //         builder: (context, child) => MediaQuery(
+                //             data: MediaQuery.of(context)
+                //                 .copyWith(alwaysUse24HourFormat: true),
+                //             child: child!),
+                //       ) ??
+                //       TimeOfDay.fromDateTime(
+                //           DateTime.now().add(Duration(hours: 1)));
+                // } // TimeOfDay(
                 //     hour: TimeOfDay.now().hour + 1,
                 //     minute: TimeOfDay.now().minute);
                 // log((DateTime.now().add(Duration(days: 1)).day == day.day)
@@ -174,7 +215,39 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
               height: height * .01,
             ),
             ListTile(
-              onTap: () async {},
+              onTap: () async {
+                   await showModalBottomSheet(
+                  context: context,
+                  showDragHandle: true,
+                  builder: (context) {
+                    // Using Wrap makes the bottom sheet height the height of the content.
+                    // Otherwise, the height will be half the height of the screen.
+                    return Wrap(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.circle,color: Colors.red,),
+                          title: Text('High Priority',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.circle,color: Colors.amber,),
+                          title: Text('Medium Priority',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.circle,color: Colors.teal,),
+                          title: Text('Low Priority',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(fontSize: 10)),
+                        ),
+                       
+                      ],
+                    );
+                  },
+                );
+              },
               leading: Icon(Icons.low_priority),
               dense: true,
               title: Text(
@@ -355,15 +428,29 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
 
             Column(
               children: [
-                Button(
-                    width: .9,
-                    color: widget.schedule.active
-                        ? theme.primaryColorLight
-                        : theme.primaryColorDark,
-                    height: .05,
-                    statesController: controller,
-                    onPressed: () {},
-                    label: widget.schedule.active ? 'Deactivate' : 'Activate'),
+                Visibility(
+                  visible: !widget.newschedule,
+                  replacement: Button(
+                      width: .9,
+                      color: Colors.teal,
+                      height: .05,
+                      onPressed: () {
+                        context.pushReplacementNamed('schedule-detail', extra: {
+                          'schedule': testSchedule.first,
+                          'new-schedule': false
+                        });
+                      },
+                      label: 'Save'),
+                  child: Button(
+                      width: .9,
+                      color: widget.schedule.active
+                          ? theme.primaryColorLight
+                          : theme.primaryColorDark,
+                      height: .05,
+                      onPressed: () {},
+                      label:
+                          widget.schedule.active ? 'Deactivate' : 'Activate'),
+                ),
                 SizedBox(
                   height: height * .02,
                 ),
@@ -371,10 +458,12 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                     width: .9,
                     color: !edit ? theme.colorScheme.error : Colors.amber,
                     height: .05,
+                    statesController: controller,
                     onPressed: () {
                       if (edit) {
                         setState(() {
                           edit = false;
+                          controller.update(MaterialState.disabled, false);
                         });
                       }
                     },
