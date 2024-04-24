@@ -315,3 +315,46 @@ class _StopwatchState extends State<StopWatch>
     );
   }
 }
+
+/// Widget for saved and named time presets  on Stop_Watch screen.
+class StopWatchPresets extends StatelessWidget {
+  const StopWatchPresets({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      width: width * 0.26,
+      height: height * 0.20,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          shape: BoxShape.circle,
+          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: const Text(
+                "Workout Rest",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ),
+            Container(
+              child: const Text(
+                "00:00:00",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

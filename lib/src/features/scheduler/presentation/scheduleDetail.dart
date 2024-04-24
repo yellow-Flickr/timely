@@ -1,14 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
-import 'package:timely/models/scheduleModel.dart';
-
+import 'package:timely/src/features/scheduler/domain/scheduleModel.dart';
+ 
 class ScheduleDetail extends StatefulWidget {
   final ScheduleModel schedule;
   final bool newschedule;

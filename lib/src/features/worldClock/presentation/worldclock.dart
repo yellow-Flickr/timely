@@ -111,3 +111,64 @@ class _WorldclockState extends State<Worldclock> {
         ));
   }
 }
+
+
+/// Widget for saved and named time presets  on Worldclock screen.
+class ClockItem extends StatelessWidget {
+  const ClockItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
+
+    return Container(
+      // width: width * 0.26,
+      height: height * 0.10,
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: ShapeDecoration(
+        color: theme.primaryColor.withOpacity(0.4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: const Text(
+                  "Accra",
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+              ),
+              Container(
+                child: const Text(
+                  "Local time zone",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 10),
+                ),
+              )
+            ],
+          ),
+          Container(
+            child: const Text(
+              "00:00",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 35,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

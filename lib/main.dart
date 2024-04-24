@@ -3,15 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:timely/scheduler.dart';
-import 'package:timely/stopwatch.dart';
-import 'package:timely/timer.dart';
-import 'package:timely/timerTicker.dart';
-import 'package:timely/worldclock.dart';
-import 'package:timely/addSchedule.dart';
+import 'package:timely/src/features/scheduler/presentation/scheduler.dart';
+import 'package:timely/src/features/stopWatch/presentation/stopwatch.dart';
+import 'package:timely/src/features/timer/presentation/timer.dart';
+import 'package:timely/src/features/timer/presentation/timerTicker.dart';
+import 'package:timely/src/features/worldClock/presentation/worldclock.dart';
 import 'package:timely/constant.dart';
-import 'package:timely/models/scheduleModel.dart';
-import 'package:timely/scheduleDetail.dart';
+import 'package:timely/src/features/scheduler/domain/scheduleModel.dart';
+import 'package:timely/src/features/scheduler/presentation/scheduleDetail.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -60,13 +59,6 @@ final GoRouter _router = GoRouter(
                 return Scheduler();
               },
               routes: [
-                GoRoute(
-                  path: 'add-schedule',
-                  name: 'add-schedule',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return AddSchedule();
-                  },
-                ),
                 GoRoute(
                   path: 'schedule-detail',
                   name: 'schedule-detail',

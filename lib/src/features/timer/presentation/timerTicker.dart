@@ -1,13 +1,10 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable, prefer_final_fields
 
 import 'dart:math';
-
-import 'dart:developer' as dev;
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
-import 'package:timely/timeTickerArc.dart';
+import 'package:timely/src/features/timer/presentation/timeTickerArc.dart';
 // import 'package:timely/stopwatch.dart';
 
 class TimerTicker extends StatefulWidget {
