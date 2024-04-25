@@ -22,7 +22,8 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   TimeOfDay time = TimeOfDay.now();
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
-  MaterialStatesController controller = MaterialStatesController();
+  MaterialStatesController button2Controller = MaterialStatesController();
+  MaterialStatesController button1Controller = MaterialStatesController();
 
   bool edit = false;
 
@@ -34,7 +35,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
     WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
       setState(() {
         if (widget.newschedule) {
-          controller.update(MaterialState.disabled, true);
+          button2Controller.update(MaterialState.disabled, true);
         }
       });
     });
@@ -44,7 +45,8 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   void dispose() {
     title.dispose();
     notes.dispose();
-    controller.dispose();
+    button1Controller.dispose();
+    button2Controller.dispose();
     super.dispose();
   }
 
@@ -66,7 +68,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 onTap: () {
                   setState(() {
                     edit = !edit;
-                    controller.update(MaterialState.disabled, true);
+                    button1Controller.update(MaterialState.disabled, true);
                   });
                 },
                 child: Container(
@@ -440,6 +442,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                       label: 'Save'),
                   child: Button(
                       width: .9,
+                      statesController: button1Controller,
                       color: widget.schedule.active
                           ? theme.primaryColorLight
                           : theme.primaryColorDark,
@@ -455,12 +458,12 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                     width: .9,
                     color: !edit ? theme.colorScheme.error : Colors.amber,
                     height: .05,
-                    statesController: controller,
+                    statesController: button2Controller,
                     onPressed: () {
                       if (edit) {
                         setState(() {
                           edit = false;
-                          controller.update(MaterialState.disabled, false);
+                          button1Controller.update(MaterialState.disabled, false);
                         });
                       }
                     },

@@ -11,8 +11,12 @@ import 'package:timely/src/features/worldClock/presentation/worldclock.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/src/features/scheduler/domain/scheduleModel.dart';
 import 'package:timely/src/features/scheduler/presentation/scheduleDetail.dart';
+import 'package:timely/src/features/worldClock/presentation/worldclockList.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() {
+  tz.initializeTimeZones();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) => TimelyStates(),
@@ -46,12 +50,20 @@ final GoRouter _router = GoRouter(
             },
           ),
           GoRoute(
-            path: '/worldclock',
-            name: 'worldclock',
-            builder: (BuildContext context, GoRouterState state) {
-              return Worldclock();
-            },
-          ),
+              path: '/worldclock',
+              name: 'worldclock',
+              builder: (BuildContext context, GoRouterState state) {
+                return Worldclock();
+              },
+              routes: [
+                GoRoute(
+                  path: 'add-worldclock',
+                  name: 'add-worldclock',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return WorldClockList();
+                  },
+                ),
+              ]),
           GoRoute(
               path: '/scheduler',
               name: 'scheduler',

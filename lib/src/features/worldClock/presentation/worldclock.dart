@@ -1,7 +1,8 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:timely/components.dart';
+import 'package:go_router/go_router.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
@@ -31,13 +32,14 @@ class _WorldclockState extends State<Worldclock> {
 
             // stretch: true,
             actions: [
-              Icon(
-                Icons.add,
-                size: 25,
-              ),
-              Icon(
-                Icons.more_vert,
-                size: 25,
+              IconButton(
+                onPressed: () => context.goNamed(
+                  'add-worldclock',
+                ),
+                icon: Icon(
+                  Icons.add,
+                  size: 25,
+                ),
               ),
             ],
             // onStretchTrigger: () async {
@@ -57,36 +59,23 @@ class _WorldclockState extends State<Worldclock> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.ideographic,
                       children: [
-                        TimeDigits(
-                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 42,
-                      ),
-                          width: width * .15,
-                          height: height * .06,
-                        ),
-                        DigitSeperator(seperator: ':'),
-                        TimeDigits(
-                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 42,
-                      ),
-                          width: width * .15,
-                          height: height * .06,
-                        ),
-                        DigitSeperator(seperator: ':'),
-                        TimeDigits(
-                          digits: 0.toString().padLeft(2, '0'), style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 42,
-                      ),
-                          width: width * .15,
-                          height: height * .06,
-                        ),
+                        Text(
+                          MaterialLocalizations.of(context).formatTimeOfDay(
+                            TimeOfDay.now(),
+                            alwaysUse24HourFormat: true,
+                          ),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 45,
+                          ),
+                        )
                       ],
                     ),
                     Text(
-                      "Greenwich Mean Time",
+                      tz.local.name
+                          // .timeZoneFromLocal(
+                          //     DateTime.now().microsecondsSinceEpoch)
+                          ,
                       style: TextStyle(
                           fontSize: 13,
                           color: theme.primaryColorLight.withOpacity(0.6)),
@@ -111,7 +100,6 @@ class _WorldclockState extends State<Worldclock> {
         ));
   }
 }
-
 
 /// Widget for saved and named time presets  on Worldclock screen.
 class ClockItem extends StatelessWidget {
