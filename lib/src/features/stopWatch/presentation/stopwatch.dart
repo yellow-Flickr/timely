@@ -1,10 +1,12 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:timely/components.dart';
-import 'package:timely/constant.dart';
+import 'package:timely/src/features/stopWatch/presentation/stopwatchController.dart';
 
 class StopWatch extends StatefulWidget {
   const StopWatch({Key? key}) : super(key: key);
@@ -15,33 +17,34 @@ class StopWatch extends StatefulWidget {
 
 class _StopwatchState extends State<StopWatch>
     with SingleTickerProviderStateMixin {
-  // int millisec = 0, minutes = 0, sec = 0;
   Duration overall = Duration.zero;
   Duration lap = Duration.zero;
-  // Stopwatch tick = Stopwatch();
-  // late AnimationController controller;
   late Ticker animationTicker;
   final Stopwatch lapTimer = Stopwatch();
   final Stopwatch overallTimer = Stopwatch();
-  // late Animation<double> animating;
+
+  StreamController<StopWatch> stopwatchController =
+      StreamController<StopWatch>();
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    context.read<TimelyStates>().laps = [];
 
-    animationTicker = createTicker((elapsed) {
-      setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<TimelyStates>().clearLaps();
+
+      animationTicker = createTicker((elapsed) {
+        setState(() {});
+      });
     });
+    // animationTicker.
+    super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-
     animationTicker.dispose();
-
     super.dispose();
   }
 
@@ -57,64 +60,127 @@ class _StopwatchState extends State<StopWatch>
           preferredSize: Size.fromHeight(height * .16),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.ideographic,
-                children: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 5),
-                    child: TimeDigits(
-                      width: width * .17,
-                      height: height * .10,
-                      digits: (overallTimer.elapsed.inMinutes.ceil())
-                          .toString()
-                          .padLeft(2, '0'),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 50,
+              Consumer<TimelyStates>(
+                builder: (BuildContext context, value, Widget? child) => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.ideographic,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 5),
+                      child: TimeDigits(
+                        width: width * .17,
+                        height: height * .10,
+                        digits: (overallTimer.elapsed.inMinutes.ceil())
+                            .toString()
+                            .padLeft(2, '0'),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 50,
+                        ),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inMinutes.ceil()),
                       ),
-                      key: ValueKey<int>(overallTimer.elapsed.inMinutes.ceil()),
                     ),
-                  ),
-                  DigitSeperator(seperator: ":"),
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 2),
-                    child: TimeDigits(
-                      width: width * .17,
-                      height: height * .10,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 50,
+                    DigitSeperator(seperator: ":"),
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 2),
+                      child: TimeDigits(
+                        width: width * .17,
+                        height: height * .10,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 50,
+                        ),
+                        digits: (overallTimer.elapsed.inSeconds.ceil() %
+                                Duration.secondsPerMinute)
+                            .toString()
+                            .padLeft(2, '0'),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inSeconds.ceil() %
+                                Duration.secondsPerMinute),
                       ),
-                      digits: (overallTimer.elapsed.inSeconds.ceil() %
-                              Duration.secondsPerMinute)
-                          .toString()
-                          .padLeft(2, '0'),
-                      key: ValueKey<int>(overallTimer.elapsed.inSeconds.ceil() %
-                          Duration.secondsPerMinute),
                     ),
-                  ),
-                  DigitSeperator(seperator: "."),
-                  AnimatedSwitcher(
-                    duration: Duration(microseconds: 1),
-                    child: TimeDigits(
-                      width: width * .2,
-                      height: height * .10,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 40,
+                    DigitSeperator(seperator: "."),
+                    AnimatedSwitcher(
+                      duration: Duration(microseconds: 1),
+                      child: TimeDigits(
+                        width: width * .2,
+                        height: height * .10,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 40,
+                        ),
+                        digits: (overallTimer.elapsed.inMilliseconds.ceil() %
+                                Duration.millisecondsPerSecond)
+                            .toString()
+                            .padLeft(3, '0'),
+                        key: ValueKey<int>(
+                            overallTimer.elapsed.inMilliseconds.ceil() %
+                                Duration.millisecondsPerSecond),
                       ),
-                      digits: (overallTimer.elapsed.inMilliseconds.ceil() %
-                              Duration.millisecondsPerSecond)
-                          .toString()
-                          .padLeft(3, '0'),
-                      key: ValueKey<int>(
-                          overallTimer.elapsed.inMilliseconds.ceil() %
-                              Duration.millisecondsPerSecond),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.baseline,
+                //   textBaseline: TextBaseline.ideographic,
+                //   children: [
+                //     AnimatedSwitcher(
+                //       duration: Duration(milliseconds: 5),
+                //       child: TimeDigits(
+                //         width: width * .17,
+                //         height: height * .10,
+                //         digits: (overallTimer.elapsed.inMinutes.ceil())
+                //             .toString()
+                //             .padLeft(2, '0'),
+                //         style: theme.textTheme.bodyMedium?.copyWith(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 50,
+                //         ),
+                //         key: ValueKey<int>(overallTimer.elapsed.inMinutes.ceil()),
+                //       ),
+                //     ),
+                //     DigitSeperator(seperator: ":"),
+                //     AnimatedSwitcher(
+                //       duration: Duration(milliseconds: 2),
+                //       child: TimeDigits(
+                //         width: width * .17,
+                //         height: height * .10,
+                //         style: theme.textTheme.bodyMedium?.copyWith(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 50,
+                //         ),
+                //         digits: (overallTimer.elapsed.inSeconds.ceil() %
+                //                 Duration.secondsPerMinute)
+                //             .toString()
+                //             .padLeft(2, '0'),
+                //         key: ValueKey<int>(overallTimer.elapsed.inSeconds.ceil() %
+                //             Duration.secondsPerMinute),
+                //       ),
+                //     ),
+                //     DigitSeperator(seperator: "."),
+                //     AnimatedSwitcher(
+                //       duration: Duration(microseconds: 1),
+                //       child: TimeDigits(
+                //         width: width * .2,
+                //         height: height * .10,
+                //         style: theme.textTheme.bodyMedium?.copyWith(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 40,
+                //         ),
+                //         digits: (overallTimer.elapsed.inMilliseconds.ceil() %
+                //                 Duration.millisecondsPerSecond)
+                //             .toString()
+                //             .padLeft(3, '0'),
+                //         key: ValueKey<int>(
+                //             overallTimer.elapsed.inMilliseconds.ceil() %
+                //                 Duration.millisecondsPerSecond),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ),
 
               ///Lap timer
@@ -238,10 +304,16 @@ class _StopwatchState extends State<StopWatch>
                                 Text(doubleDigits(index + 1),
                                     style: theme.textTheme.bodySmall),
                                 Text(
-                                    "${context.watch<TimelyStates>().laps[index].$1.inMinutes.ceil().toString().padLeft(2, '0')}:${(context.watch<TimelyStates>().laps[index].$1.inSeconds.ceil() % Duration.secondsPerMinute).toString().padLeft(2, '0')}.${(context.watch<TimelyStates>().laps[index].$1.inMilliseconds.ceil() % Duration.millisecondsPerSecond).toString().padLeft(3, '0')}",
+                                    lapOutputFormat(context
+                                        .watch<TimelyStates>()
+                                        .laps[index]
+                                        .$1),
                                     style: theme.textTheme.bodySmall),
                                 Text(
-                                    "${context.watch<TimelyStates>().laps[index].$2.inMinutes.ceil().toString().padLeft(2, '0')}:${(context.watch<TimelyStates>().laps[index].$2.inSeconds.ceil() % Duration.secondsPerMinute).toString().padLeft(2, '0')}.${(context.watch<TimelyStates>().laps[index].$2.inMilliseconds.ceil() % Duration.millisecondsPerSecond).toString().padLeft(3, '0')}",
+                                    lapOutputFormat(context
+                                        .watch<TimelyStates>()
+                                        .laps[index]
+                                        .$2),
                                     style: theme.textTheme.bodySmall),
                               ],
                             ),
@@ -269,7 +341,7 @@ class _StopwatchState extends State<StopWatch>
                   setState(() {
                     overallTimer.reset();
                     lapTimer.reset();
-                    context.read<TimelyStates>().laps.clear();
+                    context.read<TimelyStates>().clearLaps();
                   });
                 }
                 // ..start();

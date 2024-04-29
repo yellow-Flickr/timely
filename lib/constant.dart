@@ -137,17 +137,4 @@ final double height =
 //   }
 // }
 
-class TimelyStates with ChangeNotifier {
-    List<(Duration, Duration)> _laps = [];
 
-  List<(Duration, Duration)> get laps => _laps;
-
-  set laps(List<(Duration, Duration)> laps) {
-    _laps = laps;
-  }
-
-  void addLap((Duration, Duration) lap) {
-    _laps.add(lap);
-    notifyListeners();
-  }
-}

@@ -1,10 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+ 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:timely/src/features/scheduler/presentation/scheduler.dart';
 import 'package:timely/src/features/stopWatch/presentation/stopwatch.dart';
+import 'package:timely/src/features/stopWatch/presentation/stopwatchController.dart';
 import 'package:timely/src/features/timer/presentation/timer.dart';
 import 'package:timely/src/features/timer/presentation/timerTicker.dart';
 import 'package:timely/src/features/worldClock/presentation/worldclock.dart';
@@ -17,11 +17,7 @@ import 'package:timezone/data/latest.dart' as tz;
 void main() {
   tz.initializeTimeZones();
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => TimelyStates(),
-    )
-  ], child: const Timely()));
+  runApp(const Timely());
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -39,28 +35,31 @@ final GoRouter _router = GoRouter(
             path: '/',
             name: "timer",
             builder: (BuildContext context, GoRouterState state) {
-              return Timer();
+              return const Timer();
             },
           ),
           GoRoute(
             path: '/stopwatch',
             name: 'stopwatch',
             builder: (BuildContext context, GoRouterState state) {
-              return StopWatch();
+              return ChangeNotifierProvider(
+                create: (context) => TimelyStates(),
+                builder: (context, child) => const StopWatch(),
+              );
             },
           ),
           GoRoute(
               path: '/worldclock',
               name: 'worldclock',
               builder: (BuildContext context, GoRouterState state) {
-                return Worldclock();
+                return const Worldclock();
               },
               routes: [
                 GoRoute(
                   path: 'add-worldclock',
                   name: 'add-worldclock',
                   builder: (BuildContext context, GoRouterState state) {
-                    return WorldClockList();
+                    return const WorldClockList();
                   },
                 ),
               ]),
@@ -68,7 +67,7 @@ final GoRouter _router = GoRouter(
               path: '/scheduler',
               name: 'scheduler',
               builder: (BuildContext context, GoRouterState state) {
-                return Scheduler();
+                return const Scheduler();
               },
               routes: [
                 GoRoute(
@@ -157,7 +156,7 @@ class UIShell extends StatelessWidget {
           showSelectedLabels: true,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          items: [
+          items: const [
             BottomNavigationBarItem(label: "Timer", icon: Icon(Icons.timer)),
             BottomNavigationBarItem(
                 label: "Stopwatch", icon: Icon(Icons.timer_10_select_sharp)),
