@@ -1,4 +1,3 @@
- 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +6,7 @@ import 'package:timely/src/features/stopWatch/presentation/stopwatch.dart';
 import 'package:timely/src/features/stopWatch/presentation/stopwatchController.dart';
 import 'package:timely/src/features/timer/presentation/timer.dart';
 import 'package:timely/src/features/timer/presentation/timerTicker.dart';
+import 'package:timely/src/features/worldClock/presentation/worldClockController.dart';
 import 'package:timely/src/features/worldClock/presentation/worldclock.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/src/features/scheduler/domain/scheduleModel.dart';
@@ -48,20 +48,37 @@ final GoRouter _router = GoRouter(
               );
             },
           ),
-          GoRoute(
-              path: '/worldclock',
-              name: 'worldclock',
-              builder: (BuildContext context, GoRouterState state) {
-                return const Worldclock();
-              },
+          ShellRoute(
+              // path: '/worldclock',
+              // name: 'worldclock',
+              builder: (context, state, child) => ChangeNotifierProvider(
+                    create: (context) => WorldClockStates(),
+                    builder: (context, child1) => child,
+                  ),
               routes: [
                 GoRoute(
-                  path: 'add-worldclock',
-                  name: 'add-worldclock',
+                  path: '/worldclock',
+                  name: 'worldclock',
                   builder: (BuildContext context, GoRouterState state) {
-                    return const WorldClockList();
+                    return const Worldclock();
                   },
+                  routes: [
+                    GoRoute(
+                      path: 'add-worldclock',
+                      name: 'add-worldclock',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const WorldClockList();
+                      },
+                    ),
+                  ]
                 ),
+                // GoRoute(
+                //   path: '/add-worldclock',
+                //   name: 'add-worldclock',
+                //   builder: (BuildContext context, GoRouterState state) {
+                //     return const WorldClockList();
+                //   },
+                // ),
               ]),
           GoRoute(
               path: '/scheduler',

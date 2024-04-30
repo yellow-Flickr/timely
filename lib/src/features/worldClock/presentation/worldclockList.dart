@@ -1,7 +1,10 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:timely/src/features/worldClock/presentation/worldClockController.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class WorldClockList extends StatefulWidget {
@@ -39,7 +42,7 @@ class _WorldClockListState extends State<WorldClockList> {
           title: Text(
             "World Clock List",
           ),
-           elevation: 0,
+          elevation: 0,
           actions: [
             IconButton(
                 onPressed: () {},
@@ -50,11 +53,11 @@ class _WorldClockListState extends State<WorldClockList> {
           ],
         ),
         body: ListView.separated(
-          itemCount: tz.timeZoneDatabase.locations.length,
+          itemCount: tz.timeZoneDatabase.locations.keys.toList().where ((value) => !context.read<WorldClockStates>().timezones.contains(value)).toList() .length,
           padding: EdgeInsets.symmetric(
               horizontal: width * .03, vertical: height * .01),
           itemBuilder: (context, index) => WorldClockListItem(
-            zone: tz.timeZoneDatabase.locations.keys.toList()[index],
+            zone: tz.timeZoneDatabase.locations.keys.toList().where ((value) => !context.read<WorldClockStates>().timezones.contains(value)).toList()[index],
           ),
           separatorBuilder: (BuildContext context, int index) => SizedBox(
             height: height * .01,
@@ -63,7 +66,7 @@ class _WorldClockListState extends State<WorldClockList> {
   }
 }
 
-/// Widget for saved Schedules.
+/// Widget for saved and named time presets  on Worldclock screen.
 class WorldClockListItem extends StatelessWidget {
   final String zone;
   const WorldClockListItem({Key? key, required this.zone}) : super(key: key);
@@ -75,8 +78,10 @@ class WorldClockListItem extends StatelessWidget {
     var theme = Theme.of(context);
     final time = tz.TZDateTime.now(tz.getLocation(zone));
     return GestureDetector(
-      // onTap: () => context.goNamed('schedule-detail',
-      //     extra: {'schedule': schedule, 'new-schedule': false}),
+      onTap: () {
+        context.read<WorldClockStates>().addTimezone(zone);
+        context.pop();
+      },
       child: Container(
         // width: width * 0.26,
         // height: height * 0.1,
@@ -131,7 +136,18 @@ class WorldClockListItem extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        time.timeZoneName,
+                        "GMT " +
+                            ((time.timeZoneOffset.inHours.isNegative
+                                    ? ""
+                                    : "+") +
+                                (time.timeZoneOffset.inHours
+                                    .toString()
+                                    .padLeft(2, '0'))) +
+                            'HRS ' +
+                            DateFormat('mm').format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    time.timeZoneOffset.inMilliseconds)) +
+                            "mins",
                         textAlign: TextAlign.left,
                         style: theme.textTheme.bodySmall,
                       ),
@@ -144,7 +160,7 @@ class WorldClockListItem extends StatelessWidget {
               flex: 1,
               child: Container(
                 child: Text(
-                  DateFormat.Hm().format(time ),
+                  DateFormat.Hm().format(time),
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
