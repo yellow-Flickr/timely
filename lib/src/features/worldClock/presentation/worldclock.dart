@@ -1,14 +1,11 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timely/src/features/worldClock/presentation/worldClockController.dart';
 import 'package:timely/src/features/worldClock/presentation/worldclockList.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class Worldclock extends StatefulWidget {
   const Worldclock({Key? key}) : super(key: key);
@@ -24,8 +21,7 @@ class _WorldclockState extends State<Worldclock> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var theme = Theme.of(context);
-  tz.Location? location = tz.getLocation(DateTime.now().timeZoneName);
-     return Scaffold(
+    return Scaffold(
         appBar: AppBar(
             centerTitle: false,
             backgroundColor: theme.primaryColor,
@@ -78,36 +74,21 @@ class _WorldclockState extends State<Worldclock> {
                       ],
                     ),
                     Text(
-
-                        "GMT " +
-                            ((DateTime.now().timeZoneOffset.inHours.isNegative
-                                    ? ""
-                                    : "+") +
-                                (DateTime.now().timeZoneOffset.inHours
-                                    .toString()
-                                    .padLeft(2, '0'))) +
-                            'HRS ' +
-                            DateFormat('mm').format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    DateTime.now().timeZoneOffset.inMilliseconds)) +
-                            "mins"
-   // .getLocation(DateTime.now().millisecondsSinceEpoch).
-//                          "GMT " +
-//                             ((                      tz.local.currentTimeZone
-// .timeZoneOffset.inHours.isNegative
-//                                     ? ""
-//                                     : "+") +
-//                                 (time.timeZoneOffset.inHours
-//                                     .toString()
-//                                     .padLeft(2, '0'))) +
-//                             'HRS ' +
-//                             DateFormat('mm').format(
-//                                 DateTime.fromMillisecondsSinceEpoch(
-//                                     time.timeZoneOffset.inMilliseconds)) +
-//                             "mins",
-                        
-                      // .timeZoneFromLocal(
-                      //     DateTime.now().microsecondsSinceEpoch)
+                      "GMT " +
+                          ((DateTime.now().timeZoneOffset.inHours.isNegative
+                                  ? ""
+                                  : "+") +
+                              (DateTime.now()
+                                  .timeZoneOffset
+                                  .inHours
+                                  .toString()
+                                  .padLeft(2, '0'))) +
+                          'HRS ' +
+                          DateFormat('mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(DateTime.now()
+                                  .timeZoneOffset
+                                  .inMilliseconds)) +
+                          "mins"
                       ,
                       style: TextStyle(
                           fontSize: 13,

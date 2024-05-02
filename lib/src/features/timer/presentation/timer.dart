@@ -1,10 +1,11 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
- 
- import 'package:timely/constant.dart';
+
+import 'package:timely/constant.dart';
 
 class Timer extends StatefulWidget {
   const Timer({Key? key}) : super(key: key);
@@ -15,8 +16,159 @@ class Timer extends StatefulWidget {
 
 class _TimerState extends State<Timer> {
   int hour = 0, minutes = 0, sec = 0;
- 
-  @override
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Timer Preset'),
+          content: Wrap(
+            children: [
+              TextField(
+                maxLines: 1,
+                style: theme.textTheme.bodySmall,
+                // controller: title,
+                decoration: InputDecoration(
+                    fillColor: theme.highlightColor,
+                    isDense: true,
+                    filled: true,
+                    prefixIcon: Icon(
+                      Icons.title_rounded,
+                      color: Colors.grey,
+                    ),
+                    hintText: 'Timer Label',
+                    counterText: '',
+                    border: OutlineInputBorder(
+                        gapPadding: 0,
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(5))),
+              ),
+              SizedBox(
+                height: height * .08,
+              ),
+              ListTile(
+                onTap: () async {
+                  await showCupertinoModalPopup<void>(
+                    context: context,
+                    builder: (BuildContext context) => Container(
+                      height: 216,
+                      padding: const EdgeInsets.only(top: 6.0),
+                      // The bottom margin is provided to align the popup above the system
+                      // navigation bar.
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      // Provide a background color for the popup.
+                      color:
+                          CupertinoColors.systemBackground.resolveFrom(context),
+                      // Use a SafeArea widget to avoid system overlaps.
+                      child: SafeArea(
+                        top: false,
+                        child: CupertinoTimerPicker(
+                          mode: CupertinoTimerPickerMode.hms,
+                          initialTimerDuration: Duration.zero,
+                          // This is called when the user changes the timer's
+                          // duration.
+                          onTimerDurationChanged: (Duration newDuration) {
+                            // setState(() => duration = newDuration);
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                leading: Icon(
+                  Icons.timer_outlined,
+                  color: Colors.grey,
+                ),
+                dense: true,
+                title: Text(
+                  'Duration',
+                  style: theme.textTheme.labelSmall,
+                ),
+                trailing: Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: height * .015, horizontal: width * .04),
+                  decoration: ShapeDecoration(
+                      // color: theme.h.withOpacity(0.4),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5))),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('NONE'),
+                      SizedBox(
+                        width: width * .01,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_sharp,
+                        size: 13,
+                        weight: 100,
+                        grade: 100,
+                      )
+                    ],
+                  ),
+                ),
+                tileColor: theme.highlightColor,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: theme.primaryColorDark),
+              ),
+              child: Text(
+                'Cancel',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: theme.primaryColorDark),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              width: width * .04,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                backgroundColor: theme.primaryColorDark,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.white),
+              ),
+              child: Text(
+                'Save',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -36,14 +188,20 @@ class _TimerState extends State<Timer> {
         automaticallyImplyLeading: false,
         elevation: 0,
         actions: [
-          Icon(
-            Icons.add,
-            size: 25,
-          ),
-          Icon(
-            Icons.more_vert,
-            size: 25,
-          ),
+          IconButton(
+            onPressed: () async {
+              await _dialogBuilder(context);
+            },
+            icon: Icon(
+              Icons.add,
+              size: 25,
+            ),
+          )
+
+          // Icon(
+          //   Icons.more_vert,
+          //   size: 25,
+          // ),
         ],
 
         // title: Text(widget.title),
@@ -54,40 +212,46 @@ class _TimerState extends State<Timer> {
           Expanded(
             flex: 4,
             child: Row(
-             mainAxisAlignment: MainAxisAlignment.center,
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: [
-               ScrollableTimeSelector(
-                 selectedTime: (p0) {
-                   setState(() {
-                     hour = p0;
-                   });
-                 },
-                 label: 'Hours',
-                 timeFigures: 100,
-               ),
-               DigitSeperator(seperator: ':',wheelSelector: true,),
-               ScrollableTimeSelector(
-                 selectedTime: (p0) {
-                   setState(() {
-                     minutes = p0;
-                   });
-                 },
-                 label: 'Minutes',
-                 timeFigures: 60,
-               ),
-               DigitSeperator(seperator: ':',wheelSelector: true,),
-               ScrollableTimeSelector(
-                 selectedTime: (p0) {
-                   setState(() {
-                     sec = p0;
-                   });
-                 },
-                 label: 'Seconds',
-                 timeFigures: 60,
-               ),
-             ],
-                        ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
+                    setState(() {
+                      hour = p0;
+                    });
+                  },
+                  label: 'Hours',
+                  timeFigures: 100,
+                ),
+                DigitSeperator(
+                  seperator: ':',
+                  wheelSelector: true,
+                ),
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
+                    setState(() {
+                      minutes = p0;
+                    });
+                  },
+                  label: 'Minutes',
+                  timeFigures: 60,
+                ),
+                DigitSeperator(
+                  seperator: ':',
+                  wheelSelector: true,
+                ),
+                ScrollableTimeSelector(
+                  selectedTime: (p0) {
+                    setState(() {
+                      sec = p0;
+                    });
+                  },
+                  label: 'Seconds',
+                  timeFigures: 60,
+                ),
+              ],
+            ),
           ),
           // Expanded(child: SizedBox(width: width * 0.05,)),
           Expanded(
@@ -100,15 +264,14 @@ class _TimerState extends State<Timer> {
                   )),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-             ),
+            ),
           ),
-      
         ],
       ),
-      bottomNavigationBar:     Padding(
-        padding:   EdgeInsets.symmetric(horizontal: width * .1,vertical: height * .02),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: width * .1, vertical: height * .02),
         child: Button(
-          
           width: width * .6,
           onPressed: () {
             if (Duration(hours: hour, minutes: minutes, seconds: sec)
@@ -117,9 +280,8 @@ class _TimerState extends State<Timer> {
               return;
             }
             context.goNamed('ticker',
-                extra:
-                    Duration(hours: hour, minutes: minutes, seconds: sec)
-                        .inSeconds);
+                extra: Duration(hours: hour, minutes: minutes, seconds: sec)
+                    .inSeconds);
           },
           label: 'Start',
           color: theme.primaryColorDark,
@@ -129,8 +291,6 @@ class _TimerState extends State<Timer> {
   }
 }
 
- 
- 
 /// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
 String doubleDigits(int number) {
   return number.toString().length == 1 ? "0$number" : number.toString();
