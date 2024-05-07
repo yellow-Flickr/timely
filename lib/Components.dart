@@ -122,10 +122,6 @@ class TimeDigits extends StatelessWidget {
 }
 
 
-/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
-String doubleDigits(int number) {
-  return number.toString().length == 1 ? "0$number" : number.toString();
-}
-
+ 
 
 

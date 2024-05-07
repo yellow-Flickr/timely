@@ -53,11 +53,20 @@ class _WorldClockListState extends State<WorldClockList> {
           ],
         ),
         body: ListView.separated(
-          itemCount: tz.timeZoneDatabase.locations.keys.toList().where ((value) => !context.read<WorldClockStates>().timezones.contains(value)).toList() .length,
+          itemCount: tz.timeZoneDatabase.locations.keys
+              .toList()
+              .where((value) =>
+                  !context.read<WorldClockStates>().timezones.contains(value))
+              .toList()
+              .length,
           padding: EdgeInsets.symmetric(
               horizontal: width * .03, vertical: height * .01),
           itemBuilder: (context, index) => WorldClockListItem(
-            zone: tz.timeZoneDatabase.locations.keys.toList().where ((value) => !context.read<WorldClockStates>().timezones.contains(value)).toList()[index],
+            zone: tz.timeZoneDatabase.locations.keys
+                .toList()
+                .where((value) =>
+                    !context.read<WorldClockStates>().timezones.contains(value))
+                .toList()[index],
           ),
           separatorBuilder: (BuildContext context, int index) => SizedBox(
             height: height * .01,
@@ -79,6 +88,9 @@ class WorldClockListItem extends StatelessWidget {
     final time = tz.TZDateTime.now(tz.getLocation(zone));
     return GestureDetector(
       onTap: () {
+        if (context.read<WorldClockStates>().timezones.contains(zone)) {
+          return;
+        }
         context.read<WorldClockStates>().addTimezone(zone);
         context.pop();
       },

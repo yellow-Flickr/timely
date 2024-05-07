@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class TimelyStates with ChangeNotifier {
+class StopWatchStates with ChangeNotifier {
   List<(Duration, Duration)> _laps = [];
   Duration _overallTimer = Duration.zero;
 
@@ -15,7 +15,6 @@ class TimelyStates with ChangeNotifier {
   set overallTimer(Duration timer) {
     _overallTimer = timer;
   }
-
 
   void addLap((Duration, Duration) lap) {
     _laps.add(lap);

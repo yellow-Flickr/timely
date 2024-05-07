@@ -55,7 +55,7 @@ class _SchedulerState extends State<Scheduler> {
         body: ListView.separated(
           itemCount: testSchedule.length,
           padding: EdgeInsets.symmetric(
-              horizontal: width * .03, vertical: height * .01),
+              horizontal: width * 0.03, vertical: height * .01),
           itemBuilder: (context, index) => ScheduleItem(
             schedule: testSchedule[index],
           ),

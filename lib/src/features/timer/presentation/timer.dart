@@ -3,9 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:timely/components.dart';
 
 import 'package:timely/constant.dart';
+import 'package:timely/src/features/timer/application/timerController.dart';
+import 'package:timely/src/features/timer/domain/timerModel.dart';
 
 class Timer extends StatefulWidget {
   const Timer({Key? key}) : super(key: key);
@@ -62,8 +66,7 @@ class _TimerState extends State<Timer> {
                         bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
                       // Provide a background color for the popup.
-                      color:
-                          CupertinoColors.systemBackground.resolveFrom(context),
+                      color: theme.dialogBackgroundColor,
                       // Use a SafeArea widget to avoid system overlaps.
                       child: SafeArea(
                         top: false,
@@ -160,6 +163,11 @@ class _TimerState extends State<Timer> {
                     ?.copyWith(color: Colors.white),
               ),
               onPressed: () {
+                context.read<TimerStates>().addtimer(TimerModel(
+                      id: 0,
+                      title: 'Pomodoro Workout',
+                      countDown: const Duration(minutes: 1),
+                    ));
                 Navigator.of(context).pop();
               },
             ),
@@ -175,7 +183,7 @@ class _TimerState extends State<Timer> {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: theme.primaryColor,
+        // backgroundColor: theme.primaryColor,
 
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -210,7 +218,7 @@ class _TimerState extends State<Timer> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,12 +263,15 @@ class _TimerState extends State<Timer> {
           ),
           // Expanded(child: SizedBox(width: width * 0.05,)),
           Expanded(
+            flex: 2,
             child: ListView.separated(
-              itemCount: 7,
+              itemCount: context.watch<TimerStates>().timers.length,
               padding: EdgeInsets.symmetric(horizontal: width * .02),
-              itemBuilder: ((context, index) => TimerTickerPresets()),
+              itemBuilder: ((context, index) => TimerTickerPresets(
+                    timerModel: context.watch<TimerStates>().timers[index],
+                  )),
               separatorBuilder: ((context, index) => SizedBox(
-                    width: width * 0.05,
+                    width: width * 0.03,
                   )),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -291,40 +302,38 @@ class _TimerState extends State<Timer> {
   }
 }
 
-/// Returns clock numbers to appear as double digits eg. 00, 01, 33, 44.
-String doubleDigits(int number) {
-  return number.toString().length == 1 ? "0$number" : number.toString();
-}
-
 /// Widget for saved and named time presets  on TimerTicker screen.
 class TimerTickerPresets extends StatelessWidget {
-  const TimerTickerPresets({Key? key}) : super(key: key);
+  final TimerModel timerModel;
+  const TimerTickerPresets({Key? key, required this.timerModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // double height = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context);
     return Container(
-      width: width * 0.22,
+      width: width * 0.25,
       // height: height * 0.1,
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(width: 3, color: ThemeData.light().primaryColor)),
+          border: Border.all(width: 3, color: theme.primaryColorDark)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "00:00:00",
+            DateFormat.Hms().format(DateTime.fromMillisecondsSinceEpoch(
+                timerModel.countDown.inMilliseconds)),
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12),
           ),
           Text(
-            "Workout Rest",
+            timerModel.title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 10),
+            style: TextStyle(fontSize: 9),
           )
         ],
       ),
@@ -384,7 +393,7 @@ class ScrollableTimeSelector extends StatelessWidget {
                       (index) => Container(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            doubleDigits(index),
+                            (index).toString().padLeft(2, '0'),
                             style: style ?? const TextStyle(fontSize: 50),
                           ))))),
         ),

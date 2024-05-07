@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 class Themes {
 /* light theme settings */
   static ThemeData lightTheme = ThemeData(
-     brightness: Brightness.light,
-    colorScheme: ColorScheme.light(
-        background: Colors.white,
-        primaryContainer: Colors.grey.shade200,
-        primary: const Color.fromARGB(255, 237, 218, 255),
-        secondary: Colors.grey, // icons
-        inversePrimary:   Colors.purple // buttons and actions keys
-        ),
+      brightness: Brightness.light,
+      colorScheme: ColorScheme.light(
+          background: Colors.white,
+          primaryContainer: Colors.grey.shade200,
+          primary: const Color.fromARGB(255, 237, 218, 255),
+          secondary: Colors.grey, // icons
+          inversePrimary: Colors.purple // buttons and actions keys
+          ),
       primarySwatch: Colors.purple,
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -47,7 +47,7 @@ class Themes {
       ),
       primaryColorDark: const Color.fromRGBO(156, 39, 176, 1),
       primaryColorLight: Color.fromARGB(255, 25, 24, 26),
-       cardColor: const Color.fromARGB(255, 237, 218, 255),
+      cardColor: const Color.fromARGB(255, 237, 218, 255),
       textTheme: const TextTheme(
           bodyMedium:
               TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
@@ -55,27 +55,31 @@ class Themes {
           bodySmall: TextStyle(color: Colors.black54)),
       dividerColor: Colors.white12,
       scaffoldBackgroundColor: Colors.white,
-    switchTheme: SwitchThemeData(
-      trackOutlineColor:
+      switchTheme: SwitchThemeData(trackOutlineColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.selected)) {
           return const Color.fromARGB(255, 237, 218, 255);
         }
         return Colors.grey.shade300;
-      }),     thumbColor:
+      }), thumbColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.selected)) {
           return Color.fromARGB(255, 255, 255, 255);
         }
         return Colors.grey.shade500;
       })),
-      dividerTheme: DividerThemeData(color:Colors.grey.shade400 )
-
-      );
+      dividerTheme: DividerThemeData(color: Colors.grey.shade400));
 
   /* Dark theme settings */
   static ThemeData darkTheme = ThemeData(
       primarySwatch: Colors.blueGrey,
+      colorScheme: ColorScheme.dark(
+          background: Colors.white,
+          primaryContainer: Colors.grey.shade200,
+          primary: Color.fromARGB(255, 51, 42, 15),
+          secondary: Colors.grey, // icons
+          inversePrimary: Colors.amber // buttons and actions keys
+          ),
       appBarTheme: const AppBarTheme(
         // textTheme: TextTheme(
         //     bodyMedium: TextStyle(color: Colors.white),
@@ -85,6 +89,7 @@ class Themes {
         elevation: 0,
         titleTextStyle: TextStyle(color: Colors.white),
         toolbarTextStyle: TextStyle(color: Colors.white),
+        // backgroundColor: Color.fromARGB(255, 25, 24, 26),
         backgroundColor: Color.fromARGB(255, 25, 24, 26),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -100,11 +105,32 @@ class Themes {
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.amber,
       ),
-      primaryColor: const Color.fromARGB(255, 25, 24, 26),
+      // primaryColor: const Color.fromARGB(255, 25, 24, 26),
+      primaryColor: Color.fromARGB(255, 51, 42, 15),
       primaryColorDark: Colors.amber,
       primaryColorLight: Colors.white,
       brightness: Brightness.dark,
       cardColor: const Color.fromARGB(255, 12, 12, 12),
+      switchTheme: SwitchThemeData(trackOutlineColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Color(0xFFFFC107);
+        }
+                    return Color(0xFFFFC107);
+;
+      }), trackColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Color(0xFFFFC107);
+        }
+        return Color.fromARGB(255, 51, 42, 15);
+      }), thumbColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Color.fromARGB(255, 255, 255, 255);
+        }
+        return Colors.grey.shade500;
+      })),
       textTheme: const TextTheme(
           bodyMedium:
               TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

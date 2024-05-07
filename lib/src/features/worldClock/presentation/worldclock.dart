@@ -24,7 +24,7 @@ class _WorldclockState extends State<Worldclock> {
     return Scaffold(
         appBar: AppBar(
             centerTitle: false,
-            backgroundColor: theme.primaryColor,
+            // backgroundColor: theme.primaryColor,
             automaticallyImplyLeading: false,
 
             // stretch: false,

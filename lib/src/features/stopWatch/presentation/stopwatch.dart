@@ -31,7 +31,7 @@ class _StopwatchState extends State<StopWatch>
     // TODO: implement initState
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<TimelyStates>().clearLaps();
+      context.read<StopWatchStates>().clearLaps();
 
       animationTicker = createTicker((elapsed) {
         setState(() {});
@@ -60,7 +60,7 @@ class _StopwatchState extends State<StopWatch>
           preferredSize: Size.fromHeight(height * .16),
           child: Column(
             children: [
-              Consumer<TimelyStates>(
+              Consumer<StopWatchStates>(
                 builder: (BuildContext context, value, Widget? child) => Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -292,7 +292,7 @@ class _StopwatchState extends State<StopWatch>
                 child: ListView(
                   // reverse: true,
                   children: List.generate(
-                      context.watch<TimelyStates>().laps.length,
+                      context.watch<StopWatchStates>().laps.length,
                       (index) => Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: width * 0.1,
@@ -301,17 +301,17 @@ class _StopwatchState extends State<StopWatch>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(doubleDigits(index + 1),
+                                Text((index + 1).toString().padLeft(2,'0'),
                                     style: theme.textTheme.bodySmall),
                                 Text(
                                     lapOutputFormat(context
-                                        .watch<TimelyStates>()
+                                        .watch<StopWatchStates>()
                                         .laps[index]
                                         .$1),
                                     style: theme.textTheme.bodySmall),
                                 Text(
                                     lapOutputFormat(context
-                                        .watch<TimelyStates>()
+                                        .watch<StopWatchStates>()
                                         .laps[index]
                                         .$2),
                                     style: theme.textTheme.bodySmall),
@@ -334,14 +334,14 @@ class _StopwatchState extends State<StopWatch>
               onPressed: () {
                 if (overallTimer.isRunning) {
                   context
-                      .read<TimelyStates>()
+                      .read<StopWatchStates>()
                       .addLap((lapTimer.elapsed, overallTimer.elapsed));
                   lapTimer.reset();
                 } else {
                   setState(() {
                     overallTimer.reset();
                     lapTimer.reset();
-                    context.read<TimelyStates>().clearLaps();
+                    context.read<StopWatchStates>().clearLaps();
                   });
                 }
                 // ..start();

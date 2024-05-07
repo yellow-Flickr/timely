@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:timely/src/features/scheduler/presentation/scheduler.dart';
 import 'package:timely/src/features/stopWatch/presentation/stopwatch.dart';
 import 'package:timely/src/features/stopWatch/presentation/stopwatchController.dart';
+import 'package:timely/src/features/timer/application/timerController.dart';
 import 'package:timely/src/features/timer/presentation/timer.dart';
 import 'package:timely/src/features/timer/presentation/timerTicker.dart';
 import 'package:timely/src/features/worldClock/presentation/worldClockController.dart';
@@ -25,17 +26,20 @@ final schedulerNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter _router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/timer',
   routes: <RouteBase>[
     ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => UIShell(child: child),
         routes: [
           GoRoute(
-            path: '/',
+            path: '/timer',
             name: "timer",
             builder: (BuildContext context, GoRouterState state) {
-              return const Timer();
+              return ChangeNotifierProvider(
+                builder: (context, _) => const Timer(),
+                create: (context) => TimerStates(),
+              );
             },
           ),
           GoRoute(
@@ -43,7 +47,7 @@ final GoRouter _router = GoRouter(
             name: 'stopwatch',
             builder: (BuildContext context, GoRouterState state) {
               return ChangeNotifierProvider(
-                create: (context) => TimelyStates(),
+                create: (context) => StopWatchStates(),
                 builder: (context, child) => const StopWatch(),
               );
             },
@@ -57,21 +61,20 @@ final GoRouter _router = GoRouter(
                   ),
               routes: [
                 GoRoute(
-                  path: '/worldclock',
-                  name: 'worldclock',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return const Worldclock();
-                  },
-                  routes: [
-                    GoRoute(
-                      path: 'add-worldclock',
-                      name: 'add-worldclock',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const WorldClockList();
-                      },
-                    ),
-                  ]
-                ),
+                    path: '/worldclock',
+                    name: 'worldclock',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const Worldclock();
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'add-worldclock',
+                        name: 'add-worldclock',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const WorldClockList();
+                        },
+                      ),
+                    ]),
                 // GoRoute(
                 //   path: '/add-worldclock',
                 //   name: 'add-worldclock',
@@ -167,7 +170,7 @@ class UIShell extends StatelessWidget {
               case 3:
                 return context.goNamed('scheduler');
               default:
-                return context.go('/');
+                return context.go('/timer');
             }
           },
           showSelectedLabels: true,
