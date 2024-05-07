@@ -11,7 +11,7 @@ class Themes {
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
           background: Colors.white,
-          primaryContainer: Colors.grey.shade200,
+          // primaryContainer: Colors.grey.shade200,
           primary: const Color.fromARGB(255, 237, 218, 255),
           secondary: Colors.grey, // icons
           inversePrimary: Colors.purple // buttons and actions keys
@@ -74,8 +74,8 @@ class Themes {
   static ThemeData darkTheme = ThemeData(
       primarySwatch: Colors.blueGrey,
       colorScheme: ColorScheme.dark(
-          background: Colors.white,
-          primaryContainer: Colors.grey.shade200,
+          // background: Colors.white,
+          // primaryContainer: Colors.grey.shade200,
           primary: Color.fromARGB(255, 51, 42, 15),
           secondary: Colors.grey, // icons
           inversePrimary: Colors.amber // buttons and actions keys
@@ -108,9 +108,10 @@ class Themes {
       // primaryColor: const Color.fromARGB(255, 25, 24, 26),
       primaryColor: Color.fromARGB(255, 51, 42, 15),
       primaryColorDark: Colors.amber,
-      primaryColorLight: Colors.white,
+      // primaryColorLight: Color(0xFF512900),
       brightness: Brightness.dark,
-      cardColor: const Color.fromARGB(255, 12, 12, 12),
+      // cardColor: const Color.fromARGB(255, 12, 12, 12),
+      // cardColor: const Color.fromARGB(255, 12, 12, 12),
       switchTheme: SwitchThemeData(trackOutlineColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.selected)) {

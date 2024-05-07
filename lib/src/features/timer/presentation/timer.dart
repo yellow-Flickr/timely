@@ -119,7 +119,7 @@ class _TimerState extends State<Timer> {
                 tileColor: theme.highlightColor,
                 shape: RoundedRectangleBorder(
                     side: BorderSide.none,
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(5)),
               ),
             ],
           ),
