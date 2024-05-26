@@ -118,7 +118,7 @@ class Themes {
           return Color(0xFFFFC107);
         }
                     return Color(0xFFFFC107);
-;
+
       }), trackColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.selected)) {

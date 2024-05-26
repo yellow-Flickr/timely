@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
-import 'package:timely/src/features/scheduler/domain/scheduleModel.dart';
- 
+import 'package:timely/src/features/scheduler/domain/scheduleModel.dart'
+    as model;
+
 class ScheduleDetail extends StatefulWidget {
-  final ScheduleModel schedule;
+  final model.ScheduleModel schedule;
   final bool newschedule;
   const ScheduleDetail(
       {Key? key, required this.schedule, this.newschedule = false})
@@ -18,7 +21,8 @@ class ScheduleDetail extends StatefulWidget {
 }
 
 class _ScheduleDetailState extends State<ScheduleDetail> {
-  DateTime day = DateTime.now();
+  Duration repeat = Duration(minutes: 30);
+  model.Priority priority = model.Priority.Low;
   TimeOfDay time = TimeOfDay.now();
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
@@ -102,7 +106,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
             ),
             ListTile(
               onTap: () async {
-                await showModalBottomSheet(
+                await showModalBottomSheet<Duration>(
                   context: context,
                   showDragHandle: true,
                   builder: (context) {
@@ -111,18 +115,42 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                     return Wrap(
                       children: [
                         ListTile(
+                          onTap: () {
+                            time = TimeOfDay.fromDateTime(DateTime.utc(
+                              0,
+                            ).add(Duration(minutes: 30)));
+                            repeat = Duration(
+                                hours: time.hour, minutes: time.minute);
+                            Navigator.pop(context);
+                          },
                           leading: Icon(Icons.forward_30),
                           title: Text('30 minutes',
                               style: theme.textTheme.labelSmall
                                   ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
+                          onTap: () {
+                            time = TimeOfDay.fromDateTime(DateTime.utc(
+                              0,
+                            ).add(Duration(hours: 1)));
+                            repeat = Duration(
+                                hours: time.hour, minutes: time.minute);
+                            Navigator.pop(context);
+                          },
                           leading: Icon(Icons.filter_1),
                           title: Text('1 hour',
                               style: theme.textTheme.labelSmall
                                   ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
+                          onTap: () {
+                            time = TimeOfDay.fromDateTime(DateTime.utc(
+                              0,
+                            ).add(Duration(hours: 2)));
+                            repeat = Duration(
+                                hours: time.hour, minutes: time.minute);
+                            Navigator.pop(context);
+                          },
                           leading: Icon(Icons.filter_2),
                           title: Text('2 hours',
                               style: theme.textTheme.labelSmall
@@ -134,14 +162,20 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                                   context: context,
                                   initialEntryMode: TimePickerEntryMode.input,
                                   initialTime: TimeOfDay.fromDateTime(
-                                      DateTime.now().add(Duration(hours: 1))),
+                                      DateTime.utc(0).add(
+                                          Duration(hours: 1, minutes: 30))),
                                   builder: (context, child) => MediaQuery(
                                       data: MediaQuery.of(context).copyWith(
                                           alwaysUse24HourFormat: true),
                                       child: child!),
                                 ) ??
-                                TimeOfDay.fromDateTime(
-                                    DateTime.now().add(Duration(hours: 1)));
+                                TimeOfDay.fromDateTime(DateTime.utc(0)
+                                    .add(Duration(hours: 0, minutes: 0)));
+
+                            log(time.toString());
+                            repeat = Duration(
+                                hours: time.hour, minutes: time.minute);
+                            Navigator.pop(context);
                           },
                           leading: Icon(Icons.more_time_rounded),
                           title: Text('Custom Duration',
@@ -151,7 +185,11 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                       ],
                     );
                   },
-                );
+                ).then((value) {
+                  setState(() {
+                    repeat;
+                  });
+                });
                 // {
                 //   time = await showTimePicker(
                 //         context: context,
@@ -174,6 +212,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 // log(day.day.toString());
                 // setState(() {});
               },
+              enabled: widget.newschedule || edit,
               leading: Icon(Icons.event_repeat_outlined),
               dense: true,
               title: Text(
@@ -192,7 +231,14 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('NONE'),
+                    Text((repeat.inHours != 0
+                            ? repeat.inHours.toString().padLeft(2, '0') + 'hr'
+                            : '') +
+                        ' ' +
+                        (repeat.inMinutes % Duration.minutesPerHour)
+                            .toString()
+                            .padLeft(2, '0') +
+                        'min'),
                     SizedBox(
                       width: width * .01,
                     ),
@@ -215,7 +261,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
             ),
             ListTile(
               onTap: () async {
-                   await showModalBottomSheet(
+                await showModalBottomSheet(
                   context: context,
                   showDragHandle: true,
                   builder: (context) {
@@ -224,29 +270,52 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                     return Wrap(
                       children: [
                         ListTile(
-                          leading: Icon(Icons.circle,color: Colors.red,),
+                          onTap: () {
+                            priority = model.Priority.High;
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.circle,
+                            color: Colors.red,
+                          ),
                           title: Text('High Priority',
                               style: theme.textTheme.labelSmall
                                   ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
-                          leading: Icon(Icons.circle,color: Colors.amber,),
+                          onTap: () {
+                            priority = model.Priority.Medium;
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.circle,
+                            color: Colors.amber,
+                          ),
                           title: Text('Medium Priority',
                               style: theme.textTheme.labelSmall
                                   ?.copyWith(fontSize: 10)),
                         ),
                         ListTile(
-                          leading: Icon(Icons.circle,color: Colors.teal,),
+                          onTap: () {
+                            priority = model.Priority.Low;
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.circle,
+                            color: Colors.teal,
+                          ),
                           title: Text('Low Priority',
                               style: theme.textTheme.labelSmall
                                   ?.copyWith(fontSize: 10)),
                         ),
-                       
                       ],
                     );
                   },
-                );
+                ).then((value) {
+                  setState(() {});
+                });
               },
+              enabled: widget.newschedule || edit,
               leading: Icon(Icons.low_priority),
               dense: true,
               title: Text(
@@ -265,7 +334,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('NONE'),
+                    Text('${priority.name} Priority'),
                     SizedBox(
                       width: width * .01,
                     ),
@@ -292,6 +361,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
               maxLines: 1,
               style: theme.textTheme.bodySmall,
               controller: title,
+              readOnly: !(widget.newschedule || edit),
               decoration: InputDecoration(
                   fillColor: theme.highlightColor,
                   isDense: true,
@@ -313,6 +383,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
             TextField(
               // maxLength: 30,
               // style: TextStyle(),
+              readOnly: !(widget.newschedule || edit),
               maxLines: 12, maxLength: 500,
               controller: notes,
               style: theme.textTheme.bodySmall,
@@ -435,7 +506,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                       height: .05,
                       onPressed: () {
                         context.pushReplacementNamed('schedule-detail', extra: {
-                          'schedule': testSchedule.first,
+                          'schedule': model.testSchedule.first,
                           'new-schedule': false
                         });
                       },
@@ -463,7 +534,8 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                       if (edit) {
                         setState(() {
                           edit = false;
-                          button1Controller.update(MaterialState.disabled, false);
+                          button1Controller.update(
+                              MaterialState.disabled, false);
                         });
                       }
                     },
