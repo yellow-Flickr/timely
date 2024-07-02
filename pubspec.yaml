@@ -13,6 +13,7 @@ dependencies:
   go_router:  
   intl:  
   provider:  
+  sembast_sqflite: ^2.2.0
   timezone: ^0.9.3
   
 dev_dependencies:

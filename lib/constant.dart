@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 // Color primaryColor = Colors.amber;
 // Color darkColor = const Color.fromARGB(255, 12, 12, 12);
 
+
+
 class Themes {
 /* light theme settings */
   static ThemeData lightTheme = ThemeData(

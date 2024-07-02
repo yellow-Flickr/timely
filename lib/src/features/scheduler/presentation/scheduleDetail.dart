@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
 import 'package:timely/src/features/scheduler/domain/scheduleModel.dart'
@@ -22,6 +23,7 @@ class ScheduleDetail extends StatefulWidget {
 
 class _ScheduleDetailState extends State<ScheduleDetail> {
   Duration repeat = Duration(minutes: 30);
+  Duration repeatTill = Duration(hours: 19);
   model.Priority priority = model.Priority.Low;
   TimeOfDay time = TimeOfDay.now();
   TextEditingController title = TextEditingController();
@@ -239,6 +241,176 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                             .toString()
                             .padLeft(2, '0') +
                         'min'),
+                    SizedBox(
+                      width: width * .01,
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 13,
+                      weight: 100,
+                      grade: 100,
+                    )
+                  ],
+                ),
+              ),
+              tileColor: theme.cardColor,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            ListTile(
+              onTap: () async {
+                (showTimePicker(
+                  context: context,
+                  initialEntryMode: TimePickerEntryMode.input,
+                  initialTime: TimeOfDay.fromDateTime(
+                      DateTime.utc(0).add(Duration(hours: 19, minutes: 00))),
+                  builder: (context, child) => MediaQuery(
+                      data: MediaQuery.of(context)
+                          .copyWith(alwaysUse24HourFormat: true),
+                      child: child!),
+                ).then((onValue) {
+                  if (onValue != null) {
+                    time =
+                    DateTime.now().hour > 19?   TimeOfDay.fromDateTime(
+                        DateTime.utc(0).add(Duration(hours: 23, minutes: 59))):   TimeOfDay.fromDateTime(
+                        DateTime.utc(0).add(Duration(hours: 19, minutes: 0)));
+                  }
+                }));
+
+                repeat = Duration(hours: time.hour, minutes: time.minute);
+
+                // await showModalBottomSheet<Duration>(
+                //   context: context,
+                //   showDragHandle: true,
+                //   builder: (context) {
+                //     // Using Wrap makes the bottom sheet height the height of the content.
+                //     // Otherwise, the height will be half the height of the screen.
+                //     return Wrap(
+                //       children: [
+                //         ListTile(
+                //           onTap: () {
+                //             time = TimeOfDay.fromDateTime(DateTime.utc(
+                //               0,
+                //             ).add(Duration(minutes: 30)));
+                //             repeat = Duration(
+                //                 hours: time.hour, minutes: time.minute);
+                //             Navigator.pop(context);
+                //           },
+                //           leading: Icon(Icons.forward_30),
+                //           title: Text('30 minutes',
+                //               style: theme.textTheme.labelSmall
+                //                   ?.copyWith(fontSize: 10)),
+                //         ),
+                //         ListTile(
+                //           onTap: () {
+                //             time = TimeOfDay.fromDateTime(DateTime.utc(
+                //               0,
+                //             ).add(Duration(hours: 1)));
+                //             repeat = Duration(
+                //                 hours: time.hour, minutes: time.minute);
+                //             Navigator.pop(context);
+                //           },
+                //           leading: Icon(Icons.filter_1),
+                //           title: Text('1 hour',
+                //               style: theme.textTheme.labelSmall
+                //                   ?.copyWith(fontSize: 10)),
+                //         ),
+                //         ListTile(
+                //           onTap: () {
+                //             time = TimeOfDay.fromDateTime(DateTime.utc(
+                //               0,
+                //             ).add(Duration(hours: 2)));
+                //             repeat = Duration(
+                //                 hours: time.hour, minutes: time.minute);
+                //             Navigator.pop(context);
+                //           },
+                //           leading: Icon(Icons.filter_2),
+                //           title: Text('2 hours',
+                //               style: theme.textTheme.labelSmall
+                //                   ?.copyWith(fontSize: 10)),
+                //         ),
+                //         ListTile(
+                //           onTap: () async {
+                //             time = await showTimePicker(
+                //                   context: context,
+                //                   initialEntryMode: TimePickerEntryMode.input,
+                //                   initialTime: TimeOfDay.fromDateTime(
+                //                       DateTime.utc(0).add(
+                //                           Duration(hours: 1, minutes: 30))),
+                //                   builder: (context, child) => MediaQuery(
+                //                       data: MediaQuery.of(context).copyWith(
+                //                           alwaysUse24HourFormat: true),
+                //                       child: child!),
+                //                 ) ??
+                //                 TimeOfDay.fromDateTime(DateTime.utc(0)
+                //                     .add(Duration(hours: 0, minutes: 0)));
+
+                //             log(time.toString());
+                //             repeat = Duration(
+                //                 hours: time.hour, minutes: time.minute);
+                //             Navigator.pop(context);
+                //           },
+                //           leading: Icon(Icons.more_time_rounded),
+                //           title: Text('Custom Duration',
+                //               style: theme.textTheme.labelSmall
+                //                   ?.copyWith(fontSize: 10)),
+                //         ),
+                //       ],
+                //     );
+                //   },
+                // ).then((value) {
+                //   setState(() {
+                //     repeat;
+                //   });
+                // });
+                // {
+                //   time = await showTimePicker(
+                //         context: context,
+                //         initialEntryMode: TimePickerEntryMode.input,
+                //         initialTime: TimeOfDay.fromDateTime(
+                //             DateTime.now().add(Duration(hours: 1))),
+                //         builder: (context, child) => MediaQuery(
+                //             data: MediaQuery.of(context)
+                //                 .copyWith(alwaysUse24HourFormat: true),
+                //             child: child!),
+                //       ) ??
+                //       TimeOfDay.fromDateTime(
+                //           DateTime.now().add(Duration(hours: 1)));
+                // } // TimeOfDay(
+                //     hour: TimeOfDay.now().hour + 1,
+                //     minute: TimeOfDay.now().minute);
+                // log((DateTime.now().add(Duration(days: 1)).day == day.day)
+                //     .toString());
+                // log(DateTime.now().add(Duration(days: 1)).day.toString());
+                // log(day.day.toString());
+                // setState(() {});
+              },
+              enabled: widget.newschedule || edit,
+              leading: Icon(Icons.event_repeat_outlined),
+              dense: true,
+              title: Text(
+                'Repeat Till',
+                style: theme.textTheme.labelSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              trailing: Container(
+                padding: EdgeInsets.symmetric(
+                    vertical: height * .015, horizontal: width * .04),
+                decoration: ShapeDecoration(
+                    // color: theme.h.withOpacity(0.4),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(DateFormat.Hm().format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            repeatTill.inMilliseconds))),
                     SizedBox(
                       width: width * .01,
                     ),

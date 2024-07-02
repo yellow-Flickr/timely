@@ -5,6 +5,7 @@ class ScheduleModel {
   final String title;
   final String notes;
   final Duration repeat;
+  final Duration repeatTill;
   final Priority priority;
   final bool active;
 
@@ -13,6 +14,7 @@ class ScheduleModel {
       required this.title,
       required this.notes,
       this.repeat = const Duration(hours: 1),
+      this.repeatTill = const Duration(hours: 19),
       this.priority = Priority.Low,
       this.active = false});
 }
@@ -23,6 +25,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: false),
   ScheduleModel(
@@ -30,6 +33,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: true),
   ScheduleModel(
@@ -37,6 +41,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: false),
   ScheduleModel(
@@ -44,6 +49,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: true),
   ScheduleModel(
@@ -51,6 +57,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: false),
   ScheduleModel(
@@ -58,6 +65,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: true),
   ScheduleModel(
@@ -65,6 +73,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: false),
   ScheduleModel(
@@ -72,6 +81,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: true),
   ScheduleModel(
@@ -79,6 +89,7 @@ List<ScheduleModel> testSchedule = [
       title: 'Pomodoro Workout',
       notes: '10 Burpees, 30 Squats, 20 Lunges',
       repeat: const Duration(hours: 1),
+      repeatTill: const Duration(hours: 19),
       priority: Priority.High,
       active: false),
 ];
