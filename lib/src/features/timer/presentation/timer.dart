@@ -1,11 +1,14 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timely/components.dart';
+import 'package:timely/constant.dart';
 
 import 'package:timely/constant.dart';
 import 'package:timely/src/features/timer/application/timerController.dart';
@@ -19,12 +22,16 @@ class Timer extends StatefulWidget {
 }
 
 class _TimerState extends State<Timer> {
+  Duration durationPicker = Duration.zero;
   int hour = 0, minutes = 0, sec = 0;
+  final List<GlobalKey> secKeys = List.generate(60, (index) => GlobalKey());
+  final List<GlobalKey> minKeys = List.generate(60, (index) => GlobalKey());
+  final List<GlobalKey> hourKeys = List.generate(100, (index) => GlobalKey());
 
-  Future<void> _dialogBuilder(BuildContext context) {
+  Future<bool> _dialogBuilder(BuildContext context) {
     var theme = Theme.of(context);
 
-    return showDialog<void>(
+    return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -55,7 +62,7 @@ class _TimerState extends State<Timer> {
               ),
               ListTile(
                 onTap: () async {
-                  await showCupertinoModalPopup<void>(
+                  await showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) => Container(
                       height: 216,
@@ -77,11 +84,18 @@ class _TimerState extends State<Timer> {
                           // duration.
                           onTimerDurationChanged: (Duration newDuration) {
                             // setState(() => duration = newDuration);
+                            durationPicker = newDuration;
                           },
                         ),
                       ),
                     ),
-                  );
+                  ).then((onValue) {
+                    DateTime dTime = DateTime.fromMicrosecondsSinceEpoch(
+                        durationPicker.inMicroseconds);
+                    hour = dTime.hour;
+                    minutes = dTime.minute;
+                    sec = dTime.second;
+                  });
                 },
                 leading: Icon(
                   Icons.timer_outlined,
@@ -139,7 +153,7 @@ class _TimerState extends State<Timer> {
                     ?.copyWith(color: theme.primaryColorDark),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
             SizedBox(
@@ -163,20 +177,23 @@ class _TimerState extends State<Timer> {
                     ?.copyWith(color: Colors.white),
               ),
               onPressed: () {
-                context.read<TimerStates>().addtimer(TimerModel(
-                      id: 0,
-                      title: 'Pomodoro Workout',
-                      countDown: const Duration(minutes: 1),
-                    ));
-                Navigator.of(context).pop();
+                // context.read<TimerStates>().addtimer(TimerModel(
+                //       id: 0,
+                //       title: 'Pomodoro Workout',
+                //       countDown: const Duration(minutes: 1),
+                //     ));
+                Navigator.of(context).pop(true);
               },
             ),
           ],
         );
       },
-    );
+    ).then((onValue) => onValue ?? false);
   }
 
+  FixedExtentScrollController hourController = FixedExtentScrollController();
+  FixedExtentScrollController minuteController = FixedExtentScrollController();
+  FixedExtentScrollController secondController = FixedExtentScrollController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -198,7 +215,42 @@ class _TimerState extends State<Timer> {
         actions: [
           IconButton(
             onPressed: () async {
-              await _dialogBuilder(context);
+              await _dialogBuilder(context).then((onValue) {
+                if (!onValue) {
+                  return;
+                }
+
+                log('hr: $hour - min:$minutes - sec:$sec');
+                RenderBox hourRenderBox = hourKeys[hour]
+                    .currentContext
+                    ?.findRenderObject() as RenderBox;
+
+                    
+                // RenderBox minRenderBox = minKeys[minutes]
+                //     .currentContext
+                //     !.findRenderObject() as RenderBox;
+
+                // RenderBox secRenderBox = secKeys[sec]
+                //     .currentContext
+                //     !.findRenderObject() as RenderBox;
+                hourController
+                    .animateTo(hour * hourRenderBox.size.height,
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.linear)
+                    .then((onValue) {
+                  minuteController
+                      .animateTo(minutes * hourRenderBox.size.height,
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.linear)
+                      .then((onValue) {
+                    secondController.animateTo(sec * hourRenderBox.size.height,
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.linear);
+                  });
+                });
+
+                setState(() {});
+              });
             },
             icon: Icon(
               Icons.add,
@@ -224,6 +276,8 @@ class _TimerState extends State<Timer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ScrollableTimeSelector(
+                  controller: hourController,
+                  timeKeys: hourKeys,
                   selectedTime: (p0) {
                     setState(() {
                       hour = p0;
@@ -237,6 +291,8 @@ class _TimerState extends State<Timer> {
                   wheelSelector: true,
                 ),
                 ScrollableTimeSelector(
+                  timeKeys: minKeys,
+                  controller: minuteController,
                   selectedTime: (p0) {
                     setState(() {
                       minutes = p0;
@@ -250,6 +306,8 @@ class _TimerState extends State<Timer> {
                   wheelSelector: true,
                 ),
                 ScrollableTimeSelector(
+                  timeKeys: secKeys,
+                  controller: secondController,
                   selectedTime: (p0) {
                     setState(() {
                       sec = p0;
@@ -346,16 +404,23 @@ class ScrollableTimeSelector extends StatelessWidget {
   final void Function(int) selectedTime;
   final int timeFigures;
   final String label;
+  final List<GlobalKey>? timeKeys;
   final TextStyle? style;
   final TextStyle? labelStyle;
-  const ScrollableTimeSelector(
-      {Key? key,
-      required this.selectedTime,
-      required this.timeFigures,
-      this.style,
-      required this.label,
-      this.labelStyle})
-      : super(key: key);
+  final FixedExtentScrollController controller;
+  ScrollableTimeSelector({
+    Key? key,
+    required this.selectedTime,
+    required this.timeFigures,
+    required this.controller,
+    this.style,
+    required this.label,
+    this.labelStyle,
+    this.timeKeys,
+  }) : super(key: key);
+
+  // FixedExtentScrollController controller = FixedExtentScrollController();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -379,6 +444,7 @@ class ScrollableTimeSelector extends StatelessWidget {
           width: width * 0.25,
           child: ListWheelScrollView.useDelegate(
               physics: const ScrollPhysics(parent: FixedExtentScrollPhysics()),
+              controller: controller,
               diameterRatio: 4,
               itemExtent: 85,
               overAndUnderCenterOpacity: 0.3,
@@ -391,6 +457,10 @@ class ScrollableTimeSelector extends StatelessWidget {
                   children: List.generate(
                       timeFigures,
                       (index) => Container(
+                          key: (timeKeys != null ||
+                                  ((timeKeys ?? []).isNotEmpty))
+                              ? timeKeys![index]
+                              : null,
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             (index).toString().padLeft(2, '0'),

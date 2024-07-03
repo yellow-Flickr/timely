@@ -145,22 +145,7 @@ final double width =
 final double height =
     MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
 
-// extension DateOnlyCompare on DateTime {
-//   bool isTomorrow(DateTime day) {
-//     // DateTime.now().add(Duration(days: 1)) == day.day;
-
-//     if (DateTime.now().day + 1 == day.day) {
-//       return true;
-//     } else if (DateTime.now().day > day.day &&
-//         DateTime.now().month + 1 == day.month) {
-//       return true;
-//     } else if (DateTime.now().day > day.day &&
-//         DateTime.now().month > day.month &&
-//         DateTime.now().year + 1 == day.year) {
-//       return true;
-//     }
-//     return false;
-//   }
-// }
-
-
+extension on Duration {
+  DateTime get parseToDateTime =>
+      DateTime.fromMicrosecondsSinceEpoch(inMicroseconds);
+}
