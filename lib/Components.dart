@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 class Button extends StatelessWidget {
   final Color? color;
   final void Function()? onPressed;
@@ -7,7 +7,7 @@ class Button extends StatelessWidget {
   final double borderRadius;
   final double width;
   final double height;
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
   final TextStyle? style;
   const Button({
     Key? key,
@@ -30,15 +30,15 @@ class Button extends StatelessWidget {
       child: TextButton(
           statesController: statesController,
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                if (states.contains(MaterialState.disabled)) {
+              backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) {
+                if (states.contains(WidgetState.disabled)) {
                   return (color ?? ThemeData.dark().disabledColor)
                       .withOpacity(.6);
                 }
                 return color ?? ThemeData.dark().disabledColor;
               }),
-              shape: MaterialStateProperty.all<OutlinedBorder>(
+              shape: WidgetStateProperty.all<OutlinedBorder>(
                   RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
               ))),
@@ -120,8 +120,3 @@ class TimeDigits extends StatelessWidget {
     );
   }
 }
-
-
- 
-
-

@@ -242,7 +242,7 @@ class _TimerTickerState extends State<TimerTicker>
                       onPressed: () {
                              
                         _animationController.stop();
-                        context.go("/");
+                        context.pop();
                       },
                     ),
                   ),

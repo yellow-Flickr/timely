@@ -10,22 +10,25 @@ ThemeData lightMode = ThemeData(
         secondary: const Color(0xFF75A1D9), // icons
         inversePrimary: const Color(0xFF336699) // buttons and actions keys
         ),
-        highlightColor: Colors.grey.shade200,
+    highlightColor: Colors.grey.shade200,
     // c
     // buttonTheme: const ButtonThemeData(buttonColor: Color(0xFF336699)),
-    checkboxTheme:   CheckboxThemeData(
-      fillColor:   MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return const Color(0xFF336699);
-        }
-        return Colors.transparent;
-      }),
-        side: BorderSide(color: Color(0xFF336699), width: 2,
+    checkboxTheme: CheckboxThemeData(
+        fillColor:
+            WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color(0xFF336699);
+          }
+          return Colors.transparent;
+        }),
+        side: BorderSide(
+          color: Color(0xFF336699),
+          width: 2,
         )),
     radioTheme: RadioThemeData(
       fillColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        // if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        // if (states.contains(WidgetState.selected)) {
         //   return Color(0xFF480674);
         // }
         return const Color(0xFF336699);
@@ -33,20 +36,20 @@ ThemeData lightMode = ThemeData(
     ),
     switchTheme: SwitchThemeData(
       trackColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return const Color(0xFF336699);
         }
         return Colors.grey.shade300;
       }),
       thumbColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.white;
         }
         return Colors.grey;
       }),
-      trackOutlineColor: MaterialStateProperty.all<Color>(Colors.transparent),
+      trackOutlineColor: WidgetStateProperty.all<Color>(Colors.transparent),
     ),
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.white,
@@ -66,7 +69,3 @@ ThemeData lightMode = ThemeData(
         bodyColor: Colors.grey[800],
         displayColor: Colors.black,
         fontFamily: 'Montserrat'));
-
-
-
-

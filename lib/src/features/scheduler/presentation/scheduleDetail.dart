@@ -25,11 +25,15 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
   Duration repeat = Duration(minutes: 30);
   Duration repeatTill = Duration(hours: 19);
   model.Priority priority = model.Priority.Low;
-  TimeOfDay time = TimeOfDay.now();
+  TimeOfDay time = DateTime.now().hour > 19
+      ? TimeOfDay.fromDateTime(
+          DateTime.utc(0).add(Duration(hours: 23, minutes: 59)))
+      : TimeOfDay.fromDateTime(
+          DateTime.utc(0).add(Duration(hours: 19, minutes: 0)));
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
-  MaterialStatesController button2Controller = MaterialStatesController();
-  MaterialStatesController button1Controller = MaterialStatesController();
+  WidgetStatesController button2Controller = WidgetStatesController();
+  WidgetStatesController button1Controller = WidgetStatesController();
 
   bool edit = false;
 
@@ -41,7 +45,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
     WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
       setState(() {
         if (widget.newschedule) {
-          button2Controller.update(MaterialState.disabled, true);
+          button2Controller.update(WidgetState.disabled, true);
         }
       });
     });
@@ -74,7 +78,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                 onTap: () {
                   setState(() {
                     edit = !edit;
-                    button1Controller.update(MaterialState.disabled, true);
+                    button1Controller.update(WidgetState.disabled, true);
                   });
                 },
                 child: Container(
@@ -218,7 +222,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
               leading: Icon(Icons.event_repeat_outlined),
               dense: true,
               title: Text(
-                'Repeat',
+                'Alert Every',
                 style: theme.textTheme.labelSmall
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -273,15 +277,24 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                           .copyWith(alwaysUse24HourFormat: true),
                       child: child!),
                 ).then((onValue) {
-                  if (onValue != null) {
-                    time =
-                    DateTime.now().hour > 19?   TimeOfDay.fromDateTime(
-                        DateTime.utc(0).add(Duration(hours: 23, minutes: 59))):   TimeOfDay.fromDateTime(
-                        DateTime.utc(0).add(Duration(hours: 19, minutes: 0)));
+                  if (onValue == null) {
+                    return;
                   }
-                }));
 
-                repeat = Duration(hours: time.hour, minutes: time.minute);
+                  time = onValue;
+                  if (Duration(
+                              hours: TimeOfDay.now().hour,
+                              minutes: TimeOfDay.now().minute)
+                          .compareTo(Duration(
+                              hours: onValue.hour, minutes: onValue.minute)) >
+                      0) {
+                     time = revert();
+                  }
+                  setState(() {
+                    repeatTill =
+                        Duration(hours: time.hour, minutes: time.minute);
+                  });
+                }));
 
                 // await showModalBottomSheet<Duration>(
                 //   context: context,
@@ -393,7 +406,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
               leading: Icon(Icons.event_repeat_outlined),
               dense: true,
               title: Text(
-                'Repeat Till',
+                'Alert Untill',
                 style: theme.textTheme.labelSmall
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -706,8 +719,7 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
                       if (edit) {
                         setState(() {
                           edit = false;
-                          button1Controller.update(
-                              MaterialState.disabled, false);
+                          button1Controller.update(WidgetState.disabled, false);
                         });
                       }
                     },
@@ -716,5 +728,13 @@ class _ScheduleDetailState extends State<ScheduleDetail> {
             ),
           ],
         ));
+  }
+
+  revert() {
+    return DateTime.now().hour > 19
+        ? TimeOfDay.fromDateTime(
+            DateTime.utc(0).add(Duration(hours: 23, minutes: 59)))
+        : TimeOfDay.fromDateTime(
+            DateTime.utc(0).add(Duration(hours: 19, minutes: 0)));
   }
 }

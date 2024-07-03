@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 // Color primaryColor = Colors.amber;
 // Color darkColor = const Color.fromARGB(255, 12, 12, 12);
 
-
-
 class Themes {
 /* light theme settings */
   static ThemeData lightTheme = ThemeData(
@@ -58,14 +56,14 @@ class Themes {
       dividerColor: Colors.white12,
       scaffoldBackgroundColor: Colors.white,
       switchTheme: SwitchThemeData(trackOutlineColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return const Color.fromARGB(255, 237, 218, 255);
         }
         return Colors.grey.shade300;
       }), thumbColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return Color.fromARGB(255, 255, 255, 255);
         }
         return Colors.grey.shade500;
@@ -115,21 +113,20 @@ class Themes {
       // cardColor: const Color.fromARGB(255, 12, 12, 12),
       // cardColor: const Color.fromARGB(255, 12, 12, 12),
       switchTheme: SwitchThemeData(trackOutlineColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return Color(0xFFFFC107);
         }
-                    return Color(0xFFFFC107);
-
+        return Color(0xFFFFC107);
       }), trackColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return Color(0xFFFFC107);
         }
         return Color.fromARGB(255, 51, 42, 15);
       }), thumbColor:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+          WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return Color.fromARGB(255, 255, 255, 255);
         }
         return Colors.grey.shade500;
