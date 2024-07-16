@@ -74,20 +74,19 @@ class DigitSeperator extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
     return Container(
-      padding: wheelSelector ? EdgeInsets.only(top: height * 0.1) : null,
-      margin: wheelSelector ? const EdgeInsets.only(top: 10) : null,
-      height: wheelSelector ? height * 0.4 : null,
+      padding: wheelSelector ? EdgeInsets.only(top: height * 0.09) : null,
+      margin: wheelSelector ? const EdgeInsets.only(top: 0) : null,
+      height: wheelSelector ? height * 0.3 : null,
       // width: wheelSelector ? width * 0.25 : null,
-      child: Center(
-          child: Text(
-        seperator,
-        style: style ??
-            const TextStyle(
-              textBaseline: TextBaseline.ideographic,
-              fontSize: 50,
-              fontWeight: FontWeight.w400,
+      child: Text(
+              seperator,
+              style: style ??
+        const TextStyle(
+          textBaseline: TextBaseline.ideographic,
+          fontSize: 30,
+          fontWeight: FontWeight.w700,
+        ),
             ),
-      )),
     );
   }
 }

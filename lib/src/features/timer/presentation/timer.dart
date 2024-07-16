@@ -197,12 +197,10 @@ class _TimerState extends State<Timer> {
 
   @override
   void initState() {
-    WidgetsFlutterBinding.ensureInitialized()
-        .addPostFrameCallback((callback) {
-             size = (hourKeys[hour]
-                    .currentContext
-                    ?.findRenderObject() as RenderBox).size;
-        });
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((callback) {
+      size =
+          (hourKeys[hour].currentContext?.findRenderObject() as RenderBox).size;
+    });
     super.initState();
   }
 
@@ -212,7 +210,7 @@ class _TimerState extends State<Timer> {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: theme.primaryColor,
+        backgroundColor: theme.colorScheme.inversePrimary,
 
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -220,7 +218,10 @@ class _TimerState extends State<Timer> {
             alignment: Alignment.centerLeft,
             child: Text(
               "Timely",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24),
             )),
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -245,16 +246,16 @@ class _TimerState extends State<Timer> {
                 //     .currentContext
                 //     !.findRenderObject() as RenderBox;
                 hourController
-                    .animateTo(hour *  size.height,
+                    .animateTo(hour * size.height,
                         duration: Duration(milliseconds: 400),
                         curve: Curves.linear)
                     .then((onValue) {
                   minuteController
-                      .animateTo(minutes *  size.height,
+                      .animateTo(minutes * size.height,
                           duration: Duration(milliseconds: 400),
                           curve: Curves.linear)
                       .then((onValue) {
-                    secondController.animateTo(sec *  size.height,
+                    secondController.animateTo(sec * size.height,
                         duration: Duration(milliseconds: 400),
                         curve: Curves.linear);
                   });
@@ -265,6 +266,7 @@ class _TimerState extends State<Timer> {
             },
             icon: Icon(
               Icons.add,
+              color: Colors.white,
               size: 25,
             ),
           )
@@ -278,14 +280,42 @@ class _TimerState extends State<Timer> {
         // title: Text(widget.title),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(
-            flex: 5,
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "Hours",
+                  style: TextStyle(fontSize: 17),
+                ),
+                Text(
+                  ":",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "Minutes",
+                  style: TextStyle(fontSize: 17),
+                ),
+                Text(
+                  ":",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "Seconds",
+                  style: TextStyle(fontSize: 17),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex:3,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               textBaseline: TextBaseline.alphabetic,
               children: [
                 ScrollableTimeSelector(
@@ -299,10 +329,10 @@ class _TimerState extends State<Timer> {
                   label: 'Hours',
                   timeFigures: 24,
                 ),
-                DigitSeperator(
-                  seperator: ':',
-                  wheelSelector: true,
-                ),
+                // DigitSeperator(
+                //   seperator: ':',
+                //   wheelSelector: true,
+                // ),
                 ScrollableTimeSelector(
                   timeKeys: minKeys,
                   controller: minuteController,
@@ -314,10 +344,10 @@ class _TimerState extends State<Timer> {
                   label: 'Minutes',
                   timeFigures: 60,
                 ),
-                DigitSeperator(
-                  seperator: ':',
-                  wheelSelector: true,
-                ),
+                // DigitSeperator(
+                //   seperator: ':',
+                //   wheelSelector: true,
+                // ),
                 ScrollableTimeSelector(
                   timeKeys: secKeys,
                   controller: secondController,
@@ -332,9 +362,11 @@ class _TimerState extends State<Timer> {
               ],
             ),
           ),
+
           // Expanded(child: SizedBox(width: width * 0.05,)),
+
           Expanded(
-            flex: 2,
+            // flex: 5,
             child: ListView.separated(
               itemCount: context.watch<TimerStates>().timers.length,
               padding: EdgeInsets.symmetric(horizontal: width * .02),
@@ -387,9 +419,9 @@ class TimerTickerPresets extends StatelessWidget {
       width: width * 0.25,
       // height: height * 0.1,
       decoration: BoxDecoration(
-          color: Colors.transparent,
+          // color: Colors.grey,
           shape: BoxShape.circle,
-          border: Border.all(width: 3, color: theme.primaryColorDark)),
+          border: Border.all(width: 3, color: theme.primaryColor)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -442,15 +474,15 @@ class ScrollableTimeSelector extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: height * 0.02),
-          width: width * 0.25,
-          child: Center(
-              child: Text(
-            label,
-            style: labelStyle ?? const TextStyle(fontSize: 15),
-          )),
-        ),
+        // Container(
+        //   padding: EdgeInsets.symmetric(vertical: height * 0.02),
+        //   width: width * 0.25,
+        //   child: Center(
+        //       child: Text(
+        //     label,
+        //     style: labelStyle ?? const TextStyle(fontSize: 15),
+        //   )),
+        // ),
         Container(
           margin: const EdgeInsets.only(bottom: 15),
           height: height * 0.3,
@@ -477,12 +509,13 @@ class ScrollableTimeSelector extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             (index).toString().padLeft(2, '0'),
-                            style: style ?? const TextStyle(fontSize: 50,textBaseline: TextBaseline.ideographic),
+                            style: style ??
+                                const TextStyle(
+                                    fontSize: 50,
+                                    textBaseline: TextBaseline.ideographic),
                           ))))),
         ),
       ],
     );
   }
 }
-
-
