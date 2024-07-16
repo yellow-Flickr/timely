@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:timely/components.dart';
 import 'package:timely/constant.dart';
 
-import 'package:timely/constant.dart';
 import 'package:timely/src/features/timer/application/timerController.dart';
 import 'package:timely/src/features/timer/domain/timerModel.dart';
 
