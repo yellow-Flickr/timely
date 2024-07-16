@@ -24,6 +24,7 @@ class Timer extends StatefulWidget {
 class _TimerState extends State<Timer> {
   Duration durationPicker = Duration.zero;
   int hour = 0, minutes = 0, sec = 0;
+  late Size size;
   final List<GlobalKey> secKeys = List.generate(60, (index) => GlobalKey());
   final List<GlobalKey> minKeys = List.generate(60, (index) => GlobalKey());
   final List<GlobalKey> hourKeys = List.generate(100, (index) => GlobalKey());
@@ -194,6 +195,18 @@ class _TimerState extends State<Timer> {
   FixedExtentScrollController hourController = FixedExtentScrollController();
   FixedExtentScrollController minuteController = FixedExtentScrollController();
   FixedExtentScrollController secondController = FixedExtentScrollController();
+
+  @override
+  void initState() {
+    WidgetsFlutterBinding.ensureInitialized()
+        .addPostFrameCallback((callback) {
+             size = (hourKeys[hour]
+                    .currentContext
+                    ?.findRenderObject() as RenderBox).size;
+        });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -221,11 +234,10 @@ class _TimerState extends State<Timer> {
                 }
 
                 log('hr: $hour - min:$minutes - sec:$sec');
-                RenderBox hourRenderBox = hourKeys[hour]
-                    .currentContext
-                    ?.findRenderObject() as RenderBox;
+                // RenderBox hourRenderBox = hourKeys[hour]
+                //     .currentContext
+                //     ?.findRenderObject() as RenderBox;
 
-                    
                 // RenderBox minRenderBox = minKeys[minutes]
                 //     .currentContext
                 //     !.findRenderObject() as RenderBox;
@@ -234,16 +246,16 @@ class _TimerState extends State<Timer> {
                 //     .currentContext
                 //     !.findRenderObject() as RenderBox;
                 hourController
-                    .animateTo(hour * hourRenderBox.size.height,
+                    .animateTo(hour *  size.height,
                         duration: Duration(milliseconds: 400),
                         curve: Curves.linear)
                     .then((onValue) {
                   minuteController
-                      .animateTo(minutes * hourRenderBox.size.height,
+                      .animateTo(minutes *  size.height,
                           duration: Duration(milliseconds: 400),
                           curve: Curves.linear)
                       .then((onValue) {
-                    secondController.animateTo(sec * hourRenderBox.size.height,
+                    secondController.animateTo(sec *  size.height,
                         duration: Duration(milliseconds: 400),
                         curve: Curves.linear);
                   });
@@ -267,13 +279,15 @@ class _TimerState extends State<Timer> {
         // title: Text(widget.title),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
             flex: 5,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              textBaseline: TextBaseline.alphabetic,
               children: [
                 ScrollableTimeSelector(
                   controller: hourController,
@@ -284,7 +298,7 @@ class _TimerState extends State<Timer> {
                     });
                   },
                   label: 'Hours',
-                  timeFigures: 100,
+                  timeFigures: 24,
                 ),
                 DigitSeperator(
                   seperator: ':',
@@ -464,10 +478,12 @@ class ScrollableTimeSelector extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: Text(
                             (index).toString().padLeft(2, '0'),
-                            style: style ?? const TextStyle(fontSize: 50),
+                            style: style ?? const TextStyle(fontSize: 50,textBaseline: TextBaseline.ideographic),
                           ))))),
         ),
       ],
     );
   }
 }
+
+

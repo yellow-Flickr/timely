@@ -61,8 +61,12 @@ class Button extends StatelessWidget {
 class DigitSeperator extends StatelessWidget {
   final String seperator;
   final bool wheelSelector;
+  final TextStyle? style;
   const DigitSeperator(
-      {Key? key, required this.seperator, this.wheelSelector = false})
+      {Key? key,
+      required this.seperator,
+      this.wheelSelector = false,
+      this.style})
       : super(key: key);
 
   @override
@@ -77,10 +81,12 @@ class DigitSeperator extends StatelessWidget {
       child: Center(
           child: Text(
         seperator,
-        style: const TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.w400,
-        ),
+        style: style ??
+            const TextStyle(
+              textBaseline: TextBaseline.ideographic,
+              fontSize: 50,
+              fontWeight: FontWeight.w400,
+            ),
       )),
     );
   }
