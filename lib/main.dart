@@ -157,6 +157,7 @@ class UIShell extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: theme.primaryColor,
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: theme.primaryColor,

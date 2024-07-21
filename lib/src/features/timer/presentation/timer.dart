@@ -209,6 +209,7 @@ class _TimerState extends State<Timer> {
     double width = MediaQuery.of(context).size.width;
     var theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: theme.colorScheme.inversePrimary,
 
